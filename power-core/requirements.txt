@@ -1,0 +1,16 @@
+# Python 3.12+ is required. Versions are pinned for repeatable environments.
+
+# Graph modelling and classical optimization
+networkx==3.6.1
+numpy==2.5.1
+scipy==1.18.0
+
+# Charts and reports
+matplotlib==3.11.1
+
+# Quantinuum / TKET execution and emulation
+pytket==2.18.1
+pytket-quantinuum==0.59.1
+
+# Tests
+pytest==9.1.1

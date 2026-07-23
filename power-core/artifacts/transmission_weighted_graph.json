@@ -1,0 +1,3357 @@
+{
+  "schema_version": 1,
+  "graph": {
+    "type": "undirected_simple_weighted",
+    "node_count": 70,
+    "edge_count": 92,
+    "resolved_line_count": 96,
+    "unresolved_line_count": 6,
+    "isolated_node_count": 1
+  },
+  "weight_model": "sum_nominal_voltage_kv",
+  "weight_units": "kV",
+  "weight_definition": "For each substation pair, weight is the sum of nominal voltage_kv across all transmission circuits connecting the pair.",
+  "limitations": [
+    "Nominal voltage is a reproducible importance proxy, not line capacity, power flow, impedance, or failure risk.",
+    "Lines whose named endpoint is absent from the substation dataset are reported but excluded from graph edges.",
+    "Circuit endpoint matching normalizes accents, known numeric circuit suffixes, and the Garita/La Garita alias."
+  ],
+  "sources": [
+    {
+      "path": "data-analysis/dataset/Subestaciones.csv",
+      "sha256": "75b8cfb77fa697cb1a7dc874a51e318eb9da8f867c3c602171e0a888963da0f8"
+    },
+    {
+      "path": "data-analysis/dataset/Subestaciones.geojson",
+      "sha256": "39bd9a3784ba4455cae0e4a07fb5198e4def1be7bb0cba69f43e637ae69afe5c"
+    },
+    {
+      "path": "data-analysis/dataset/LineasDeTransmision.csv",
+      "sha256": "880c78881e9312423fb0a955ede434b197131aca4a863c5b70b0395aeff64534"
+    },
+    {
+      "path": "data-analysis/dataset/LineasDeTransmision.geojson",
+      "sha256": "3f7ae3427ef3f619bdf4a27706fa43f7bec10195d0eb4ec457e05851b8720982"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "SUB-01",
+      "fid": 1,
+      "object_id": 1,
+      "name": "Pailas",
+      "province": "Guanacaste",
+      "canton": "Liberia",
+      "district": "Curubande",
+      "district_code": "50105",
+      "code": "PAI",
+      "coordinates": [
+        -85.3589556083694,
+        10.7560934802952
+      ],
+      "csv_x": -9502115.47296933,
+      "csv_y": 1204458.41910926,
+      "point_x": 351364.1094,
+      "point_y": 1189696.6503,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 2
+    },
+    {
+      "id": "SUB-02",
+      "fid": 2,
+      "object_id": 2,
+      "name": "Palmar",
+      "province": "Puntarenas",
+      "canton": "Osa",
+      "district": "Palmar",
+      "district_code": "60502",
+      "code": "PAL",
+      "coordinates": [
+        -83.4219564485242,
+        8.94348490946517
+      ],
+      "csv_x": -9286489.71282835,
+      "csv_y": 999651.907136919,
+      "point_x": 563565.006,
+      "point_y": 988950.5848,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 2
+    },
+    {
+      "id": "SUB-03",
+      "fid": 3,
+      "object_id": 3,
+      "name": "Nuevo Colon",
+      "province": "Guanacaste",
+      "canton": "Carrillo",
+      "district": "Sandillal",
+      "district_code": "50303",
+      "code": "NCO",
+      "coordinates": [
+        -85.7149104775674,
+        10.5072195364139
+      ],
+      "csv_x": -9541740.18775384,
+      "csv_y": 1176269.98005814,
+      "point_x": 312269.6436,
+      "point_y": 1162354.3696,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 1
+    },
+    {
+      "id": "SUB-04",
+      "fid": 4,
+      "object_id": 4,
+      "name": "Naranjo",
+      "province": "Alajuela",
+      "canton": "Naranjo",
+      "district": "Naranjo",
+      "district_code": "20601",
+      "code": "NAR",
+      "coordinates": [
+        -84.371277621695,
+        10.0873381721484
+      ],
+      "csv_x": -9392167.66242501,
+      "csv_y": 1128763.73085753,
+      "point_x": 459308.0753,
+      "point_y": 1115426.6794,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 2
+    },
+    {
+      "id": "SUB-05",
+      "fid": 5,
+      "object_id": 5,
+      "name": "Moin",
+      "province": "Limón",
+      "canton": "Limón",
+      "district": "Rio Blanco",
+      "district_code": "70103",
+      "code": "MOI",
+      "coordinates": [
+        -83.1022376096318,
+        9.99447317482164
+      ],
+      "csv_x": -9250898.77448584,
+      "csv_y": 1118265.24568474,
+      "point_x": 598425.7277,
+      "point_y": 1105266.8363,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 3
+    },
+    {
+      "id": "SUB-06",
+      "fid": 6,
+      "object_id": 6,
+      "name": "Mogote",
+      "province": "Guanacaste",
+      "canton": "Bagaces",
+      "district": "Mogote",
+      "district_code": "50403",
+      "code": "MOG",
+      "coordinates": [
+        -85.267612029714,
+        10.725715627784
+      ],
+      "csv_x": -9491947.15230617,
+      "csv_y": 1201016.46901161,
+      "point_x": 361342.5446,
+      "point_y": 1186293.2829,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 2
+    },
+    {
+      "id": "SUB-07",
+      "fid": 7,
+      "object_id": 7,
+      "name": "Liberia",
+      "province": "Guanacaste",
+      "canton": "Liberia",
+      "district": "Liberia",
+      "district_code": "50101",
+      "code": "LIB",
+      "coordinates": [
+        -85.44574374991,
+        10.6153551397224
+      ],
+      "csv_x": -9511776.68469252,
+      "csv_y": 1188515.02042561,
+      "point_x": 341796.9519,
+      "point_y": 1174169.5231,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 3
+    },
+    {
+      "id": "SUB-08",
+      "fid": 8,
+      "object_id": 8,
+      "name": "La Garita",
+      "province": "Alajuela",
+      "canton": "Alajuela",
+      "district": "Turrucares",
+      "district_code": "20111",
+      "code": "GAR",
+      "coordinates": [
+        -84.3593273953882,
+        9.92871152165449
+      ],
+      "csv_x": -9390837.36931767,
+      "csv_y": 1110832.63702294,
+      "point_x": 460598.7121,
+      "point_y": 1097881.2971,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 7
+    },
+    {
+      "id": "SUB-09",
+      "fid": 9,
+      "object_id": 9,
+      "name": "Leesville",
+      "province": "Limón",
+      "canton": "Pococi",
+      "district": "Roxana",
+      "district_code": "70204",
+      "code": "LEE",
+      "coordinates": [
+        -83.755211522264,
+        10.2623925157968
+      ],
+      "csv_x": -9323587.49794135,
+      "csv_y": 1148562.06379834,
+      "point_x": 526814.037,
+      "point_y": 1134774.4302,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 2
+    },
+    {
+      "id": "SUB-10",
+      "fid": 10,
+      "object_id": 10,
+      "name": "Guayabal",
+      "province": "Guanacaste",
+      "canton": "Santa Cruz",
+      "district": "Santa Cruz",
+      "district_code": "50301",
+      "code": "GUA",
+      "coordinates": [
+        -85.5694118639598,
+        10.2664424906921
+      ],
+      "csv_x": -9525543.35617591,
+      "csv_y": 1149020.23760551,
+      "point_x": 328069.6285,
+      "point_y": 1135631.8946,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 1
+    },
+    {
+      "id": "SUB-11",
+      "fid": 11,
+      "object_id": 11,
+      "name": "La Caja",
+      "province": "San Jose",
+      "canton": "San Jose",
+      "district": "Uruca",
+      "district_code": "10107",
+      "code": "CAJ",
+      "coordinates": [
+        -84.1659977254549,
+        9.96469179813076
+      ],
+      "csv_x": -9369316.00890546,
+      "csv_y": 1114899.06621563,
+      "point_x": 481799.9497,
+      "point_y": 1101843.8433,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 10
+    },
+    {
+      "id": "SUB-12",
+      "fid": 12,
+      "object_id": 12,
+      "name": "Juanilama",
+      "province": "Puntarenas",
+      "canton": "Esparza",
+      "district": "San Juan Grande",
+      "district_code": "60202",
+      "code": "JUA",
+      "coordinates": [
+        -84.6625335700405,
+        9.96835964493438
+      ],
+      "csv_x": -9424590.12628534,
+      "csv_y": 1115313.6251479,
+      "point_x": 427358.9571,
+      "point_y": 1102317.6363,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 1
+    },
+    {
+      "id": "SUB-13",
+      "fid": 13,
+      "object_id": 13,
+      "name": "Heredia",
+      "province": "Heredia",
+      "canton": "Heredia",
+      "district": "San Francisco",
+      "district_code": "40101",
+      "code": "HER",
+      "coordinates": [
+        -84.1200188484355,
+        9.98287954156834
+      ],
+      "csv_x": -9364197.66372841,
+      "csv_y": 1116954.78442957,
+      "point_x": 486841.8284,
+      "point_y": 1103853.1715,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 2
+    },
+    {
+      "id": "SUB-14",
+      "fid": 14,
+      "object_id": 14,
+      "name": "Garabito",
+      "province": "Puntarenas",
+      "canton": "Montes de Oro",
+      "district": "San Isidro",
+      "district_code": "60403",
+      "code": "GAB",
+      "coordinates": [
+        -84.7609376943803,
+        10.045579727934
+      ],
+      "csv_x": -9435544.4232988,
+      "csv_y": 1124042.52216323,
+      "point_x": 416588.9513,
+      "point_y": 1110881.8417,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 4
+    },
+    {
+      "id": "SUB-15",
+      "fid": 15,
+      "object_id": 15,
+      "name": "Filadelfia",
+      "province": "Guanacaste",
+      "canton": "Carrillo",
+      "district": "Filadelfia",
+      "district_code": "50501",
+      "code": "FIL",
+      "coordinates": [
+        -85.4724249855784,
+        10.4173704179929
+      ],
+      "csv_x": -9514746.82626086,
+      "csv_y": 1166098.92316279,
+      "point_x": 338773.9512,
+      "point_y": 1152279.2768,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 2
+    },
+    {
+      "id": "SUB-16",
+      "fid": 16,
+      "object_id": 16,
+      "name": "El Coco",
+      "province": "Alajuela",
+      "canton": "Alajuela",
+      "district": "San Antonio",
+      "district_code": "20104",
+      "code": "COC",
+      "coordinates": [
+        -84.2254708389885,
+        9.99809986742623
+      ],
+      "csv_x": -9375936.52561991,
+      "csv_y": 1118675.19063079,
+      "point_x": 475281.7887,
+      "point_y": 1105542.5433,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 2
+    },
+    {
+      "id": "SUB-17",
+      "fid": 17,
+      "object_id": 17,
+      "name": "Desamparados",
+      "province": "San Jose",
+      "canton": "Desamparados",
+      "district": "Gravilias",
+      "district_code": "10312",
+      "code": "DES",
+      "coordinates": [
+        -84.0548013743086,
+        9.88916450166535
+      ],
+      "csv_x": -9356937.68771779,
+      "csv_y": 1106363.61615533,
+      "point_x": 493990.1874,
+      "point_y": 1093486.7411,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 2
+    },
+    {
+      "id": "SUB-18",
+      "fid": 18,
+      "object_id": 18,
+      "name": "Corobici",
+      "province": "Guanacaste",
+      "canton": "Cañas",
+      "district": "Cañas",
+      "district_code": "50601",
+      "code": "COR",
+      "coordinates": [
+        -85.0778213507225,
+        10.4712932222768
+      ],
+      "csv_x": -9470819.75056352,
+      "csv_y": 1172202.71314525,
+      "point_x": 382007.8643,
+      "point_y": 1158070.1895,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 3
+    },
+    {
+      "id": "SUB-19",
+      "fid": 19,
+      "object_id": 19,
+      "name": "Concavas",
+      "province": "Cartago",
+      "canton": "Cartago",
+      "district": "Dulce Nombre",
+      "district_code": "30109",
+      "code": "COV",
+      "coordinates": [
+        -83.887730559082,
+        9.83860620383819
+      ],
+      "csv_x": -9338339.44964034,
+      "csv_y": 1100651.04592691,
+      "point_x": 512313.9516,
+      "point_y": 1087896.7732,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 3
+    },
+    {
+      "id": "SUB-20",
+      "fid": 20,
+      "object_id": 20,
+      "name": "Colorado",
+      "province": "Guanacaste",
+      "canton": "Abangares",
+      "district": "Colorado",
+      "district_code": "50704",
+      "code": "COD",
+      "coordinates": [
+        -85.1724692781189,
+        10.2254716021372
+      ],
+      "csv_x": -9481355.90964593,
+      "csv_y": 1144385.46957003,
+      "point_x": 371545.2111,
+      "point_y": 1130914.1779,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 2
+    },
+    {
+      "id": "SUB-21",
+      "fid": 21,
+      "object_id": 21,
+      "name": "Ciudad Quesada",
+      "province": "Alajuela",
+      "canton": "San Carlos",
+      "district": "Quesada",
+      "district_code": "21001",
+      "code": "CQU",
+      "coordinates": [
+        -84.4299981406418,
+        10.3524420644017
+      ],
+      "csv_x": -9398704.40069328,
+      "csv_y": 1158750.76118936,
+      "point_x": 452911.2595,
+      "point_y": 1144755.3485,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 2
+    },
+    {
+      "id": "SUB-22",
+      "fid": 22,
+      "object_id": 22,
+      "name": "Cariblanco",
+      "province": "Alajuela",
+      "canton": "Alajuela",
+      "district": "Sarapiqui",
+      "district_code": "20114",
+      "code": "CAR",
+      "coordinates": [
+        -84.1966792378551,
+        10.2862851166661
+      ],
+      "csv_x": -9372731.45924262,
+      "csv_y": 1151265.11942488,
+      "point_x": 478457.4707,
+      "point_y": 1137413.3148,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 3
+    },
+    {
+      "id": "SUB-23",
+      "fid": 23,
+      "object_id": 23,
+      "name": "Barranca",
+      "province": "Puntarenas",
+      "canton": "Puntarenas",
+      "district": "Barranca",
+      "district_code": "60108",
+      "code": "BAR",
+      "coordinates": [
+        -84.7138447259884,
+        9.9917608454426
+      ],
+      "csv_x": -9430302.05803748,
+      "csv_y": 1117958.65921538,
+      "point_x": 421738.4585,
+      "point_y": 1104917.6172,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 3
+    },
+    {
+      "id": "SUB-24",
+      "fid": 24,
+      "object_id": 24,
+      "name": "Arenal",
+      "province": "Guanacaste",
+      "canton": "Tilaran",
+      "district": "Santa Rosa",
+      "district_code": "50804",
+      "code": "ARE",
+      "coordinates": [
+        -85.0002881841908,
+        10.4727301596314
+      ],
+      "csv_x": -9462188.79794563,
+      "csv_y": 1172365.38171851,
+      "point_x": 390496.9849,
+      "point_y": 1158201.1567,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 5
+    },
+    {
+      "id": "SUB-25",
+      "fid": 25,
+      "object_id": 25,
+      "name": "Angostura",
+      "province": "Cartago",
+      "canton": "Turrialba",
+      "district": "Pavones",
+      "district_code": "30506",
+      "code": "ANG",
+      "coordinates": [
+        -83.6405866332732,
+        9.91682583413841
+      ],
+      "csv_x": -9310827.51366666,
+      "csv_y": 1109489.43528385,
+      "point_x": 539412.136,
+      "point_y": 1096566.771,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 3
+    },
+    {
+      "id": "SUB-26",
+      "fid": 26,
+      "object_id": 26,
+      "name": "Alajuelita",
+      "province": "San Jose",
+      "canton": "Alajuelita",
+      "district": "San Felipe",
+      "district_code": "11005",
+      "code": "ALA",
+      "coordinates": [
+        -84.1104412741054,
+        9.91277769892899
+      ],
+      "csv_x": -9363131.49303096,
+      "csv_y": 1109031.96658234,
+      "point_x": 487889.2778,
+      "point_y": 1096099.7832,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 4
+    },
+    {
+      "id": "SUB-27",
+      "fid": 27,
+      "object_id": 27,
+      "name": "Cachi",
+      "province": "Cartago",
+      "canton": "Jimenez",
+      "district": "Tucurrique",
+      "district_code": "30402",
+      "code": "CAC",
+      "coordinates": [
+        -83.7539381006002,
+        9.87025764992937
+      ],
+      "csv_x": -9323445.74129017,
+      "csv_y": 1104227.23278386,
+      "point_x": 526986.083,
+      "point_y": 1091405.1602,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 5
+    },
+    {
+      "id": "SUB-28",
+      "fid": 28,
+      "object_id": 28,
+      "name": "Belen",
+      "province": "Heredia",
+      "canton": "Belen",
+      "district": "La Ribera",
+      "district_code": "40702",
+      "code": "BEL",
+      "coordinates": [
+        -84.1727882631211,
+        9.99678991218218
+      ],
+      "csv_x": -9370071.92810068,
+      "csv_y": 1118527.11868092,
+      "point_x": 481057.2861,
+      "point_y": 1105394.181,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 2
+    },
+    {
+      "id": "SUB-29",
+      "fid": 29,
+      "object_id": 29,
+      "name": "Cañas",
+      "province": "Guanacaste",
+      "canton": "Cañas",
+      "district": "Cañas",
+      "district_code": "50601",
+      "code": "CAS",
+      "coordinates": [
+        -85.1236323586436,
+        10.4234985773189
+      ],
+      "csv_x": -9475919.40863803,
+      "csv_y": 1166792.54665283,
+      "point_x": 376973.4083,
+      "point_y": 1152800.6727,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 6
+    },
+    {
+      "id": "SUB-30",
+      "fid": 30,
+      "object_id": 30,
+      "name": "Cahuita",
+      "province": "Limón",
+      "canton": "Talamanca",
+      "district": "Cahuita",
+      "district_code": "70403",
+      "code": "CAH",
+      "coordinates": [
+        -82.8729795563532,
+        9.73197300004779
+      ],
+      "csv_x": -9225377.8847346,
+      "csv_y": 1088605.44554723,
+      "point_x": 623660.9247,
+      "point_y": 1076307.1897,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 1
+    },
+    {
+      "id": "SUB-31",
+      "fid": 31,
+      "object_id": 31,
+      "name": "Reventazon",
+      "province": "Limon",
+      "canton": "Siquirres",
+      "district": "Siquirres",
+      "district_code": "70301",
+      "code": "REV",
+      "coordinates": [
+        -83.5568891493052,
+        10.0827538744123
+      ],
+      "csv_x": -9301510.35237066,
+      "csv_y": 1128245.40040058,
+      "point_x": 548565.6497,
+      "point_y": 1114929.4545,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 3
+    },
+    {
+      "id": "SUB-32",
+      "fid": 32,
+      "object_id": 32,
+      "name": "Torito",
+      "province": "Cartago",
+      "canton": "Turrialba",
+      "district": "Pavones",
+      "district_code": "30506",
+      "code": "TOT",
+      "coordinates": [
+        -83.6230966342929,
+        9.94793779198735
+      ],
+      "csv_x": -9308880.5358862,
+      "csv_y": 1113005.50143455,
+      "point_x": 541326.1554,
+      "point_y": 1100009.83,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 2
+    },
+    {
+      "id": "SUB-33",
+      "fid": 33,
+      "object_id": 33,
+      "name": "Venecia",
+      "province": "Alajuela",
+      "canton": "San Carlos",
+      "district": "Venecia",
+      "district_code": "21005",
+      "code": "VEN",
+      "coordinates": [
+        -84.2501040855814,
+        10.3353104246594
+      ],
+      "csv_x": -9378678.68608722,
+      "csv_y": 1156812.16943762,
+      "point_x": 472609.9837,
+      "point_y": 1142839.5776,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 2
+    },
+    {
+      "id": "SUB-34",
+      "fid": 34,
+      "object_id": 34,
+      "name": "Trapiche",
+      "province": "Limón",
+      "canton": "Siquirres",
+      "district": "Siquirres",
+      "district_code": "70301",
+      "code": "TRA",
+      "coordinates": [
+        -83.5266726675119,
+        10.0990345858369
+      ],
+      "csv_x": -9298146.66900386,
+      "csv_y": 1130086.23674032,
+      "point_x": 551874.8864,
+      "point_y": 1116734.7525,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 3
+    },
+    {
+      "id": "SUB-35",
+      "fid": 35,
+      "object_id": 35,
+      "name": "Miravalles",
+      "province": "Guanacaste",
+      "canton": "Bagaces",
+      "district": "Fortuna",
+      "district_code": "50402",
+      "code": "MIR",
+      "coordinates": [
+        -85.1932537699486,
+        10.701481507002
+      ],
+      "csv_x": -9483669.62869282,
+      "csv_y": 1198270.87982366,
+      "point_x": 369466.9616,
+      "point_y": 1183579.8883,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 2
+    },
+    {
+      "id": "SUB-36",
+      "fid": 36,
+      "object_id": 36,
+      "name": "El Este",
+      "province": "Cartago",
+      "canton": "La Union",
+      "district": "San Juan",
+      "district_code": "30303",
+      "code": "EST",
+      "coordinates": [
+        -83.996566045105,
+        9.91027340851822
+      ],
+      "csv_x": -9350454.96052466,
+      "csv_y": 1108748.96639224,
+      "point_x": 500376.5618,
+      "point_y": 1095820.811,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 4
+    },
+    {
+      "id": "SUB-37",
+      "fid": 37,
+      "object_id": 37,
+      "name": "Lindora",
+      "province": "San Jose",
+      "canton": "Santa Ana",
+      "district": "Pozos",
+      "district_code": "10903",
+      "code": "LIN",
+      "coordinates": [
+        -84.2128942557041,
+        9.95950795877904
+      ],
+      "csv_x": -9374536.50677277,
+      "csv_y": 1114313.16995047,
+      "point_x": 476657.8088,
+      "point_y": 1101273.4672,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 5
+    },
+    {
+      "id": "SUB-38",
+      "fid": 38,
+      "object_id": 38,
+      "name": "Colima",
+      "province": "San Jose",
+      "canton": "Tibas",
+      "district": "Colima",
+      "district_code": "11305",
+      "code": "COL",
+      "coordinates": [
+        -84.0905336958344,
+        9.95221134899667
+      ],
+      "csv_x": -9360915.39155489,
+      "csv_y": 1113488.4965035,
+      "point_x": 490073.4851,
+      "point_y": 1100460.3434,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 4
+    },
+    {
+      "id": "SUB-39",
+      "fid": 39,
+      "object_id": 39,
+      "name": "Cobano",
+      "province": "Puntarenas",
+      "canton": "Puntarenas",
+      "district": "Cobano",
+      "district_code": "60111",
+      "code": "COB",
+      "coordinates": [
+        -85.1258452871889,
+        9.70702587144946
+      ],
+      "csv_x": -9476165.75071686,
+      "csv_y": 1085787.90103534,
+      "point_x": 376458.8781,
+      "point_y": 1073547.2309,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 1
+    },
+    {
+      "id": "SUB-40",
+      "fid": 40,
+      "object_id": 40,
+      "name": "Tanque",
+      "province": "Guanacaste",
+      "canton": "Tilaran",
+      "district": "Santa Rosa",
+      "district_code": "50801",
+      "code": "TAN",
+      "coordinates": [
+        -84.9962764371341,
+        10.4819843791374
+      ],
+      "csv_x": -9461742.21230609,
+      "csv_y": 1173413.02422505,
+      "point_x": 390939.4356,
+      "point_y": 1159223.4272,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 0
+    },
+    {
+      "id": "SUB-41",
+      "fid": 41,
+      "object_id": 41,
+      "name": "Anonos",
+      "province": "San Jose",
+      "canton": "San Jose",
+      "district": "Mata Redonda",
+      "district_code": "10108",
+      "code": "ANN",
+      "coordinates": [
+        -84.1186177079289,
+        9.93205256369277
+      ],
+      "csv_x": -9364041.6894807,
+      "csv_y": 1111210.21701758,
+      "point_x": 486993.4292,
+      "point_y": 1098231.8227,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 1
+    },
+    {
+      "id": "SUB-42",
+      "fid": 42,
+      "object_id": 42,
+      "name": "Turrialba",
+      "province": "Cartago",
+      "canton": "Turrialba",
+      "district": "Turrialba",
+      "district_code": "30501",
+      "code": "TUR",
+      "coordinates": [
+        -83.6730678811495,
+        9.89579602695646
+      ],
+      "csv_x": -9314443.30964058,
+      "csv_y": 1107112.97574083,
+      "point_x": 535852.5896,
+      "point_y": 1094237.2467,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 2
+    },
+    {
+      "id": "SUB-43",
+      "fid": 43,
+      "object_id": 43,
+      "name": "Toro",
+      "province": "Alajuela",
+      "canton": "Grecia",
+      "district": "Rio Cuarto",
+      "district_code": "20306",
+      "code": "TOR",
+      "coordinates": [
+        -84.2579376913874,
+        10.2750223494126
+      ],
+      "csv_x": -9379550.71909662,
+      "csv_y": 1149990.89671451,
+      "point_x": 471746.7152,
+      "point_y": 1136172.4101,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 2
+    },
+    {
+      "id": "SUB-44",
+      "fid": 44,
+      "object_id": 44,
+      "name": "San Miguel",
+      "province": "Heredia",
+      "canton": "Santo Domingo",
+      "district": "San Miguel",
+      "district_code": "40303",
+      "code": "SMI",
+      "coordinates": [
+        -84.0553668404591,
+        9.98023935836378
+      ],
+      "csv_x": -9357000.63512172,
+      "csv_y": 1116656.36355907,
+      "point_x": 493929.8546,
+      "point_y": 1103559.2955,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 7
+    },
+    {
+      "id": "SUB-45",
+      "fid": 45,
+      "object_id": 45,
+      "name": "San Isidro",
+      "province": "San Jose",
+      "canton": "Perez Zeledon",
+      "district": "Daniel Flores",
+      "district_code": "11903",
+      "code": "SIS",
+      "coordinates": [
+        -83.6805316230186,
+        9.3617220335632
+      ],
+      "csv_x": -9315274.16958486,
+      "csv_y": 1046810.37240714,
+      "point_x": 535089.167,
+      "point_y": 1035170.0442,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 2
+    },
+    {
+      "id": "SUB-46",
+      "fid": 46,
+      "object_id": 46,
+      "name": "Santa Rita",
+      "province": "Guanacaste",
+      "canton": "Nandayure",
+      "district": "Santa Rita",
+      "district_code": "50902",
+      "code": "SRI",
+      "coordinates": [
+        -85.2659936223352,
+        10.0316537985192
+      ],
+      "csv_x": -9491766.99202086,
+      "csv_y": 1122468.19257691,
+      "point_x": 361213.9182,
+      "point_y": 1109512.1768,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 2
+    },
+    {
+      "id": "SUB-47",
+      "fid": 47,
+      "object_id": 47,
+      "name": "Sandillal",
+      "province": "Guanacaste",
+      "canton": "Cañas",
+      "district": "Cañas",
+      "district_code": "50601",
+      "code": "SAD",
+      "coordinates": [
+        -85.103277557602,
+        10.4652780043708
+      ],
+      "csv_x": -9473653.52255088,
+      "csv_y": 1171521.7682505,
+      "point_x": 379218.4533,
+      "point_y": 1157414.4335,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 1
+    },
+    {
+      "id": "SUB-48",
+      "fid": 48,
+      "object_id": 48,
+      "name": "Tejona",
+      "province": "Guanacaste",
+      "canton": "Tilaran",
+      "district": "Santa Rosa",
+      "district_code": "50801",
+      "code": "TEJ",
+      "coordinates": [
+        -84.9892432433061,
+        10.5241607282092
+      ],
+      "csv_x": -9460959.2807505,
+      "csv_y": 1178188.07945315,
+      "point_x": 391724.1035,
+      "point_y": 1163886.3626,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 2
+    },
+    {
+      "id": "SUB-49",
+      "fid": 49,
+      "object_id": 49,
+      "name": "Tejar",
+      "province": "Cartago",
+      "canton": "El Guarco",
+      "district": "San Isidro",
+      "district_code": "30802",
+      "code": "TER",
+      "coordinates": [
+        -83.9518222044129,
+        9.82377515025453
+      ],
+      "csv_x": -9345474.09896268,
+      "csv_y": 1098975.45468904,
+      "point_x": 505284.4762,
+      "point_y": 1086254.8416,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 3
+    },
+    {
+      "id": "SUB-50",
+      "fid": 50,
+      "object_id": 50,
+      "name": "Tarbaca",
+      "province": "San Jose",
+      "canton": "Aserri",
+      "district": "Tarbaca",
+      "district_code": "10602",
+      "code": "TAR",
+      "coordinates": [
+        -84.1173057068872,
+        9.82991054354878
+      ],
+      "csv_x": -9363895.63819281,
+      "csv_y": 1099668.61354021,
+      "point_x": 487133.323,
+      "point_y": 1086935.2585,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 3
+    },
+    {
+      "id": "SUB-51",
+      "fid": 51,
+      "object_id": 52,
+      "name": "Sabanilla",
+      "province": "San Jose",
+      "canton": "Montes de Oca",
+      "district": "Mercedes",
+      "district_code": "11503",
+      "code": "SAB",
+      "coordinates": [
+        -84.0425995596387,
+        9.94756127006027
+      ],
+      "csv_x": -9355579.38792198,
+      "csv_y": 1112962.9474358,
+      "point_x": 495329.1312,
+      "point_y": 1099945.0061,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 3
+    },
+    {
+      "id": "SUB-52",
+      "fid": 52,
+      "object_id": 53,
+      "name": "Rio Macho",
+      "province": "Cartago",
+      "canton": "Paraiso",
+      "district": "Orosi",
+      "district_code": "30203",
+      "code": "RMA",
+      "coordinates": [
+        -83.8418044248856,
+        9.77610097534489
+      ],
+      "csv_x": -9333226.9757675,
+      "csv_y": 1093589.80266171,
+      "point_x": 517354.4894,
+      "point_y": 1080985.9866,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 6
+    },
+    {
+      "id": "SUB-53",
+      "fid": 53,
+      "object_id": 54,
+      "name": "Rio Claro",
+      "province": "Puntarenas",
+      "canton": "Golfito",
+      "district": "Guaycara",
+      "district_code": "60703",
+      "code": "RCL",
+      "coordinates": [
+        -83.0694790592335,
+        8.68527750128086
+      ],
+      "csv_x": -9247252.10933638,
+      "csv_y": 970564.844813564,
+      "point_x": 602399.1791,
+      "point_y": 960471.3335,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 1
+    },
+    {
+      "id": "SUB-54",
+      "fid": 54,
+      "object_id": 55,
+      "name": "Poas",
+      "province": "Alajuela",
+      "canton": "Poas",
+      "district": "Carrillos",
+      "district_code": "20804",
+      "code": "POA",
+      "coordinates": [
+        -84.2841341009743,
+        10.0258748840407
+      ],
+      "csv_x": -9382466.89007244,
+      "csv_y": 1121814.90481779,
+      "point_x": 468853.1798,
+      "point_y": 1108619.3721,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 2
+    },
+    {
+      "id": "SUB-55",
+      "fid": 55,
+      "object_id": 56,
+      "name": "Pirris",
+      "province": "San José",
+      "canton": "Aserri",
+      "district": "Legua",
+      "district_code": "10605",
+      "code": "PIR",
+      "coordinates": [
+        -84.198199860268,
+        9.63171868258835
+      ],
+      "csv_x": -9372900.73415531,
+      "csv_y": 1077283.92992147,
+      "point_x": 478247.605,
+      "point_y": 1065020.2871,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 2
+    },
+    {
+      "id": "SUB-56",
+      "fid": 56,
+      "object_id": 57,
+      "name": "Peñas Blancas",
+      "province": "Alajuela",
+      "canton": "San Ramon",
+      "district": "Peñas Blancas",
+      "district_code": "20213",
+      "code": "PBL",
+      "coordinates": [
+        -84.5751972622274,
+        10.3912424737593
+      ],
+      "csv_x": -9414867.89297182,
+      "csv_y": 1163141.75157716,
+      "point_x": 437017.941,
+      "point_y": 1149071.9132,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 3
+    },
+    {
+      "id": "SUB-57",
+      "fid": 57,
+      "object_id": 58,
+      "name": "Parrita",
+      "province": "Puntarenas",
+      "canton": "Parrita",
+      "district": "Parrita",
+      "district_code": "60901",
+      "code": "PAR",
+      "coordinates": [
+        -84.2283574696009,
+        9.5548421128282
+      ],
+      "csv_x": -9376257.8638698,
+      "csv_y": 1068604.69464818,
+      "point_x": 474932.1506,
+      "point_y": 1056520.1923,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 3
+    },
+    {
+      "id": "SUB-58",
+      "fid": 58,
+      "object_id": 59,
+      "name": "Papagayo",
+      "province": "Guanacaste",
+      "canton": "Liberia",
+      "district": "Nacascolo",
+      "district_code": "50104",
+      "code": "PAP",
+      "coordinates": [
+        -85.6055963931614,
+        10.6637018567001
+      ],
+      "csv_x": -9529571.39954122,
+      "csv_y": 1193991.09607235,
+      "point_x": 324328.3952,
+      "point_y": 1179604.5366,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 2
+    },
+    {
+      "id": "SUB-59",
+      "fid": 59,
+      "object_id": 60,
+      "name": "Jacó",
+      "province": "San Jose",
+      "canton": "Turrubares",
+      "district": "Carara",
+      "district_code": "11605",
+      "code": "JAC",
+      "coordinates": [
+        -84.5325502185204,
+        9.59457877512522
+      ],
+      "csv_x": -9410120.44578252,
+      "csv_y": 1073090.65114544,
+      "point_x": 441545.6551,
+      "point_y": 1060951.8142,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 2
+    },
+    {
+      "id": "SUB-60",
+      "fid": 60,
+      "object_id": 61,
+      "name": "Coyol",
+      "province": "Alajuela",
+      "canton": "Alajuela",
+      "district": " San José",
+      "district_code": "20202",
+      "code": "COY",
+      "coordinates": [
+        -84.2694614295508,
+        9.99215878267053
+      ],
+      "csv_x": -9380833.535761,
+      "csv_y": 1118003.63964309,
+      "point_x": 470458.5636,
+      "point_y": 1104889.0886,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 2
+    },
+    {
+      "id": "SUB-61",
+      "fid": 61,
+      "object_id": 62,
+      "name": "Balsa",
+      "province": "Alajuela",
+      "canton": "San Ramón",
+      "district": "Angeles",
+      "district_code": "20208",
+      "code": "BAL",
+      "coordinates": [
+        -84.5209892602467,
+        10.2555113327424
+      ],
+      "csv_x": -9408833.4857944,
+      "csv_y": 1147783.60875279,
+      "point_x": 442929.2237,
+      "point_y": 1134049.3741,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 2
+    },
+    {
+      "id": "SUB-62",
+      "fid": 62,
+      "object_id": 63,
+      "name": "Escazú",
+      "province": "San José",
+      "canton": "Escazú",
+      "district": "San Rafael",
+      "district_code": "10203",
+      "code": "ESC",
+      "coordinates": [
+        -84.1615307762048,
+        9.93550877790663
+      ],
+      "csv_x": -9368818.75038954,
+      "csv_y": 1111600.81698134,
+      "point_x": 482288.1366,
+      "point_y": 1098616.0527,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 2
+    },
+    {
+      "id": "SUB-63",
+      "fid": 63,
+      "object_id": 64,
+      "name": "Coronado",
+      "province": "San José",
+      "canton": "Vazquez de Coronado",
+      "district": "Dulce Nombre",
+      "district_code": "11103",
+      "code": "CON",
+      "coordinates": [
+        -84.0160172345404,
+        9.99286717976289
+      ],
+      "csv_x": -9352620.25702793,
+      "csv_y": 1118083.71272038,
+      "point_x": 498244.0179,
+      "point_y": 1104955.4241,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 2
+    },
+    {
+      "id": "SUB-64",
+      "fid": 64,
+      "object_id": 863,
+      "name": "General",
+      "province": "Heredia",
+      "canton": "Sarapiquí",
+      "district": "Horquetas",
+      "district_code": "41003",
+      "code": "GEN",
+      "coordinates": [
+        -83.9156207511754,
+        10.2143225105608
+      ],
+      "csv_x": -9341444.17162231,
+      "csv_y": 1143124.34950621,
+      "point_x": 509244.2392,
+      "point_y": 1129448.9715,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 2
+    },
+    {
+      "id": "SUB-65",
+      "fid": 65,
+      "object_id": 864,
+      "name": "Río Blanco",
+      "province": "Limón",
+      "canton": "Limón",
+      "district": "Río Blanco",
+      "district_code": "70102",
+      "code": "RBL",
+      "coordinates": [
+        -83.1001911396817,
+        10.0124002374984
+      ],
+      "csv_x": -9250670.96249307,
+      "csv_y": 1120291.68445066,
+      "point_x": 598644.699,
+      "point_y": 1107250.353,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 2
+    },
+    {
+      "id": "SUB-66",
+      "fid": 66,
+      "object_id": 865,
+      "name": "Guadalupe",
+      "province": "San José",
+      "canton": "Goicoechea",
+      "district": "Calle Blancos",
+      "district_code": "10803",
+      "code": "GUD",
+      "coordinates": [
+        -84.0582552164994,
+        9.95103618003399
+      ],
+      "csv_x": -9357322.16767175,
+      "csv_y": 1113355.67892196,
+      "point_x": 493612.619,
+      "point_y": 1100329.5797,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 1
+    },
+    {
+      "id": "SUB-67",
+      "fid": 67,
+      "object_id": 866,
+      "name": "Uruca",
+      "province": "San José",
+      "canton": "San José",
+      "district": "Uruca",
+      "district_code": "10107",
+      "code": "URU",
+      "coordinates": [
+        -84.0918646483895,
+        9.94805806288704
+      ],
+      "csv_x": -9361063.5525156,
+      "csv_y": 1113019.09429924,
+      "point_x": 489927.4262,
+      "point_y": 1100001.0446,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 1
+    },
+    {
+      "id": "SUB-68",
+      "fid": 68,
+      "object_id": 867,
+      "name": "Los Ángeles",
+      "province": "San José",
+      "canton": "San José",
+      "district": "Hospital",
+      "district_code": "10103",
+      "code": "LAN",
+      "coordinates": [
+        -84.0854727063055,
+        9.92868368842007
+      ],
+      "csv_x": -9360352.00477763,
+      "csv_y": 1110829.49153172,
+      "point_x": 490627.7247,
+      "point_y": 1097858.1209,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 1
+    },
+    {
+      "id": "SUB-69",
+      "fid": 69,
+      "object_id": 869,
+      "name": "Higuito",
+      "province": "San José",
+      "canton": "Desamparados",
+      "district": "San Rafael Arriba",
+      "district_code": "10304",
+      "code": "HIG",
+      "coordinates": [
+        -84.0675463999821,
+        9.86718723069944
+      ],
+      "csv_x": -9358356.4574859,
+      "csv_y": 1103880.30175223,
+      "point_x": 492592.0074,
+      "point_y": 1091056.3997,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 2
+    },
+    {
+      "id": "SUB-70",
+      "fid": 70,
+      "object_id": 0,
+      "name": "Ribera",
+      "province": "Heredia",
+      "canton": "Belen",
+      "district": "Ribera",
+      "district_code": "40702",
+      "code": "RIB",
+      "coordinates": [
+        -84.1695564037503,
+        9.99092500452512
+      ],
+      "csv_x": -9369712.15916121,
+      "csv_y": 1117864.18097102,
+      "point_x": 481411.26152258,
+      "point_y": 1104745.35534412,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 2
+    }
+  ],
+  "edges": [
+    {
+      "source": "SUB-01",
+      "target": "SUB-06",
+      "source_name": "Pailas",
+      "target_name": "Mogote",
+      "weight": 230.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 6,
+          "name": "Mogote-Pailas",
+          "voltage_kv": 230.0,
+          "shape_stle": 10349.2681783,
+          "shape_length": 18158.0631486745,
+          "geometry_type": "MultiLineString",
+          "coordinate_count": 55
+        }
+      ]
+    },
+    {
+      "source": "SUB-01",
+      "target": "SUB-07",
+      "source_name": "Pailas",
+      "target_name": "Liberia",
+      "weight": 230.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 5,
+          "name": "Pailas-Liberia",
+          "voltage_kv": 230.0,
+          "shape_stle": 10896.8700269,
+          "shape_length": 21308.649604196,
+          "geometry_type": "LineString",
+          "coordinate_count": 67
+        }
+      ]
+    },
+    {
+      "source": "SUB-02",
+      "target": "SUB-45",
+      "source_name": "Palmar",
+      "target_name": "San Isidro",
+      "weight": 230.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 43,
+          "name": "San Isidro-Palmar",
+          "voltage_kv": 230.0,
+          "shape_stle": 285.021984282,
+          "shape_length": 56630.4207932274,
+          "geometry_type": "LineString",
+          "coordinate_count": 131
+        }
+      ]
+    },
+    {
+      "source": "SUB-02",
+      "target": "SUB-53",
+      "source_name": "Palmar",
+      "target_name": "Rio Claro",
+      "weight": 230.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 42,
+          "name": "Palmar-Rio Claro",
+          "voltage_kv": 230.0,
+          "shape_stle": 49117.7013291,
+          "shape_length": 50105.0775143669,
+          "geometry_type": "LineString",
+          "coordinate_count": 121
+        }
+      ]
+    },
+    {
+      "source": "SUB-03",
+      "target": "SUB-58",
+      "source_name": "Nuevo Colon",
+      "target_name": "Papagayo",
+      "weight": 230.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 4,
+          "name": "Papagayo-Nuevo Colon",
+          "voltage_kv": 230.0,
+          "shape_stle": 5008.67713591,
+          "shape_length": 29061.9889215585,
+          "geometry_type": "LineString",
+          "coordinate_count": 91
+        }
+      ]
+    },
+    {
+      "source": "SUB-04",
+      "target": "SUB-08",
+      "source_name": "Naranjo",
+      "target_name": "La Garita",
+      "weight": 138.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 87,
+          "name": "Naranjo-La Garita",
+          "voltage_kv": 138.0,
+          "shape_stle": 17963.4090212,
+          "shape_length": 18354.3222461296,
+          "geometry_type": "LineString",
+          "coordinate_count": 47
+        }
+      ]
+    },
+    {
+      "source": "SUB-04",
+      "target": "SUB-54",
+      "source_name": "Naranjo",
+      "target_name": "Poas",
+      "weight": 138.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 67,
+          "name": "Poas-Naranjo",
+          "voltage_kv": 138.0,
+          "shape_stle": 6397.28327587,
+          "shape_length": 15585.0995677741,
+          "geometry_type": "LineString",
+          "coordinate_count": 56
+        }
+      ]
+    },
+    {
+      "source": "SUB-05",
+      "target": "SUB-30",
+      "source_name": "Moin",
+      "target_name": "Cahuita",
+      "weight": 230.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 50,
+          "name": "Moin-Cahuita",
+          "voltage_kv": 230.0,
+          "shape_stle": 43065.3029207,
+          "shape_length": 43862.2184769485,
+          "geometry_type": "MultiLineString",
+          "coordinate_count": 145
+        }
+      ]
+    },
+    {
+      "source": "SUB-05",
+      "target": "SUB-34",
+      "source_name": "Moin",
+      "target_name": "Trapiche",
+      "weight": 230.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 49,
+          "name": "Trapiche-Moin",
+          "voltage_kv": 230.0,
+          "shape_stle": 51326.8864748,
+          "shape_length": 53037.7779181118,
+          "geometry_type": "LineString",
+          "coordinate_count": 134
+        }
+      ]
+    },
+    {
+      "source": "SUB-05",
+      "target": "SUB-65",
+      "source_name": "Moin",
+      "target_name": "Río Blanco",
+      "weight": 230.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 92,
+          "name": "Rio Blanco-Moin",
+          "voltage_kv": 230.0,
+          "shape_stle": 2899.16258012,
+          "shape_length": 3814.52571577384,
+          "geometry_type": "LineString",
+          "coordinate_count": 15
+        }
+      ]
+    },
+    {
+      "source": "SUB-06",
+      "target": "SUB-35",
+      "source_name": "Mogote",
+      "target_name": "Miravalles",
+      "weight": 230.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 19,
+          "name": "Miravalles-Mogote",
+          "voltage_kv": 230.0,
+          "shape_stle": 8983.56147104,
+          "shape_length": 9191.2026969087,
+          "geometry_type": "MultiLineString",
+          "coordinate_count": 36
+        }
+      ]
+    },
+    {
+      "source": "SUB-07",
+      "target": "SUB-29",
+      "source_name": "Liberia",
+      "target_name": "Cañas",
+      "weight": 230.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 2,
+          "name": "Canas-Liberia",
+          "voltage_kv": 230.0,
+          "shape_stle": 1631.22488349,
+          "shape_length": 42862.2929941258,
+          "geometry_type": "LineString",
+          "coordinate_count": 110
+        }
+      ]
+    },
+    {
+      "source": "SUB-07",
+      "target": "SUB-58",
+      "source_name": "Liberia",
+      "target_name": "Papagayo",
+      "weight": 230.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 1,
+          "name": "Liberia-Papagayo",
+          "voltage_kv": 230.0,
+          "shape_stle": 1615.05854861,
+          "shape_length": 24379.2073890395,
+          "geometry_type": "MultiLineString",
+          "coordinate_count": 80
+        }
+      ]
+    },
+    {
+      "source": "SUB-08",
+      "target": "SUB-11",
+      "source_name": "La Garita",
+      "target_name": "La Caja",
+      "weight": 138.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 63,
+          "name": "Garita-La Caja",
+          "voltage_kv": 138.0,
+          "shape_stle": 9355.61287665,
+          "shape_length": 22526.6712539937,
+          "geometry_type": "MultiLineString",
+          "coordinate_count": 72
+        }
+      ]
+    },
+    {
+      "source": "SUB-08",
+      "target": "SUB-16",
+      "source_name": "La Garita",
+      "target_name": "El Coco",
+      "weight": 138.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 65,
+          "name": "Garita-El Coco",
+          "voltage_kv": 138.0,
+          "shape_stle": 12637.918283,
+          "shape_length": 19620.0378330922,
+          "geometry_type": "LineString",
+          "coordinate_count": 85
+        }
+      ]
+    },
+    {
+      "source": "SUB-08",
+      "target": "SUB-23",
+      "source_name": "La Garita",
+      "target_name": "Barranca",
+      "weight": 230.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 35,
+          "name": "Barranca-La Garita",
+          "voltage_kv": 230.0,
+          "shape_stle": 6216.27486956,
+          "shape_length": 41536.5155826071,
+          "geometry_type": "MultiLineString",
+          "coordinate_count": 94
+        }
+      ]
+    },
+    {
+      "source": "SUB-08",
+      "target": "SUB-37",
+      "source_name": "La Garita",
+      "target_name": "Lindora",
+      "weight": 230.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 68,
+          "name": "Garita-Lindora",
+          "voltage_kv": 230.0,
+          "shape_stle": 1231.83943295,
+          "shape_length": 20828.0010126423,
+          "geometry_type": "MultiLineString",
+          "coordinate_count": 78
+        }
+      ]
+    },
+    {
+      "source": "SUB-08",
+      "target": "SUB-54",
+      "source_name": "La Garita",
+      "target_name": "Poas",
+      "weight": 138.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 66,
+          "name": "Poas-La Garita",
+          "voltage_kv": 138.0,
+          "shape_stle": 11366.8457066,
+          "shape_length": 17444.6773383961,
+          "geometry_type": "LineString",
+          "coordinate_count": 55
+        }
+      ]
+    },
+    {
+      "source": "SUB-08",
+      "target": "SUB-61",
+      "source_name": "La Garita",
+      "target_name": "Balsa",
+      "weight": 230.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 88,
+          "name": "Balsa-La Garita",
+          "voltage_kv": 230.0,
+          "shape_stle": 29708.4418183,
+          "shape_length": 49307.114633003,
+          "geometry_type": "LineString",
+          "coordinate_count": 116
+        }
+      ]
+    },
+    {
+      "source": "SUB-09",
+      "target": "SUB-34",
+      "source_name": "Leesville",
+      "target_name": "Trapiche",
+      "weight": 230.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 52,
+          "name": "Trapiche-Leesville",
+          "voltage_kv": 230.0,
+          "shape_stle": 32246.0308614,
+          "shape_length": 32837.2408495581,
+          "geometry_type": "LineString",
+          "coordinate_count": 93
+        }
+      ]
+    },
+    {
+      "source": "SUB-09",
+      "target": "SUB-64",
+      "source_name": "Leesville",
+      "target_name": "General",
+      "weight": 230.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 51,
+          "name": "General-Leesville",
+          "voltage_kv": 230.0,
+          "shape_stle": 1663.29397025,
+          "shape_length": 21441.9013048816,
+          "geometry_type": "LineString",
+          "coordinate_count": 101
+        }
+      ]
+    },
+    {
+      "source": "SUB-10",
+      "target": "SUB-15",
+      "source_name": "Guayabal",
+      "target_name": "Filadelfia",
+      "weight": 138.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 24,
+          "name": "Filadelfia-Guayabal",
+          "voltage_kv": 138.0,
+          "shape_stle": 21665.5597306,
+          "shape_length": 28643.2551637214,
+          "geometry_type": "LineString",
+          "coordinate_count": 79
+        }
+      ]
+    },
+    {
+      "source": "SUB-11",
+      "target": "SUB-13",
+      "source_name": "La Caja",
+      "target_name": "Heredia",
+      "weight": 138.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 60,
+          "name": "La Caja-Heredia",
+          "voltage_kv": 138.0,
+          "shape_stle": 2918.6630582,
+          "shape_length": 8132.62771782794,
+          "geometry_type": "LineString",
+          "coordinate_count": 33
+        }
+      ]
+    },
+    {
+      "source": "SUB-11",
+      "target": "SUB-16",
+      "source_name": "La Caja",
+      "target_name": "El Coco",
+      "weight": 138.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 64,
+          "name": "El Coco-La Caja",
+          "voltage_kv": 138.0,
+          "shape_stle": 9345.46818619,
+          "shape_length": 16266.8715618398,
+          "geometry_type": "LineString",
+          "coordinate_count": 79
+        }
+      ]
+    },
+    {
+      "source": "SUB-11",
+      "target": "SUB-26",
+      "source_name": "La Caja",
+      "target_name": "Alajuelita",
+      "weight": 138.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 15,
+          "name": "Alajuelita-La Caja",
+          "voltage_kv": 138.0,
+          "shape_stle": 1961.88000802,
+          "shape_length": 12096.8529223242,
+          "geometry_type": "MultiLineString",
+          "coordinate_count": 33
+        }
+      ]
+    },
+    {
+      "source": "SUB-11",
+      "target": "SUB-28",
+      "source_name": "La Caja",
+      "target_name": "Belen",
+      "weight": 230.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 61,
+          "name": "La Caja-Belen2",
+          "voltage_kv": 230.0,
+          "shape_stle": 3655.44489867,
+          "shape_length": 3733.09999175284,
+          "geometry_type": "LineString",
+          "coordinate_count": 30
+        }
+      ]
+    },
+    {
+      "source": "SUB-11",
+      "target": "SUB-37",
+      "source_name": "La Caja",
+      "target_name": "Lindora",
+      "weight": 460.0,
+      "circuit_count": 2,
+      "circuits": [
+        {
+          "fid": 39,
+          "name": "Lindora-La Caja",
+          "voltage_kv": 230.0,
+          "shape_stle": 727.371259967,
+          "shape_length": 5860.34147699671,
+          "geometry_type": "LineString",
+          "coordinate_count": 23
+        },
+        {
+          "fid": 79,
+          "name": "Lindora-La Caja2",
+          "voltage_kv": 230.0,
+          "shape_stle": 2173.09393745,
+          "shape_length": 5973.50165727742,
+          "geometry_type": "LineString",
+          "coordinate_count": 24
+        }
+      ]
+    },
+    {
+      "source": "SUB-11",
+      "target": "SUB-38",
+      "source_name": "La Caja",
+      "target_name": "Colima",
+      "weight": 138.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 58,
+          "name": "La Caja-Colima",
+          "voltage_kv": 138.0,
+          "shape_stle": 3808.69436114,
+          "shape_length": 8852.9998007432,
+          "geometry_type": "LineString",
+          "coordinate_count": 31
+        }
+      ]
+    },
+    {
+      "source": "SUB-11",
+      "target": "SUB-60",
+      "source_name": "La Caja",
+      "target_name": "Coyol",
+      "weight": 230.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 84,
+          "name": "Coyol-La Caja",
+          "voltage_kv": 230.0,
+          "shape_stle": 7376.02998891,
+          "shape_length": 15909.8379302929,
+          "geometry_type": "MultiLineString",
+          "coordinate_count": 62
+        }
+      ]
+    },
+    {
+      "source": "SUB-11",
+      "target": "SUB-62",
+      "source_name": "La Caja",
+      "target_name": "Escazú",
+      "weight": 138.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 40,
+          "name": "Escazu-La Caja",
+          "voltage_kv": 138.0,
+          "shape_stle": 3698.81555774,
+          "shape_length": 4004.16723099274,
+          "geometry_type": "LineString",
+          "coordinate_count": 14
+        }
+      ]
+    },
+    {
+      "source": "SUB-11",
+      "target": "SUB-70",
+      "source_name": "La Caja",
+      "target_name": "Ribera",
+      "weight": 230.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 62,
+          "name": "La Caja-Ribera",
+          "voltage_kv": 230.0,
+          "shape_stle": 3666.90769059,
+          "shape_length": 3297.17528708134,
+          "geometry_type": "LineString",
+          "coordinate_count": 30
+        }
+      ]
+    },
+    {
+      "source": "SUB-12",
+      "target": "SUB-23",
+      "source_name": "Juanilama",
+      "target_name": "Barranca",
+      "weight": 138.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 36,
+          "name": "Barranca-Juanilama",
+          "voltage_kv": 138.0,
+          "shape_stle": 6141.0142902,
+          "shape_length": 6243.03233820331,
+          "geometry_type": "LineString",
+          "coordinate_count": 19
+        }
+      ]
+    },
+    {
+      "source": "SUB-13",
+      "target": "SUB-38",
+      "source_name": "Heredia",
+      "target_name": "Colima",
+      "weight": 138.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 59,
+          "name": "Heredia-Colima",
+          "voltage_kv": 138.0,
+          "shape_stle": 3816.66640209,
+          "shape_length": 6861.49050321685,
+          "geometry_type": "LineString",
+          "coordinate_count": 29
+        }
+      ]
+    },
+    {
+      "source": "SUB-14",
+      "target": "SUB-23",
+      "source_name": "Garabito",
+      "target_name": "Barranca",
+      "weight": 230.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 29,
+          "name": "Barranca-Garabito",
+          "voltage_kv": 230.0,
+          "shape_stle": 7799.52269514,
+          "shape_length": 7949.6937487349,
+          "geometry_type": "LineString",
+          "coordinate_count": 29
+        }
+      ]
+    },
+    {
+      "source": "SUB-14",
+      "target": "SUB-24",
+      "source_name": "Garabito",
+      "target_name": "Arenal",
+      "weight": 230.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 27,
+          "name": "Arenal-Garabito",
+          "voltage_kv": 230.0,
+          "shape_stle": 2694.14244777,
+          "shape_length": 58158.5815489224,
+          "geometry_type": "LineString",
+          "coordinate_count": 130
+        }
+      ]
+    },
+    {
+      "source": "SUB-14",
+      "target": "SUB-29",
+      "source_name": "Garabito",
+      "target_name": "Cañas",
+      "weight": 230.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 26,
+          "name": "Garabito-Canas",
+          "voltage_kv": 230.0,
+          "shape_stle": 53005.0845235,
+          "shape_length": 61285.76468612,
+          "geometry_type": "MultiLineString",
+          "coordinate_count": 175
+        }
+      ]
+    },
+    {
+      "source": "SUB-14",
+      "target": "SUB-60",
+      "source_name": "Garabito",
+      "target_name": "Coyol",
+      "weight": 230.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 28,
+          "name": "Garabito-Coyol",
+          "voltage_kv": 230.0,
+          "shape_stle": 2656.39064905,
+          "shape_length": 64865.4310411738,
+          "geometry_type": "MultiLineString",
+          "coordinate_count": 184
+        }
+      ]
+    },
+    {
+      "source": "SUB-15",
+      "target": "SUB-29",
+      "source_name": "Filadelfia",
+      "target_name": "Cañas",
+      "weight": 138.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 23,
+          "name": "Canas-Filadelfia",
+          "voltage_kv": 138.0,
+          "shape_stle": 36697.2905487,
+          "shape_length": 43914.2689530939,
+          "geometry_type": "MultiLineString",
+          "coordinate_count": 130
+        }
+      ]
+    },
+    {
+      "source": "SUB-17",
+      "target": "SUB-52",
+      "source_name": "Desamparados",
+      "target_name": "Rio Macho",
+      "weight": 138.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 14,
+          "name": "Rio Macho-Desamparados",
+          "voltage_kv": 138.0,
+          "shape_stle": 1711.55465958,
+          "shape_length": 34271.543082419,
+          "geometry_type": "MultiLineString",
+          "coordinate_count": 96
+        }
+      ]
+    },
+    {
+      "source": "SUB-17",
+      "target": "SUB-62",
+      "source_name": "Desamparados",
+      "target_name": "Escazú",
+      "weight": 138.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 13,
+          "name": "Desamparados-Escazu",
+          "voltage_kv": 138.0,
+          "shape_stle": 1715.03419455,
+          "shape_length": 16964.9334345536,
+          "geometry_type": "LineString",
+          "coordinate_count": 45
+        }
+      ]
+    },
+    {
+      "source": "SUB-18",
+      "target": "SUB-24",
+      "source_name": "Corobici",
+      "target_name": "Arenal",
+      "weight": 230.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 21,
+          "name": "Arenal-Corobici",
+          "voltage_kv": 230.0,
+          "shape_stle": 1290.03743291,
+          "shape_length": 10130.5112576976,
+          "geometry_type": "LineString",
+          "coordinate_count": 26
+        }
+      ]
+    },
+    {
+      "source": "SUB-18",
+      "target": "SUB-29",
+      "source_name": "Corobici",
+      "target_name": "Cañas",
+      "weight": 230.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 20,
+          "name": "Corobici-Canas",
+          "voltage_kv": 230.0,
+          "shape_stle": 6360.90743989,
+          "shape_length": 7818.45969348572,
+          "geometry_type": "LineString",
+          "coordinate_count": 21
+        }
+      ]
+    },
+    {
+      "source": "SUB-18",
+      "target": "SUB-47",
+      "source_name": "Corobici",
+      "target_name": "Sandillal",
+      "weight": 230.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 22,
+          "name": "Sandillal-Corobici",
+          "voltage_kv": 230.0,
+          "shape_stle": 3049.60307378,
+          "shape_length": 3104.2736325269,
+          "geometry_type": "LineString",
+          "coordinate_count": 15
+        }
+      ]
+    },
+    {
+      "source": "SUB-19",
+      "target": "SUB-25",
+      "source_name": "Concavas",
+      "target_name": "Angostura",
+      "weight": 138.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 9,
+          "name": "Angostura-Concavas",
+          "voltage_kv": 138.0,
+          "shape_stle": 30098.7665632,
+          "shape_length": 33213.4423931688,
+          "geometry_type": "LineString",
+          "coordinate_count": 119
+        }
+      ]
+    },
+    {
+      "source": "SUB-19",
+      "target": "SUB-26",
+      "source_name": "Concavas",
+      "target_name": "Alajuelita",
+      "weight": 138.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 11,
+          "name": "Concavas-Alajuelita",
+          "voltage_kv": 138.0,
+          "shape_stle": 15942.5059425,
+          "shape_length": 34386.1124506822,
+          "geometry_type": "MultiLineString",
+          "coordinate_count": 96
+        }
+      ]
+    },
+    {
+      "source": "SUB-19",
+      "target": "SUB-52",
+      "source_name": "Concavas",
+      "target_name": "Rio Macho",
+      "weight": 138.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 12,
+          "name": "Rio Macho-Concavas",
+          "voltage_kv": 138.0,
+          "shape_stle": 8601.96310506,
+          "shape_length": 8766.93513350483,
+          "geometry_type": "MultiLineString",
+          "coordinate_count": 28
+        }
+      ]
+    },
+    {
+      "source": "SUB-20",
+      "target": "SUB-29",
+      "source_name": "Colorado",
+      "target_name": "Cañas",
+      "weight": 138.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 7,
+          "name": "Canas-Colorado",
+          "voltage_kv": 138.0,
+          "shape_stle": 23764.7549727,
+          "shape_length": 24284.5793004088,
+          "geometry_type": "LineString",
+          "coordinate_count": 73
+        }
+      ]
+    },
+    {
+      "source": "SUB-20",
+      "target": "SUB-46",
+      "source_name": "Colorado",
+      "target_name": "Santa Rita",
+      "weight": 138.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 8,
+          "name": "Colorado-Santa Rita",
+          "voltage_kv": 138.0,
+          "shape_stle": 16502.5766968,
+          "shape_length": 33127.8829660527,
+          "geometry_type": "MultiLineString",
+          "coordinate_count": 111
+        }
+      ]
+    },
+    {
+      "source": "SUB-21",
+      "target": "SUB-33",
+      "source_name": "Ciudad Quesada",
+      "target_name": "Venecia",
+      "weight": 230.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 76,
+          "name": "Ciudad Quesada-Venecia",
+          "voltage_kv": 230.0,
+          "shape_stle": 22507.6824084,
+          "shape_length": 22907.00529755,
+          "geometry_type": "LineString",
+          "coordinate_count": 78
+        }
+      ]
+    },
+    {
+      "source": "SUB-21",
+      "target": "SUB-56",
+      "source_name": "Ciudad Quesada",
+      "target_name": "Peñas Blancas",
+      "weight": 230.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 34,
+          "name": "Penas Blancas-Ciudad Quesada",
+          "voltage_kv": 230.0,
+          "shape_stle": 473.231551857,
+          "shape_length": 17946.7504352182,
+          "geometry_type": "LineString",
+          "coordinate_count": 53
+        }
+      ]
+    },
+    {
+      "source": "SUB-22",
+      "target": "SUB-43",
+      "source_name": "Cariblanco",
+      "target_name": "Toro",
+      "weight": 230.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 74,
+          "name": "Toro-Cariblanco",
+          "voltage_kv": 230.0,
+          "shape_stle": 749.332197886,
+          "shape_length": 8486.06422954422,
+          "geometry_type": "LineString",
+          "coordinate_count": 31
+        }
+      ]
+    },
+    {
+      "source": "SUB-22",
+      "target": "SUB-44",
+      "source_name": "Cariblanco",
+      "target_name": "San Miguel",
+      "weight": 230.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 75,
+          "name": "Cariblanco-San Miguel",
+          "voltage_kv": 230.0,
+          "shape_stle": 743.932320765,
+          "shape_length": 45139.240892336,
+          "geometry_type": "LineString",
+          "coordinate_count": 136
+        }
+      ]
+    },
+    {
+      "source": "SUB-22",
+      "target": "SUB-64",
+      "source_name": "Cariblanco",
+      "target_name": "General",
+      "weight": 230.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 85,
+          "name": "Cariblanco-General",
+          "voltage_kv": 230.0,
+          "shape_stle": 38613.3033661,
+          "shape_length": 80695.8947785805,
+          "geometry_type": "MultiLineString",
+          "coordinate_count": 259
+        }
+      ]
+    },
+    {
+      "source": "SUB-24",
+      "target": "SUB-35",
+      "source_name": "Arenal",
+      "target_name": "Miravalles",
+      "weight": 230.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 31,
+          "name": "Miravalles-Arenal",
+          "voltage_kv": 230.0,
+          "shape_stle": 35765.6650815,
+          "shape_length": 36503.9268096318,
+          "geometry_type": "LineString",
+          "coordinate_count": 114
+        }
+      ]
+    },
+    {
+      "source": "SUB-24",
+      "target": "SUB-37",
+      "source_name": "Arenal",
+      "target_name": "Lindora",
+      "weight": 230.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 30,
+          "name": "Arenal-Lindora",
+          "voltage_kv": 230.0,
+          "shape_stle": 54268.0653134,
+          "shape_length": 122582.028088175,
+          "geometry_type": "LineString",
+          "coordinate_count": 296
+        }
+      ]
+    },
+    {
+      "source": "SUB-24",
+      "target": "SUB-48",
+      "source_name": "Arenal",
+      "target_name": "Tejona",
+      "weight": 230.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 33,
+          "name": "Arenal-Tejona",
+          "voltage_kv": 230.0,
+          "shape_stle": 6020.31891743,
+          "shape_length": 6157.22776286508,
+          "geometry_type": "LineString",
+          "coordinate_count": 25
+        }
+      ]
+    },
+    {
+      "source": "SUB-25",
+      "target": "SUB-27",
+      "source_name": "Angostura",
+      "target_name": "Cachi",
+      "weight": 138.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 16,
+          "name": "Angostura-Cachi",
+          "voltage_kv": 138.0,
+          "shape_stle": 9618.367981,
+          "shape_length": 15081.1803915011,
+          "geometry_type": "LineString",
+          "coordinate_count": 46
+        }
+      ]
+    },
+    {
+      "source": "SUB-25",
+      "target": "SUB-42",
+      "source_name": "Angostura",
+      "target_name": "Turrialba",
+      "weight": 138.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 17,
+          "name": "Turrialba-Angostura",
+          "voltage_kv": 138.0,
+          "shape_stle": 5129.76471347,
+          "shape_length": 5243.73611083811,
+          "geometry_type": "LineString",
+          "coordinate_count": 19
+        }
+      ]
+    },
+    {
+      "source": "SUB-26",
+      "target": "SUB-41",
+      "source_name": "Alajuelita",
+      "target_name": "Anonos",
+      "weight": 138.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 70,
+          "name": "Alajuelita-Anonos",
+          "voltage_kv": 138.0,
+          "shape_stle": 2386.74258098,
+          "shape_length": 2435.54984998131,
+          "geometry_type": "LineString",
+          "coordinate_count": 13
+        }
+      ]
+    },
+    {
+      "source": "SUB-26",
+      "target": "SUB-68",
+      "source_name": "Alajuelita",
+      "target_name": "Los Ángeles",
+      "weight": 138.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 97,
+          "name": "Los Angeles-Alajuelita",
+          "voltage_kv": 138.0,
+          "shape_stle": 4189.8470914,
+          "shape_length": 4264.06005956429,
+          "geometry_type": "LineString",
+          "coordinate_count": 171
+        }
+      ]
+    },
+    {
+      "source": "SUB-27",
+      "target": "SUB-42",
+      "source_name": "Cachi",
+      "target_name": "Turrialba",
+      "weight": 138.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 18,
+          "name": "Cachi-Turrialba",
+          "voltage_kv": 138.0,
+          "shape_stle": 9624.16701968,
+          "shape_length": 9807.3993417606,
+          "geometry_type": "LineString",
+          "coordinate_count": 27
+        }
+      ]
+    },
+    {
+      "source": "SUB-27",
+      "target": "SUB-44",
+      "source_name": "Cachi",
+      "target_name": "San Miguel",
+      "weight": 138.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 54,
+          "name": "Cachi-San Miguel",
+          "voltage_kv": 138.0,
+          "shape_stle": 26730.3233584,
+          "shape_length": 36792.1589924271,
+          "geometry_type": "MultiLineString",
+          "coordinate_count": 103
+        }
+      ]
+    },
+    {
+      "source": "SUB-27",
+      "target": "SUB-51",
+      "source_name": "Cachi",
+      "target_name": "Sabanilla",
+      "weight": 138.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 53,
+          "name": "Cachi-Sabanilla",
+          "voltage_kv": 138.0,
+          "shape_stle": 26748.1105163,
+          "shape_length": 35759.066029897,
+          "geometry_type": "LineString",
+          "coordinate_count": 98
+        }
+      ]
+    },
+    {
+      "source": "SUB-27",
+      "target": "SUB-52",
+      "source_name": "Cachi",
+      "target_name": "Rio Macho",
+      "weight": 138.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 48,
+          "name": "Rio Macho-Cachi",
+          "voltage_kv": 138.0,
+          "shape_stle": 14017.4967059,
+          "shape_length": 14743.1470081924,
+          "geometry_type": "MultiLineString",
+          "coordinate_count": 36
+        }
+      ]
+    },
+    {
+      "source": "SUB-28",
+      "target": "SUB-70",
+      "source_name": "Belen",
+      "target_name": "Ribera",
+      "weight": 230.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 102,
+          "name": "Ribera-Belén",
+          "voltage_kv": 230.0,
+          "shape_stle": 3666.90769059,
+          "shape_length": 747.7947615394,
+          "geometry_type": "LineString",
+          "coordinate_count": 8
+        }
+      ]
+    },
+    {
+      "source": "SUB-29",
+      "target": "SUB-59",
+      "source_name": "Cañas",
+      "target_name": "Jacó",
+      "weight": 230.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 101,
+          "name": "Cañas-Jacó (siepac)",
+          "voltage_kv": 230.0,
+          "shape_stle": 14222.3340481,
+          "shape_length": 14495.8552439119,
+          "geometry_type": "LineString",
+          "coordinate_count": 38
+        }
+      ]
+    },
+    {
+      "source": "SUB-31",
+      "target": "SUB-32",
+      "source_name": "Reventazon",
+      "target_name": "Torito",
+      "weight": 230.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 82,
+          "name": "Torito-Reventazon",
+          "voltage_kv": 230.0,
+          "shape_stle": 15096.4131274,
+          "shape_length": 19578.1583406973,
+          "geometry_type": "MultiLineString",
+          "coordinate_count": 52
+        }
+      ]
+    },
+    {
+      "source": "SUB-31",
+      "target": "SUB-34",
+      "source_name": "Reventazon",
+      "target_name": "Trapiche",
+      "weight": 230.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 90,
+          "name": "Reventazon-Trapiche",
+          "voltage_kv": 230.0,
+          "shape_stle": 2391.35483981,
+          "shape_length": 6800.54131903709,
+          "geometry_type": "MultiLineString",
+          "coordinate_count": 32
+        }
+      ]
+    },
+    {
+      "source": "SUB-31",
+      "target": "SUB-65",
+      "source_name": "Reventazon",
+      "target_name": "Río Blanco",
+      "weight": 230.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 91,
+          "name": "Reventazon-Rio Blanco",
+          "voltage_kv": 230.0,
+          "shape_stle": 51312.22253,
+          "shape_length": 62054.2485468799,
+          "geometry_type": "MultiLineString",
+          "coordinate_count": 158
+        }
+      ]
+    },
+    {
+      "source": "SUB-32",
+      "target": "SUB-52",
+      "source_name": "Torito",
+      "target_name": "Rio Macho",
+      "weight": 230.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 47,
+          "name": "Rio Macho-Torito",
+          "voltage_kv": 230.0,
+          "shape_stle": 14700.0853937,
+          "shape_length": 35129.9867142963,
+          "geometry_type": "MultiLineString",
+          "coordinate_count": 88
+        }
+      ]
+    },
+    {
+      "source": "SUB-33",
+      "target": "SUB-43",
+      "source_name": "Venecia",
+      "target_name": "Toro",
+      "weight": 230.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 77,
+          "name": "Venecia-Toro",
+          "voltage_kv": 230.0,
+          "shape_stle": 7215.26360777,
+          "shape_length": 7373.79112959767,
+          "geometry_type": "LineString",
+          "coordinate_count": 26
+        }
+      ]
+    },
+    {
+      "source": "SUB-36",
+      "target": "SUB-44",
+      "source_name": "El Este",
+      "target_name": "San Miguel",
+      "weight": 230.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 45,
+          "name": "San Miguel-El Este",
+          "voltage_kv": 230.0,
+          "shape_stle": 14239.2681651,
+          "shape_length": 20465.6399650367,
+          "geometry_type": "LineString",
+          "coordinate_count": 81
+        }
+      ]
+    },
+    {
+      "source": "SUB-36",
+      "target": "SUB-49",
+      "source_name": "El Este",
+      "target_name": "Tejar",
+      "weight": 230.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 78,
+          "name": "Tejar-El Este",
+          "voltage_kv": 230.0,
+          "shape_stle": 1327.42543175,
+          "shape_length": 15257.5114956074,
+          "geometry_type": "LineString",
+          "coordinate_count": 47
+        }
+      ]
+    },
+    {
+      "source": "SUB-36",
+      "target": "SUB-63",
+      "source_name": "El Este",
+      "target_name": "Coronado",
+      "weight": 230.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 46,
+          "name": "Coronado-El Este",
+          "voltage_kv": 230.0,
+          "shape_stle": 14246.7634031,
+          "shape_length": 14522.7182070321,
+          "geometry_type": "LineString",
+          "coordinate_count": 55
+        }
+      ]
+    },
+    {
+      "source": "SUB-36",
+      "target": "SUB-69",
+      "source_name": "El Este",
+      "target_name": "Higuito",
+      "weight": 230.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 96,
+          "name": "El Este-Higuito",
+          "voltage_kv": 230.0,
+          "shape_stle": 9143.84875127,
+          "shape_length": 28104.7742508161,
+          "geometry_type": "MultiLineString",
+          "coordinate_count": 77
+        }
+      ]
+    },
+    {
+      "source": "SUB-37",
+      "target": "SUB-44",
+      "source_name": "Lindora",
+      "target_name": "San Miguel",
+      "weight": 460.0,
+      "circuit_count": 2,
+      "circuits": [
+        {
+          "fid": 80,
+          "name": "San Miguel-Lindora2",
+          "voltage_kv": 230.0,
+          "shape_stle": 9176.99326555,
+          "shape_length": 19654.7860856583,
+          "geometry_type": "MultiLineString",
+          "coordinate_count": 71
+        },
+        {
+          "fid": 81,
+          "name": "San Miguel-Lindora1",
+          "voltage_kv": 230.0,
+          "shape_stle": 9260.81133305,
+          "shape_length": 19723.3057049545,
+          "geometry_type": "LineString",
+          "coordinate_count": 69
+        }
+      ]
+    },
+    {
+      "source": "SUB-37",
+      "target": "SUB-50",
+      "source_name": "Lindora",
+      "target_name": "Tarbaca",
+      "weight": 460.0,
+      "circuit_count": 2,
+      "circuits": [
+        {
+          "fid": 71,
+          "name": "Tarbaca-Lindora1",
+          "voltage_kv": 230.0,
+          "shape_stle": 33113.7440493,
+          "shape_length": 33828.1153906872,
+          "geometry_type": "MultiLineString",
+          "coordinate_count": 92
+        },
+        {
+          "fid": 72,
+          "name": "Tarbaca-Lindora2",
+          "voltage_kv": 230.0,
+          "shape_stle": 33034.7296601,
+          "shape_length": 33719.7970401987,
+          "geometry_type": "LineString",
+          "coordinate_count": 87
+        }
+      ]
+    },
+    {
+      "source": "SUB-38",
+      "target": "SUB-44",
+      "source_name": "Colima",
+      "target_name": "San Miguel",
+      "weight": 276.0,
+      "circuit_count": 2,
+      "circuits": [
+        {
+          "fid": 56,
+          "name": "San Miguel-Colima2",
+          "voltage_kv": 138.0,
+          "shape_stle": 5414.61889052,
+          "shape_length": 5611.18997078516,
+          "geometry_type": "LineString",
+          "coordinate_count": 20
+        },
+        {
+          "fid": 57,
+          "name": "San Miguel-Colima1",
+          "voltage_kv": 138.0,
+          "shape_stle": 5427.23385539,
+          "shape_length": 5641.1883362181,
+          "geometry_type": "LineString",
+          "coordinate_count": 21
+        }
+      ]
+    },
+    {
+      "source": "SUB-38",
+      "target": "SUB-67",
+      "source_name": "Colima",
+      "target_name": "Uruca",
+      "weight": 138.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 99,
+          "name": "Colima-Uruca",
+          "voltage_kv": 138.0,
+          "shape_stle": 582.232889557,
+          "shape_length": 593.39127958595,
+          "geometry_type": "LineString",
+          "coordinate_count": 40
+        }
+      ]
+    },
+    {
+      "source": "SUB-39",
+      "target": "SUB-46",
+      "source_name": "Cobano",
+      "target_name": "Santa Rita",
+      "weight": 138.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 89,
+          "name": "Santa Rita-Cobano",
+          "voltage_kv": 138.0,
+          "shape_stle": 43453.4332429,
+          "shape_length": 47624.633993011,
+          "geometry_type": "LineString",
+          "coordinate_count": 129
+        }
+      ]
+    },
+    {
+      "source": "SUB-44",
+      "target": "SUB-51",
+      "source_name": "San Miguel",
+      "target_name": "Sabanilla",
+      "weight": 138.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 55,
+          "name": "Sabanilla-San Miguel",
+          "voltage_kv": 138.0,
+          "shape_stle": 3082.49524379,
+          "shape_length": 7327.80506521736,
+          "geometry_type": "LineString",
+          "coordinate_count": 31
+        }
+      ]
+    },
+    {
+      "source": "SUB-44",
+      "target": "SUB-63",
+      "source_name": "San Miguel",
+      "target_name": "Coronado",
+      "weight": 230.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 69,
+          "name": "San Miguel-Coronado",
+          "voltage_kv": 230.0,
+          "shape_stle": 5505.65954602,
+          "shape_length": 5908.76845550728,
+          "geometry_type": "LineString",
+          "coordinate_count": 28
+        }
+      ]
+    },
+    {
+      "source": "SUB-45",
+      "target": "SUB-52",
+      "source_name": "San Isidro",
+      "target_name": "Rio Macho",
+      "weight": 230.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 44,
+          "name": "Rio Macho-San Isidro",
+          "voltage_kv": 230.0,
+          "shape_stle": 57197.541652,
+          "shape_length": 58272.7012835414,
+          "geometry_type": "LineString",
+          "coordinate_count": 126
+        }
+      ]
+    },
+    {
+      "source": "SUB-48",
+      "target": "SUB-56",
+      "source_name": "Tejona",
+      "target_name": "Peñas Blancas",
+      "weight": 230.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 32,
+          "name": "Tejona-Penas Blancas",
+          "voltage_kv": 230.0,
+          "shape_stle": 45578.6643084,
+          "shape_length": 59775.161755262,
+          "geometry_type": "LineString",
+          "coordinate_count": 167
+        }
+      ]
+    },
+    {
+      "source": "SUB-49",
+      "target": "SUB-52",
+      "source_name": "Tejar",
+      "target_name": "Rio Macho",
+      "weight": 230.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 94,
+          "name": "Rio Macho-Tejar",
+          "voltage_kv": 230.0,
+          "shape_stle": 3212.00510606,
+          "shape_length": 15286.0522849704,
+          "geometry_type": "MultiLineString",
+          "coordinate_count": 47
+        }
+      ]
+    },
+    {
+      "source": "SUB-49",
+      "target": "SUB-55",
+      "source_name": "Tejar",
+      "target_name": "Pirris",
+      "weight": 230.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 73,
+          "name": "Tejar-Pirris",
+          "voltage_kv": 230.0,
+          "shape_stle": 29208.5009651,
+          "shape_length": 52975.6498774365,
+          "geometry_type": "LineString",
+          "coordinate_count": 135
+        }
+      ]
+    },
+    {
+      "source": "SUB-50",
+      "target": "SUB-57",
+      "source_name": "Tarbaca",
+      "target_name": "Parrita",
+      "weight": 230.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 37,
+          "name": "Tarbaca-Parrita",
+          "voltage_kv": 230.0,
+          "shape_stle": 29080.7788697,
+          "shape_length": 43580.2487569515,
+          "geometry_type": "LineString",
+          "coordinate_count": 101
+        }
+      ]
+    },
+    {
+      "source": "SUB-50",
+      "target": "SUB-69",
+      "source_name": "Tarbaca",
+      "target_name": "Higuito",
+      "weight": 230.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 95,
+          "name": "Higuito-Tarbaca",
+          "voltage_kv": 230.0,
+          "shape_stle": 2094.47466645,
+          "shape_length": 8117.31155878904,
+          "geometry_type": "LineString",
+          "coordinate_count": 23
+        }
+      ]
+    },
+    {
+      "source": "SUB-51",
+      "target": "SUB-66",
+      "source_name": "Sabanilla",
+      "target_name": "Guadalupe",
+      "weight": 138.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 98,
+          "name": "Sabanilla-Guadalupe",
+          "voltage_kv": 138.0,
+          "shape_stle": 2320.80801088,
+          "shape_length": 2362.39645165386,
+          "geometry_type": "LineString",
+          "coordinate_count": 145
+        }
+      ]
+    },
+    {
+      "source": "SUB-55",
+      "target": "SUB-57",
+      "source_name": "Pirris",
+      "target_name": "Parrita",
+      "weight": 230.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 38,
+          "name": "Parrita-Pirris",
+          "voltage_kv": 230.0,
+          "shape_stle": 9524.40170849,
+          "shape_length": 9710.37116229709,
+          "geometry_type": "MultiLineString",
+          "coordinate_count": 28
+        }
+      ]
+    },
+    {
+      "source": "SUB-56",
+      "target": "SUB-61",
+      "source_name": "Peñas Blancas",
+      "target_name": "Balsa",
+      "weight": 230.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 86,
+          "name": "Penas Blancas-Balsa",
+          "voltage_kv": 230.0,
+          "shape_stle": 17610.2735919,
+          "shape_length": 17989.650385927,
+          "geometry_type": "MultiLineString",
+          "coordinate_count": 61
+        }
+      ]
+    },
+    {
+      "source": "SUB-57",
+      "target": "SUB-59",
+      "source_name": "Parrita",
+      "target_name": "Jacó",
+      "weight": 230.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 100,
+          "name": "Jaco-Parrita (siepac)",
+          "voltage_kv": 230.0,
+          "shape_stle": 14234.9296833,
+          "shape_length": 14502.983444896,
+          "geometry_type": "LineString",
+          "coordinate_count": 38
+        }
+      ]
+    }
+  ],
+  "unresolved_lines": [
+    {
+      "fid": 3,
+      "circuit": "Liberia-Frontera Nicaragua",
+      "unmatched_endpoints": [
+        "Frontera Nicaragua"
+      ],
+      "voltage_kv": 230.0,
+      "shape_length": 73495.6888702991,
+      "geometry_type": "MultiLineString"
+    },
+    {
+      "fid": 10,
+      "circuit": "Concavas-Aguas Calientes",
+      "unmatched_endpoints": [
+        "Aguas Calientes"
+      ],
+      "voltage_kv": 138.0,
+      "shape_length": 1377.54105948766,
+      "geometry_type": "LineString"
+    },
+    {
+      "fid": 25,
+      "circuit": "Colorado-Cemex",
+      "unmatched_endpoints": [
+        "Cemex"
+      ],
+      "voltage_kv": 138.0,
+      "shape_length": 3382.66174127281,
+      "geometry_type": "LineString"
+    },
+    {
+      "fid": 41,
+      "circuit": "Rio Claro-Progreso",
+      "unmatched_endpoints": [
+        "Progreso"
+      ],
+      "voltage_kv": 230.0,
+      "shape_length": 37480.1349147962,
+      "geometry_type": "LineString"
+    },
+    {
+      "fid": 83,
+      "circuit": "SIEPAC",
+      "unmatched_endpoints": [
+        "SIEPAC"
+      ],
+      "voltage_kv": 230.0,
+      "shape_length": 502777.644518268,
+      "geometry_type": "LineString"
+    },
+    {
+      "fid": 93,
+      "circuit": "Cahuita-Changuinola",
+      "unmatched_endpoints": [
+        "Changuinola"
+      ],
+      "voltage_kv": 230.0,
+      "shape_length": 44792.3716444704,
+      "geometry_type": "LineString"
+    }
+  ]
+}
