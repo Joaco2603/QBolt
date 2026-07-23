@@ -2,7 +2,8 @@
 
 ## Test target
 
-The executable pytest module is `power-core/tests/optimizer/test_goemans_williamson.py`.
+The executable pytest module is
+`power-core/tests/optimizer/goemans-williamson/tests_goemans_williamson.py`.
 This Markdown file defines its behavioural contract; `index.py` is not a pytest
 test filename and must not be used as the executable test target.
 
@@ -49,7 +50,7 @@ solver status.
 ## Acceptance commands
 
 ```bash
-python -m pytest power-core/tests/optimizer/test_goemans_williamson.py
+python -m pytest power-core/tests/optimizer/goemans-williamson/tests_goemans_williamson.py
 python -m pytest power-core/tests
 ```
 

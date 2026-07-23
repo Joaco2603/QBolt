@@ -50,3 +50,13 @@ python data-analysis/scripts/build_regional_instance.py \
 
 Its `edge_model` and limitation fields must be included in any report; inferred
 proximity is not a claim about the real electrical topology.
+
+Render the exact six-node graph used by the QUBO/Max-Cut instance with:
+
+```bash
+python data-analysis/scripts/plot_regional_graph.py
+```
+
+This writes `power-core/artifacts/regional_instance_graph.png`. Node positions
+use the dataset coordinates, edge labels show the nominal-voltage weights, and
+the reference two-zone cut is highlighted in red.

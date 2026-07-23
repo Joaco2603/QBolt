@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import pytest
 
-from optimizer.quantum import IsingModel, MeasurementBatch, QAOA
-from optimizer.quantum.qubo.constraint_builder import QuboModel
+from src.optimizer.quantum import IsingModel, MeasurementBatch, QAOA
+from src.optimizer.quantum.qubo.constraint_builder import QuboModel
 
 def test_ising_model_converts_qubo_and_preserves_exact_energy() -> None:
     qubo = QuboModel(
