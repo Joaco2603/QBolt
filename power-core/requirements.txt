@@ -13,6 +13,9 @@ matplotlib==3.11.1
 # Quantinuum / TKET execution and emulation
 pytket==2.18.1
 pytket-quantinuum==0.59.1
+guppylang==0.21.16
+selene-sim==0.2.17
+qnexus==0.45.0
 
 # Tests
 pytest==9.1.1
