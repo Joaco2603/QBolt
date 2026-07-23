@@ -18,14 +18,14 @@ import networkx as nx
 import pytest
 
 
-ROOT = Path(__file__).parents[4]
+ROOT = Path(__file__).parents[5]
 REGIONAL_INSTANCE = ROOT / "power-core" / "artifacts" / "regional_instance.json"
 BUILDER_MODULE = (
     ROOT
     / "power-core"
     / "src"
     / "optimizer"
-    / "qubo_ising_qaoa"
+    / "quantum"
     / "qubo"
     / "constraint_builder.py"
 )

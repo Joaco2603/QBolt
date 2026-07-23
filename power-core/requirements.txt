@@ -4,6 +4,8 @@
 networkx==3.6.1
 numpy==2.5.1
 scipy==1.18.0
+cvxpy==1.9.2
+scs==3.2.11
 
 # Charts and reports
 matplotlib==3.11.1
