@@ -24,6 +24,18 @@ The immutable result records positive and negative partitions, cut weight, SDP
 value, empirical ratio, seed, requested rounds, winning round, solver, and
 solver status.
 
+## Strategy adapter contract
+
+`GoemansWilliamsonStrategy` adapts this API to the optimizer-agnostic runner:
+
+- Its stable identifier is `goemans-williamson`.
+- It accepts only `rounds` and `solver` in `SolverRunRequest.options`.
+- It maps the positive partition to `1` and the negative partition to `0`.
+- It recomputes the normalized cut against the request graph.
+- It returns validation and SDP failures as `SolverRunResult(status="failed")`.
+- It records JSON-serializable SDP and rounding evidence without exposing the
+  numerical matrix through shared metadata.
+
 ## RED-to-GREEN sequence
 
 1. Validate graph type, string node IDs, simple undirected topology, explicit
@@ -46,13 +58,16 @@ solver status.
 9. Load `power-core/artifacts/regional_instance.json` deterministically, verify
    that brute force yields the reference optimum `1058.0 kV`, and compare
    partitions only up to complement.
+10. Verify the strategy defaults, option validation, normalized partition,
+    recomputed cut, immutable request forwarding, and structured failures.
+11. Inject the strategy into `SolverRunner` and verify the regional reference
+    instance without adding optimizer-specific branches to the runner.
 
 ## Acceptance commands
 
 ```bash
 python -m pytest power-core/tests/optimizer/goemans-williamson/tests_goemans_williamson.py
+python -m pytest power-core/tests/optimizer/test_goemans_williamson_strategy.py
+python -m pytest power-core/tests/test_run_solver.py
 python -m pytest power-core/tests
 ```
-
-Before the full-suite command is accepted, fix the existing duplicated
-`power-core/power-core/...` module path in the QUBO constraint-builder test.

@@ -2,7 +2,8 @@
 
 ## Objetivo de la prueba
 
-El módulo ejecutable de pytest es `power-core/tests/optimizer/test_goemans_williamson.py`.
+El módulo ejecutable de pytest es
+`power-core/tests/optimizer/goemans-williamson/tests_goemans_williamson.py`.
 Este archivo Markdown define su contrato de comportamiento; `index.py` no es un
 nombre de prueba pytest ejecutable y no debe usarse como objetivo de prueba.
 
@@ -22,6 +23,20 @@ solve_goemans_williamson(
 El resultado inmutable registra las particiones positiva y negativa, el peso del
 cut, el valor SDP, la ratio empírica, la seed, las rondas solicitadas, la ronda
 ganadora, el solver y el estado del solver.
+
+## Contrato del adaptador Strategy
+
+`GoemansWilliamsonStrategy` adapta esta API al runner independiente del
+optimizador:
+
+- Su identificador estable es `goemans-williamson`.
+- Solo acepta `rounds` y `solver` en `SolverRunRequest.options`.
+- Convierte la partición positiva a `1` y la negativa a `0`.
+- Recalcula el corte normalizado contra el grafo del request.
+- Devuelve errores de validación y SDP como
+  `SolverRunResult(status="failed")`.
+- Registra evidencia SDP y de redondeo serializable como JSON, sin exponer la
+  matriz numérica en la metadata compartida.
 
 ## Secuencia RED-a-VERDE (RED-to-GREEN)
 
@@ -49,14 +64,16 @@ ganadora, el solver y el estado del solver.
 9. Cargar `power-core/artifacts/regional_instance.json` de forma determinista,
    verificar que fuerza bruta produzca el óptimo de referencia `1058.0 kV`, y
    comparar particiones solo hasta el complemento.
+10. Verificar defaults, validación de opciones, partición normalizada, corte
+    recalculado, preservación del request y errores estructurados del Strategy.
+11. Inyectar el Strategy en `SolverRunner` y verificar la instancia regional
+    sin agregar ramas específicas del optimizador al runner.
 
 ## Comandos de aceptación
 
 ```bash
-python -m pytest power-core/tests/optimizer/test_goemans_williamson.py
+python -m pytest power-core/tests/optimizer/goemans-williamson/tests_goemans_williamson.py
+python -m pytest power-core/tests/optimizer/test_goemans_williamson_strategy.py
+python -m pytest power-core/tests/test_run_solver.py
 python -m pytest power-core/tests
 ```
-
-Antes de aceptar el comando de suite completa, arreglar la ruta duplicada
-existente `power-core/power-core/...` en la prueba del construcctor de
-restricciones QUBO.
