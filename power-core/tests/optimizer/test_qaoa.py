@@ -5,6 +5,7 @@ from __future__ import annotations
 import pytest
 
 from optimizer.quantum import IsingModel, MeasurementBatch, QAOA
+from optimizer.quantum.qaoa.backends import _counts_from_collated_counts
 from optimizer.quantum.qubo.constraint_builder import QuboModel
 
 def test_ising_model_converts_qubo_and_preserves_exact_energy() -> None:
@@ -65,3 +66,21 @@ def test_qaoa_runs_seeded_multistart_and_returns_statistics() -> None:
 def test_qaoa_requires_at_least_five_starts() -> None:
     with pytest.raises(ValueError, match="at least 5"):
         QAOA(starts=4)
+
+
+def test_nexus_collated_counts_normalize_named_qubit_results() -> None:
+    counts = {
+        (
+            ("q0", "0"),
+            ("q1", "1"),
+            ("q2", "1"),
+        ): 4
+    }
+
+    assert _counts_from_collated_counts(counts, ("a", "b", "c")) == {"011": 4}
+
+
+def test_nexus_collated_counts_preserve_single_named_result_format() -> None:
+    counts = {(('result', '011'),): 4}
+
+    assert _counts_from_collated_counts(counts, ("a", "b", "c")) == {"011": 4}
