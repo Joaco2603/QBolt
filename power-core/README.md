@@ -144,6 +144,13 @@ are dependency installation, `data-analysis` tests, and graph-artifact
 generation above. Add documented commands here only when their implementation
 and tests exist.
 
+## Benchmark plan
+
+The Spanish benchmark plan distinguishes the Challenge 1 mandatory baselines,
+the implemented solvers, and useful supplemental experiments:
+
+- [`docs/spanish/benchmarks/README.md`](docs/spanish/benchmarks/README.md)
+
 ## Troubleshooting
 
 | Symptom | Fix |
