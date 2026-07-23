@@ -51,11 +51,22 @@ class NexusBackend:
 
     name = "quantinuum-nexus"
 
-    def __init__(self, session: object, executor: Any | None = None) -> None:
+    def __init__(
+        self,
+        session: object,
+        executor: Any | None = None,
+        *,
+        project: object | None = None,
+        timeout: float | None = None,
+        max_cost: float | list[float] | None = None,
+    ) -> None:
         if session is None:
             raise ValueError("An authenticated Nexus session is required")
         self.session = session
         self._executor = executor
+        self.project = project
+        self.timeout = timeout
+        self.max_cost = max_cost
 
     def execute(
         self,
@@ -82,13 +93,18 @@ class NexusBackend:
                 n_qubits=len(program.variables),
                 simulator=self.session.models.StatevectorSimulator(),
             )
-            job = self.session.start_execute_job(
-                programs=[hugr_ref],
-                n_shots=[shots],
-                backend_config=config,
-                name="qaoa-ising-execution",
-            )
-            self.session.jobs.wait_for(job, timeout=None)
+            job_kwargs: dict[str, Any] = {
+                "programs": [hugr_ref],
+                "n_shots": [shots],
+                "backend_config": config,
+                "name": "qaoa-ising-execution",
+            }
+            if self.project is not None:
+                job_kwargs["project"] = self.project
+            if self.max_cost is not None:
+                job_kwargs["max_cost"] = self.max_cost
+            job = self.session.start_execute_job(**job_kwargs)
+            self.session.jobs.wait_for(job, timeout=self.timeout)
             result = self.session.jobs.results(job)[0].download_result()
         except AttributeError as error:
             raise RuntimeError(
@@ -176,15 +192,36 @@ def _counts_from_collated_counts(
 ) -> dict[str, int]:
     normalized: dict[str, int] = {}
     for key, value in counts.items():
-        if isinstance(key, str):
-            bitstring = key
-        elif isinstance(key, tuple) and len(key) == 1:
-            entry = key[0]
-            bitstring = entry[1] if isinstance(entry, tuple) and len(entry) == 2 else str(entry)
-        else:
-            bitstring = str(key)
+        bitstring = _collated_key_to_bitstring(key, len(variables))
         normalized[bitstring] = normalized.get(bitstring, 0) + int(value)
     return _canonical_counts(normalized, variables)
+
+
+def _collated_key_to_bitstring(key: Any, qubit_count: int) -> str:
+    """Normalize Nexus collated-count keys to q0..qN bitstring order."""
+    if isinstance(key, str):
+        return key
+
+    if not isinstance(key, tuple):
+        raise ValueError(f"Unsupported Nexus measurement key: {key!r}")
+
+    # Nexus may return one named result, e.g. (('result', '011'),).
+    if len(key) == 1:
+        entry = key[0]
+        if isinstance(entry, tuple) and len(entry) == 2:
+            return str(entry[1])
+        raise ValueError(f"Unsupported Nexus measurement key: {key!r}")
+
+    # Selene can also return one entry per measured qubit:
+    # (('q0', '0'), ('q1', '1'), ...).
+    if all(isinstance(entry, tuple) and len(entry) == 2 for entry in key):
+        named_values = dict(key)
+        expected_labels = [f"q{index}" for index in range(qubit_count)]
+        if set(named_values) != set(expected_labels) or len(named_values) != len(key):
+            raise ValueError(f"Unexpected Nexus measurement labels: {key!r}")
+        return "".join(str(named_values[label]) for label in expected_labels)
+
+    raise ValueError(f"Unsupported Nexus measurement key: {key!r}")
 
 
 def _as_batch(value: MeasurementBatch | Mapping[str, int]) -> MeasurementBatch:
