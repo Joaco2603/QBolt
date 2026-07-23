@@ -1,3 +1,3 @@
-from .model import IsingModel
+from .ising import IsingModel
 
 __all__ = ["IsingModel"]
