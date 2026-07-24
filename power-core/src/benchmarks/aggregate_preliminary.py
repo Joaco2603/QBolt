@@ -11,6 +11,13 @@ from typing import Any
 import matplotlib.pyplot as plt
 
 
+def _display_path(path: Path, base: Path) -> str:
+    try:
+        return str(path.resolve().relative_to(base))
+    except ValueError:
+        return str(path)
+
+
 def _parse_input(value: str) -> tuple[int, Path]:
     try:
         size_text, path_text = value.split("=", 1)
@@ -25,12 +32,36 @@ def _parse_input(value: str) -> tuple[int, Path]:
     return size, path
 
 
-def aggregate(inputs: list[tuple[int, Path]]) -> dict[str, Any]:
+def aggregate(
+    inputs: list[tuple[int, Path]],
+    *,
+    path_base: Path | None = None,
+) -> dict[str, Any]:
+    """Combine compatible benchmark results while keeping paths portable."""
+    display_base = (path_base or Path.cwd()).resolve()
     rows: list[dict[str, Any]] = []
     instances: list[dict[str, Any]] = []
+    documents: list[tuple[int, Path, dict[str, Any]]] = []
+    expected_depths: tuple[int, ...] | None = None
     for node_count, path in sorted(inputs):
         document = json.loads(path.read_text(encoding="utf-8"))
+        if document.get("benchmark") != "challenge_1_local_preliminary":
+            raise ValueError(f"{path} is not a Challenge 1 preliminary benchmark")
         input_info = document["input"]
+        actual_node_count = int(input_info["node_count"])
+        if actual_node_count != node_count:
+            raise ValueError(
+                f"CLI declares {node_count} nodes but result contains "
+                f"{actual_node_count}: {path}"
+            )
+        depths = tuple(int(depth) for depth in document["configuration"]["depths"])
+        if expected_depths is None:
+            expected_depths = depths
+        elif depths != expected_depths:
+            raise ValueError("all aggregated results must use the same QAOA depths")
+        if tuple(item["p"] for item in document["qaoa"]) != depths:
+            raise ValueError(f"QAOA rows do not match configured depths: {path}")
+        documents.append((node_count, path, document))
         instances.append({
             "node_count": node_count,
             "edge_count": input_info["edge_count"],
@@ -38,7 +69,7 @@ def aggregate(inputs: list[tuple[int, Path]]) -> dict[str, Any]:
             "source": input_info.get("source"),
             "edge_model": input_info.get("edge_model"),
             "weight_model": input_info.get("weight_model"),
-            "results_path": str(path),
+            "results_path": _display_path(path, display_base),
         })
         for qaoa in document["qaoa"]:
             rows.append({
@@ -51,7 +82,11 @@ def aggregate(inputs: list[tuple[int, Path]]) -> dict[str, Any]:
                 "status": qaoa.get("status"),
                 "independent_runs": qaoa.get("independent_runs", document["configuration"].get("independent_runs_per_configuration")),
                 "parameter_candidates": qaoa.get("parameter_candidates_completed"),
-                "mean_expected_ratio": qaoa.get("expected_ratio") if qaoa.get("status") == "completed" else None,
+                "expected_ratio_observation": (
+                    qaoa.get("expected_ratio")
+                    if str(qaoa.get("status", "")).startswith("completed")
+                    else None
+                ),
                 "std_expected_ratio": None,
             })
     return {
@@ -67,13 +102,13 @@ def aggregate(inputs: list[tuple[int, Path]]) -> dict[str, Any]:
         "baselines": [
             {
                 "node_count": node_count,
-                "exact_cut": json.loads(path.read_text(encoding="utf-8"))["exact"]["cut"],
-                "greedy_cut": json.loads(path.read_text(encoding="utf-8"))["greedy"]["cut"],
-                "greedy_ratio": json.loads(path.read_text(encoding="utf-8"))["greedy"]["ratio"],
-                "gw_cut": json.loads(path.read_text(encoding="utf-8"))["goemans_williamson"]["cut"],
-                "gw_ratio": json.loads(path.read_text(encoding="utf-8"))["goemans_williamson"]["ratio"],
+                "exact_cut": document["exact"]["cut"],
+                "greedy_cut": document["greedy"]["cut"],
+                "greedy_ratio": document["greedy"]["ratio"],
+                "gw_cut": document["goemans_williamson"]["cut"],
+                "gw_ratio": document["goemans_williamson"]["ratio"],
             }
-            for node_count, path in sorted(inputs)
+            for node_count, _path, document in documents
         ],
     }
 
@@ -85,17 +120,25 @@ def render(document: dict[str, Any], output_dir: Path) -> None:
     )
     with (output_dir / "results.csv").open("w", newline="", encoding="utf-8") as handle:
         rows = document["rows"]
-        writer = csv.DictWriter(handle, fieldnames=list(rows[0]))
+        writer = csv.DictWriter(
+            handle,
+            fieldnames=list(rows[0]),
+            lineterminator="\n",
+        )
         writer.writeheader()
         writer.writerows(rows)
 
     figure, axis = plt.subplots(figsize=(10, 6))
     rows = document["rows"]
     for depth in sorted({row["p"] for row in rows}):
-        selected = [row for row in rows if row["p"] == depth and row["status"] == "completed"]
+        selected = [
+            row
+            for row in rows
+            if row["p"] == depth and str(row["status"]).startswith("completed")
+        ]
         axis.plot(
             [row["node_count"] for row in selected],
-            [row["mean_expected_ratio"] for row in selected],
+            [row["expected_ratio_observation"] for row in selected],
             marker="o",
             label=f"QAOA p={depth}",
         )
@@ -112,26 +155,28 @@ def render(document: dict[str, Any], output_dir: Path) -> None:
     figure.savefig(output_dir / "approximation_ratio_vs_nodes_and_p.png", dpi=220)
     plt.close(figure)
 
+    input_lines = [
+        f"  --input {item['node_count']}={item['results_path']} \\"
+        for item in document["instances"]
+    ]
     lines = [
         "# Comparación preliminar por tamaño y profundidad",
         "",
-        "Este agregado compara QAOA para 8, 10 y 12 nodos con `p=1,2,3`.",
+        "Este agregado compara QAOA por tamaño de instancia y profundidad.",
         "La métrica principal es `E_QAOA / E_optimal`; también se incluyen greedy y GW.",
         "",
         "Cada configuración tiene una sola corrida independiente. Por ello no se",
         "reportan desviaciones estándar: se guardan como `null`. Los cinco candidatos",
         "de parámetros no equivalen a cinco corridas independientes.",
         "",
-        "Los grafos son instancias `proximity-fallback` con pesos de distancia inversa,",
-        "no topologías eléctricas confirmadas. No se afirma escalabilidad ni ventaja cuántica.",
+        "Todas las instancias deben declarar el modelo de aristas y el peso en el JSON.",
+        "No se afirma escalabilidad ni ventaja cuántica a partir de una sola corrida.",
         "",
         "## Reproducción",
         "",
         "```bash",
-        ".venv/bin/python power-core/src/benchmarks/aggregate_preliminary.py \\",
-        "  --input 8=power-core/artifacts/preliminary_local_benchmark_8_escalated/results.json \\",
-        "  --input 10=power-core/artifacts/preliminary_local_benchmark_10_escalated/results.json \\",
-        "  --input 12=power-core/artifacts/preliminary_local_benchmark_12_escalated/results.json \\",
+        "python power-core/src/benchmarks/aggregate_preliminary.py \\",
+        *input_lines,
         "  --output-dir power-core/artifacts/preliminary_size_depth_comparison",
         "```",
     ]

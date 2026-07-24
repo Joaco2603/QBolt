@@ -74,3 +74,53 @@ def test_reference_two_zone_max_cut_cuts_every_confirmed_edge() -> None:
     }
     assert all(zones[edge["source"]] != zones[edge["target"]] for edge in instance["edges"])
     assert reference["cut_weight_kv"] == 1058.0
+
+
+@pytest.mark.parametrize("count", [8, 10, 12])
+def test_confirmed_regional_instances_expand_deterministically_with_real_ice_lines(
+    count: int,
+) -> None:
+    substations, lines = MODULE.load_sources(ROOT / "data-analysis" / "dataset")
+
+    instance = MODULE.build_real_regional_instance(substations, lines, count=count)
+
+    assert len(instance["nodes"]) == count
+    assert instance["edge_model"] == "confirmed_transmission_lines"
+    assert instance["weight_model"] == "sum_nominal_voltage_kv"
+    assert instance["weight_units"] == "kV"
+    assert {node["province"] for node in instance["nodes"]} == {"Guanacaste"}
+    assert all({"source", "target", "weight"} <= edge.keys() for edge in instance["edges"])
+    assert all("from" not in edge and "to" not in edge for edge in instance["edges"])
+
+    selected = {node["id"] for node in instance["nodes"]}
+    adjacency = {node_id: set() for node_id in selected}
+    for edge in instance["edges"]:
+        adjacency[edge["source"]].add(edge["target"])
+        adjacency[edge["target"]].add(edge["source"])
+    visited = set()
+    pending = [min(selected)]
+    while pending:
+        node_id = pending.pop()
+        if node_id in visited:
+            continue
+        visited.add(node_id)
+        pending.extend(adjacency[node_id] - visited)
+    assert visited == selected
+
+
+def test_proximity_fallback_uses_the_shared_source_target_edge_schema() -> None:
+    nodes = [
+        {"id": "SUB-01", "longitude": -85.0, "latitude": 10.0},
+        {"id": "SUB-02", "longitude": -85.1, "latitude": 10.1},
+    ]
+
+    instance = MODULE.build_instance(nodes, neighbors=1)
+
+    assert instance["edges"] == [
+        {
+            "source": "SUB-01",
+            "target": "SUB-02",
+            "distance_km": pytest.approx(15.605, abs=0.001),
+            "weight": pytest.approx(0.064081, abs=0.000001),
+        }
+    ]

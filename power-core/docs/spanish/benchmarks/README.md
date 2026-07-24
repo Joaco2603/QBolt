@@ -15,7 +15,7 @@ semilla, las versiones de dependencias y la configuración completa.
 | --- | --- | --- | --- |
 | QAOA | Método cuántico evaluado | Implementado | Es el objeto principal del experimento; se evalúa por su valor de corte y su ratio de aproximación, no por una afirmación de ventaja cuántica. |
 | Goemans-Williamson (GW) | Baseline clásico de alta calidad | Implementado | Es la referencia de aproximación más importante para Max-Cut ponderado no negativo: combina relajación SDP y redondeo aleatorio, con garantía teórica esperada bajo sus supuestos. |
-| Búsqueda exhaustiva | Oráculo exacto | Por integrar al runner de benchmarks | Para los grafos de 6–12 nodos del reto es viable: como máximo hay \(2^{11}=2048\) cortes no complementarios. Produce `OPT`, necesario para calcular ratios de aproximación honestos. |
+| Búsqueda exhaustiva | Oráculo exacto | Implementado | Para los grafos de 6–12 nodos del reto es viable: como máximo hay \(2^{11}=2048\) cortes no complementarios. Produce `OPT`, necesario para calcular ratios de aproximación honestos. |
 | Greedy | Baseline clásico liviano | Implementado | Mide cuánto valor obtiene una heurística simple y rápida; evita que QAOA o GW parezcan útiles si no superan un método elemental. |
 
 ## Qué exige la rúbrica / skill
@@ -78,6 +78,7 @@ La corrida preliminar disponible se puede leer visualmente en:
 - [`qaoa_cut_distribution.png`](../../../artifacts/preliminary_local_benchmark/qaoa_cut_distribution.png): probabilidad empírica de cada valor de corte para la profundidad con mayor corte esperado.
 - [`execution_time_comparison.png`](../../../artifacts/preliminary_local_benchmark/execution_time_comparison.png): tiempo observado por método en escala logarítmica.
 - [`results.json`](../../../artifacts/preliminary_local_benchmark/results.json): datos completos, seeds, counts, tiempos y fallos.
+- [Comparación de 6/8/10/12 nodos](../../../artifacts/preliminary_size_depth_comparison/README.md): agrega las mismas profundidades sobre instancias construidas únicamente con líneas ICE confirmadas.
 
 La primera figura responde “¿cómo cambia QAOA con la profundidad?”; la segunda
 responde “¿cómo se compara el rendimiento esperado de QAOA con los resultados

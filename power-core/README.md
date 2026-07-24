@@ -44,26 +44,15 @@ IsingModel: E_Q(x) = E_I(1 - 2x)
 | Nexus collection | [Dataset guide](docs/spanish/benchmarks/nexus-run-dataset.md) |
 | ICE provenance | [Spanish](docs/spanish/reference-ice-dataset.md) · [English](docs/english/reference-ice-dataset.md) |
 
-## Reproduce the preliminary benchmark
+## Reproduce the preliminary benchmarks
 
 ```bash
-python power-core/src/benchmarks/preliminary.py \
-  --input power-core/artifacts/regional_instance.json \
-  --output-dir power-core/artifacts/preliminary_local_benchmark \
-  --depths 1 2 3 --parameter-candidates 5 \
-  --search-shots 128 --final-shots 1024 --seed 1729 --gw-rounds 128
+python power-core/src/benchmarks/reproduce_local.py
 ```
 
-For the size/depth aggregate, use the recorded 8-, 10-, and 12-node fallback
-runs:
-
-```bash
-python power-core/src/benchmarks/aggregate_preliminary.py \
-  --input 8=power-core/artifacts/preliminary_local_benchmark_8_escalated/results.json \
-  --input 10=power-core/artifacts/preliminary_local_benchmark_10_escalated/results.json \
-  --input 12=power-core/artifacts/preliminary_local_benchmark_12_escalated/results.json \
-  --output-dir power-core/artifacts/preliminary_size_depth_comparison
-```
+This single entry point rebuilds the confirmed ICE instances for 6, 8, 10, and
+12 nodes, executes exact, greedy, GW, and local Guppy/Selene QAOA on each one,
+then regenerates the aggregate JSON, CSV, READMEs, and figures.
 
 These are preliminary local Guppy/Selene runs with one independent run per
 size/depth configuration. Five parameter candidates are not five independent
@@ -80,8 +69,9 @@ to preserve configuration, counts, optimizer details, and failures.
 
 - The final multi-run study with five or more independent runs per configuration
   and uncertainty reporting is not complete.
-- The 8/10/12-node study uses proximity-fallback graphs, not confirmed ICE
-  transmission topology; do not present it as an electrical-grid scaling result.
+- The 6/8/10/12-node family uses confirmed ICE topology, but its deterministic
+  connected expansion is a benchmark-selection rule, not an operational zoning
+  study or proof of asymptotic scaling.
 - Direct dependency pins are committed, but no transitive lockfile is committed.
 - Nominal-voltage weights are a modelling proxy, not electrical capacity or risk.
 

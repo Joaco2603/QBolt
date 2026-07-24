@@ -185,6 +185,8 @@ def test_schema_and_outputs_are_generated_with_fake_backend(tmp_path: Path) -> N
     assert "Estado: `preliminary`" in readme
     assert "candidatos de parámetros dentro de UNA corrida independiente" in readme
     assert "no se reportan media, desviación estándar ni barras de error" in readme
+    assert "fixture edge weight" in readme
+    assert "unit" in readme
 
     comparison = method_comparison_rows(results)
     assert [(label, value) for label, value, _ in comparison] == [

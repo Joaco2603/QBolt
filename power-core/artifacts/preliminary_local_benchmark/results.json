@@ -31,7 +31,7 @@
     ],
     "ratio": 1.0,
     "status": "completed",
-    "time_seconds": 0.00028
+    "time_seconds": 7.5e-05
   },
   "execution_status": "completed",
   "goemans_williamson": {
@@ -50,7 +50,7 @@
     ],
     "ratio": 1.0,
     "rounds": 128,
-    "sdp_value": 1057.9999940310925,
+    "sdp_value": 1057.9999937078942,
     "seed": 1730,
     "solver": "SCS",
     "solver_options": {
@@ -59,7 +59,7 @@
     },
     "solver_status": "optimal",
     "status": "completed",
-    "time_seconds": 0.020983,
+    "time_seconds": 0.010248,
     "winning_round": 0
   },
   "greedy": {
@@ -79,7 +79,7 @@
     "ratio": 1.0,
     "seed": 1729,
     "status": "completed",
-    "time_seconds": 0.000181
+    "time_seconds": 5.3e-05
   },
   "input": {
     "edge_count": 5,
@@ -91,7 +91,7 @@
     "node_count": 6,
     "path": "power-core/artifacts/regional_instance.json",
     "schema_version": 2,
-    "sha256": "c7551d39319704029233b84f535b1873561095b875f39230de70e0a2817c5509",
+    "sha256": "b0cbdf2b81240aba24513c78c475a129dcdfafe6f588c790282a40bfacd24674",
     "source": "Subestaciones.* + LineasDeTransmision.*",
     "weight_definition": "Each edge weight is the summed nominal voltage of confirmed circuits between its two substations.",
     "weight_model": "sum_nominal_voltage_kv",
@@ -191,7 +191,7 @@
           "seed": 101729,
           "shots": 128,
           "status": "completed",
-          "time_seconds": 1.187906
+          "time_seconds": 1.686813
         },
         {
           "backend_metadata": {},
@@ -263,7 +263,7 @@
           "seed": 101730,
           "shots": 128,
           "status": "completed",
-          "time_seconds": 0.347862
+          "time_seconds": 0.620127
         },
         {
           "backend_metadata": {},
@@ -333,7 +333,7 @@
           "seed": 101731,
           "shots": 128,
           "status": "completed",
-          "time_seconds": 0.348845
+          "time_seconds": 0.435704
         },
         {
           "backend_metadata": {},
@@ -403,7 +403,7 @@
           "seed": 101732,
           "shots": 128,
           "status": "completed",
-          "time_seconds": 0.344213
+          "time_seconds": 0.408929
         },
         {
           "backend_metadata": {},
@@ -467,7 +467,7 @@
           "seed": 101733,
           "shots": 128,
           "status": "completed",
-          "time_seconds": 0.345881
+          "time_seconds": 0.42464
         }
       ],
       "counts": {
@@ -898,9 +898,9 @@
       },
       "status": "completed",
       "timings_seconds": {
-        "final_sampling": 0.448656,
-        "parameter_search": 2.574819,
-        "total": 3.023571
+        "final_sampling": 1.02818,
+        "parameter_search": 3.576325,
+        "total": 4.604575
       }
     },
     {
@@ -984,7 +984,7 @@
           "seed": 201729,
           "shots": 128,
           "status": "completed",
-          "time_seconds": 0.43474
+          "time_seconds": 0.567532
         },
         {
           "backend_metadata": {},
@@ -1051,7 +1051,7 @@
           "seed": 201730,
           "shots": 128,
           "status": "completed",
-          "time_seconds": 0.433162
+          "time_seconds": 0.43872
         },
         {
           "backend_metadata": {},
@@ -1114,7 +1114,7 @@
           "seed": 201731,
           "shots": 128,
           "status": "completed",
-          "time_seconds": 0.440445
+          "time_seconds": 0.513911
         },
         {
           "backend_metadata": {},
@@ -1191,7 +1191,7 @@
           "seed": 201732,
           "shots": 128,
           "status": "completed",
-          "time_seconds": 0.450395
+          "time_seconds": 0.45271
         },
         {
           "backend_metadata": {},
@@ -1262,7 +1262,7 @@
           "seed": 201733,
           "shots": 128,
           "status": "completed",
-          "time_seconds": 0.437418
+          "time_seconds": 0.442862
         }
       ],
       "counts": {
@@ -1683,9 +1683,9 @@
       },
       "status": "completed",
       "timings_seconds": {
-        "final_sampling": 0.575484,
-        "parameter_search": 2.196275,
-        "total": 2.771844
+        "final_sampling": 0.585443,
+        "parameter_search": 2.415835,
+        "total": 3.001383
       }
     },
     {
@@ -1764,7 +1764,7 @@
           "seed": 301729,
           "shots": 128,
           "status": "completed",
-          "time_seconds": 0.525197
+          "time_seconds": 0.53244
         },
         {
           "backend_metadata": {},
@@ -1839,7 +1839,7 @@
           "seed": 301730,
           "shots": 128,
           "status": "completed",
-          "time_seconds": 0.531307
+          "time_seconds": 0.470045
         },
         {
           "backend_metadata": {},
@@ -1919,7 +1919,7 @@
           "seed": 301731,
           "shots": 128,
           "status": "completed",
-          "time_seconds": 0.531163
+          "time_seconds": 0.5347
         },
         {
           "backend_metadata": {},
@@ -1989,7 +1989,7 @@
           "seed": 301732,
           "shots": 128,
           "status": "completed",
-          "time_seconds": 0.626649
+          "time_seconds": 0.952871
         },
         {
           "backend_metadata": {},
@@ -2064,7 +2064,7 @@
           "seed": 301733,
           "shots": 128,
           "status": "completed",
-          "time_seconds": 0.532592
+          "time_seconds": 0.461322
         }
       ],
       "counts": {
@@ -2487,9 +2487,9 @@
       },
       "status": "completed",
       "timings_seconds": {
-        "final_sampling": 0.69379,
-        "parameter_search": 2.747022,
-        "total": 3.440892
+        "final_sampling": 0.546752,
+        "parameter_search": 2.951477,
+        "total": 3.498281
       }
     }
   ],
@@ -2504,13 +2504,13 @@
   "software_versions": {
     "cvxpy": "1.9.2",
     "guppylang": "0.21.16",
-    "matplotlib": "3.11.1",
+    "matplotlib": "3.10.9",
     "networkx": "3.6.1",
-    "numpy": "2.5.1",
-    "python": "3.14.6",
+    "numpy": "2.5.0",
+    "python": "3.13.13",
     "scipy": "1.18.0",
     "scs": "3.2.11",
-    "selene-sim": "0.2.17"
+    "selene-sim": "0.2.18"
   },
   "source_provenance": {
     "source": "Subestaciones.* + LineasDeTransmision.*",
@@ -2518,5 +2518,5 @@
     "weight_units": "kV"
   },
   "study_status": "preliminary",
-  "total_time_seconds": 9.265846
+  "total_time_seconds": 11.120517
 }

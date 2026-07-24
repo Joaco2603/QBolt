@@ -4,9 +4,9 @@ Reproducible workspace for Quantathon CR 2026 Challenge 1: modelling Costa
 Rica's transmission network and benchmarking weighted Max-Cut with classical
 baselines and QAOA.
 
-> **Evidence status:** the ICE-backed six-node study, QUBO/Ising verification,
-> greedy, Goemans-Williamson, exhaustive search, preliminary local QAOA, and a
-> preliminary multi-size comparison are available. These artifacts are
+> **Evidence status:** the ICE-backed 6-, 8-, 10-, and 12-node studies,
+> QUBO/Ising verification, greedy, Goemans-Williamson, exhaustive search,
+> preliminary local QAOA, and a preliminary multi-size comparison are available. These artifacts are
 > exploratory evidence; they are not evidence of quantum advantage, convergence,
 > or a Quantinuum H2 run.
 
@@ -28,6 +28,7 @@ python data-analysis/scripts/plot_regional_graph.py
 python power-core/src/reports/generate_qubo_walkthrough.py
 python power-core/src/reports/generate_ising_walkthrough.py
 python power-core/src/reports/generate_qaoa_walkthrough.py
+python power-core/src/benchmarks/reproduce_local.py
 ```
 
 ## Documentation map
@@ -43,23 +44,23 @@ python power-core/src/reports/generate_qaoa_walkthrough.py
 | Review classical baselines | [GW (ES)](power-core/src/optimizer/random_approximation/goemans-williamson.es.md) · [English](power-core/src/optimizer/random_approximation/goemans-williamson.md) | Greedy, GW, and exact reference. |
 | Interpret six-node benchmark results | [Benchmark methodology](power-core/docs/spanish/benchmarks/README.md) · [Preliminary results](power-core/artifacts/preliminary_local_benchmark/README.md) | [`results.json`](power-core/artifacts/preliminary_local_benchmark/results.json) and charts. |
 | Inspect size/depth comparison | [Size/depth report](power-core/artifacts/preliminary_size_depth_comparison/README.md) | [`aggregate_preliminary.py`](power-core/src/benchmarks/aggregate_preliminary.py), CSV/JSON, and ratio plot. |
-| Inspect individual fallback-size runs | [8 nodes](power-core/artifacts/preliminary_local_benchmark_8_escalated/README.md) · [10 nodes](power-core/artifacts/preliminary_local_benchmark_10_escalated/README.md) · [12 nodes](power-core/artifacts/preliminary_local_benchmark_12_escalated/README.md) | Explicitly labelled proximity-fallback instances. |
+| Inspect individual ICE-backed runs | [6 nodes](power-core/artifacts/preliminary_local_benchmark/README.md) · [8 nodes](power-core/artifacts/preliminary_local_benchmark_8/README.md) · [10 nodes](power-core/artifacts/preliminary_local_benchmark_10/README.md) · [12 nodes](power-core/artifacts/preliminary_local_benchmark_12/README.md) | Confirmed transmission-line instances generated from the versioned ICE snapshot. |
 | Inspect Nexus collection | [Nexus dataset guide](power-core/docs/spanish/benchmarks/nexus-run-dataset.md) | [`nexus_maxcut_runs.json`](power-core/artifacts/nexus_maxcut_runs.json). |
 | Check implementation setup | [Power core README](power-core/README.md) | Dependencies, source layout, commands, and limitations. |
 | Check delivery constraints | [Challenge skill](skills/quantathon-challenge-1/SKILL.md) | Reproducibility and reporting rules. |
 
 ## Experimental evidence
 
-The primary graph has six substations connected through confirmed ICE
-transmission lines. Edge weight is summed nominal circuit voltage in kV: a
-transparent importance proxy, **not** capacity, power flow, impedance, failure
-risk, or a resilience metric.
+The benchmark family contains 6, 8, 10, and 12 substations connected only
+through confirmed ICE transmission lines. Each larger graph deterministically
+expands the documented six-node Guanacaste seed through its connected ICE
+frontier. Edge weight is summed nominal circuit voltage in kV: a transparent
+importance proxy, **not** capacity, power flow, impedance, failure risk, or a
+resilience metric.
 
-The size/depth study adds 8-, 10-, and 12-node `proximity-fallback` graphs. Those
-edges represent geographic proximity, not confirmed electrical topology. Each
-size/depth configuration currently has one independent QAOA run, so the study
-shows comparative behavior only; it does not provide uncertainty estimates or
-prove scaling.
+Each size/depth configuration currently has one independent local QAOA run, so
+the study shows comparative behavior only; it does not provide uncertainty
+estimates or prove scaling.
 
 Nexus integration submits through the Nexus API to a Selene
 `StatevectorSimulator`. It is cloud-hosted simulation, not Quantinuum H2

@@ -16,7 +16,7 @@
     "national_peak_demand_mw": 1940.23,
     "dataset_substation_count": 70,
     "allocation_method": "equal_share_of_national_peak_across_dataset_substations",
-    "scenario_total_mw": 166.305429,
+    "scenario_total_mw": 332.610857,
     "is_observed_local_demand": false,
     "source": "ICE DOCSE, Informe de atención de demanda y producción de electricidad con fuentes renovables, Costa Rica 2025",
     "source_url": "https://apps.grupoice.com/CenceWeb/documentos/3/3008/27/R01-PDOCSE-07%20Informe_Atenci%C3%B3n%20demanda%20y%20producci%C3%B3n_2025_v2_firmado.pdf"
@@ -24,7 +24,7 @@
   "selection": {
     "method": "confirmed_connected_expansion_from_reference_six",
     "province": "Guanacaste",
-    "requested_node_count": 6,
+    "requested_node_count": 12,
     "reference_node_names": [
       "Pailas",
       "Liberia",
@@ -54,7 +54,7 @@
       "point_x": 351364.1094,
       "point_y": 1189696.6503,
       "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
-      "degree": 1,
+      "degree": 2,
       "synthetic_peak_demand_mw": 27.717571
     },
     {
@@ -98,7 +98,7 @@
       "point_x": 376973.4083,
       "point_y": 1152800.6727,
       "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
-      "degree": 3,
+      "degree": 4,
       "synthetic_peak_demand_mw": 27.717571
     },
     {
@@ -120,7 +120,7 @@
       "point_x": 382007.8643,
       "point_y": 1158070.1895,
       "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
-      "degree": 2,
+      "degree": 3,
       "synthetic_peak_demand_mw": 27.717571
     },
     {
@@ -164,11 +164,162 @@
       "point_x": 338773.9512,
       "point_y": 1152279.2768,
       "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 2,
+      "synthetic_peak_demand_mw": 27.717571
+    },
+    {
+      "id": "SUB-06",
+      "fid": 6,
+      "object_id": 6,
+      "name": "Mogote",
+      "province": "Guanacaste",
+      "canton": "Bagaces",
+      "district": "Mogote",
+      "district_code": "50403",
+      "code": "MOG",
+      "coordinates": [
+        -85.267612029714,
+        10.725715627784
+      ],
+      "csv_x": -9491947.15230617,
+      "csv_y": 1201016.46901161,
+      "point_x": 361342.5446,
+      "point_y": 1186293.2829,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 2,
+      "synthetic_peak_demand_mw": 27.717571
+    },
+    {
+      "id": "SUB-10",
+      "fid": 10,
+      "object_id": 10,
+      "name": "Guayabal",
+      "province": "Guanacaste",
+      "canton": "Santa Cruz",
+      "district": "Santa Cruz",
+      "district_code": "50301",
+      "code": "GUA",
+      "coordinates": [
+        -85.5694118639598,
+        10.2664424906921
+      ],
+      "csv_x": -9525543.35617591,
+      "csv_y": 1149020.23760551,
+      "point_x": 328069.6285,
+      "point_y": 1135631.8946,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 1,
+      "synthetic_peak_demand_mw": 27.717571
+    },
+    {
+      "id": "SUB-20",
+      "fid": 20,
+      "object_id": 20,
+      "name": "Colorado",
+      "province": "Guanacaste",
+      "canton": "Abangares",
+      "district": "Colorado",
+      "district_code": "50704",
+      "code": "COD",
+      "coordinates": [
+        -85.1724692781189,
+        10.2254716021372
+      ],
+      "csv_x": -9481355.90964593,
+      "csv_y": 1144385.46957003,
+      "point_x": 371545.2111,
+      "point_y": 1130914.1779,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 2,
+      "synthetic_peak_demand_mw": 27.717571
+    },
+    {
+      "id": "SUB-24",
+      "fid": 24,
+      "object_id": 24,
+      "name": "Arenal",
+      "province": "Guanacaste",
+      "canton": "Tilaran",
+      "district": "Santa Rosa",
+      "district_code": "50804",
+      "code": "ARE",
+      "coordinates": [
+        -85.0002881841908,
+        10.4727301596314
+      ],
+      "csv_x": -9462188.79794563,
+      "csv_y": 1172365.38171851,
+      "point_x": 390496.9849,
+      "point_y": 1158201.1567,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 2,
+      "synthetic_peak_demand_mw": 27.717571
+    },
+    {
+      "id": "SUB-35",
+      "fid": 35,
+      "object_id": 35,
+      "name": "Miravalles",
+      "province": "Guanacaste",
+      "canton": "Bagaces",
+      "district": "Fortuna",
+      "district_code": "50402",
+      "code": "MIR",
+      "coordinates": [
+        -85.1932537699486,
+        10.701481507002
+      ],
+      "csv_x": -9483669.62869282,
+      "csv_y": 1198270.87982366,
+      "point_x": 369466.9616,
+      "point_y": 1183579.8883,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+      "degree": 2,
+      "synthetic_peak_demand_mw": 27.717571
+    },
+    {
+      "id": "SUB-46",
+      "fid": 46,
+      "object_id": 46,
+      "name": "Santa Rita",
+      "province": "Guanacaste",
+      "canton": "Nandayure",
+      "district": "Santa Rita",
+      "district_code": "50902",
+      "code": "SRI",
+      "coordinates": [
+        -85.2659936223352,
+        10.0316537985192
+      ],
+      "csv_x": -9491766.99202086,
+      "csv_y": 1122468.19257691,
+      "point_x": 361213.9182,
+      "point_y": 1109512.1768,
+      "crs": "urn:ogc:def:crs:OGC:1.3:CRS84",
       "degree": 1,
       "synthetic_peak_demand_mw": 27.717571
     }
   ],
   "edges": [
+    {
+      "source": "SUB-01",
+      "target": "SUB-06",
+      "source_name": "Pailas",
+      "target_name": "Mogote",
+      "weight": 230.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 6,
+          "name": "Mogote-Pailas",
+          "voltage_kv": 230.0,
+          "shape_stle": 10349.2681783,
+          "shape_length": 18158.0631486745,
+          "geometry_type": "MultiLineString",
+          "coordinate_count": 55
+        }
+      ]
+    },
     {
       "source": "SUB-01",
       "target": "SUB-07",
@@ -185,6 +336,25 @@
           "shape_length": 21308.649604196,
           "geometry_type": "LineString",
           "coordinate_count": 67
+        }
+      ]
+    },
+    {
+      "source": "SUB-06",
+      "target": "SUB-35",
+      "source_name": "Mogote",
+      "target_name": "Miravalles",
+      "weight": 230.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 19,
+          "name": "Miravalles-Mogote",
+          "voltage_kv": 230.0,
+          "shape_stle": 8983.56147104,
+          "shape_length": 9191.2026969087,
+          "geometry_type": "MultiLineString",
+          "coordinate_count": 36
         }
       ]
     },
@@ -208,6 +378,25 @@
       ]
     },
     {
+      "source": "SUB-10",
+      "target": "SUB-15",
+      "source_name": "Guayabal",
+      "target_name": "Filadelfia",
+      "weight": 138.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 24,
+          "name": "Filadelfia-Guayabal",
+          "voltage_kv": 138.0,
+          "shape_stle": 21665.5597306,
+          "shape_length": 28643.2551637214,
+          "geometry_type": "LineString",
+          "coordinate_count": 79
+        }
+      ]
+    },
+    {
       "source": "SUB-15",
       "target": "SUB-29",
       "source_name": "Filadelfia",
@@ -223,6 +412,25 @@
           "shape_length": 43914.2689530939,
           "geometry_type": "MultiLineString",
           "coordinate_count": 130
+        }
+      ]
+    },
+    {
+      "source": "SUB-18",
+      "target": "SUB-24",
+      "source_name": "Corobici",
+      "target_name": "Arenal",
+      "weight": 230.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 21,
+          "name": "Arenal-Corobici",
+          "voltage_kv": 230.0,
+          "shape_stle": 1290.03743291,
+          "shape_length": 10130.5112576976,
+          "geometry_type": "LineString",
+          "coordinate_count": 26
         }
       ]
     },
@@ -263,19 +471,63 @@
           "coordinate_count": 15
         }
       ]
+    },
+    {
+      "source": "SUB-20",
+      "target": "SUB-29",
+      "source_name": "Colorado",
+      "target_name": "Cañas",
+      "weight": 138.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 7,
+          "name": "Canas-Colorado",
+          "voltage_kv": 138.0,
+          "shape_stle": 23764.7549727,
+          "shape_length": 24284.5793004088,
+          "geometry_type": "LineString",
+          "coordinate_count": 73
+        }
+      ]
+    },
+    {
+      "source": "SUB-20",
+      "target": "SUB-46",
+      "source_name": "Colorado",
+      "target_name": "Santa Rita",
+      "weight": 138.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 8,
+          "name": "Colorado-Santa Rita",
+          "voltage_kv": 138.0,
+          "shape_stle": 16502.5766968,
+          "shape_length": 33127.8829660527,
+          "geometry_type": "MultiLineString",
+          "coordinate_count": 111
+        }
+      ]
+    },
+    {
+      "source": "SUB-24",
+      "target": "SUB-35",
+      "source_name": "Arenal",
+      "target_name": "Miravalles",
+      "weight": 230.0,
+      "circuit_count": 1,
+      "circuits": [
+        {
+          "fid": 31,
+          "name": "Miravalles-Arenal",
+          "voltage_kv": 230.0,
+          "shape_stle": 35765.6650815,
+          "shape_length": 36503.9268096318,
+          "geometry_type": "LineString",
+          "coordinate_count": 114
+        }
+      ]
     }
-  ],
-  "reference_two_zone_max_cut": {
-    "zone_a": [
-      "SUB-01",
-      "SUB-29",
-      "SUB-47"
-    ],
-    "zone_b": [
-      "SUB-07",
-      "SUB-18",
-      "SUB-15"
-    ],
-    "cut_weight_kv": 1058.0
-  }
+  ]
 }

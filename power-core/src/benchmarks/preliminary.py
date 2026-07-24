@@ -868,6 +868,12 @@ def _readme(results: Mapping[str, Any], output_dir: Path) -> str:
         f"--final-shots {config['final_shots']} --seed {config['base_seed']} "
         f"--gw-rounds {config['gw_rounds']}"
     )
+    weight_definition = input_info.get("weight_definition") or "No weight definition recorded."
+    weight_units = input_info.get("weight_units") or "unspecified units"
+    weight_limitation = (
+        f"- Pesos (`{weight_units}`): {weight_definition} "
+        "No deben reinterpretarse como otra magnitud física."
+    )
     return "\n".join(
         [
             "# Benchmark local preliminar — Challenge 1",
@@ -911,7 +917,7 @@ def _readme(results: Mapping[str, Any], output_dir: Path) -> str:
             "- La búsqueda aleatoria pequeña no permite afirmar convergencia del QAOA.",
             "- `LocalGuppySeleneBackend` recompila el programa Guppy en cada evaluación; los tiempos caracterizan esta implementación preliminar y no ventaja computacional.",
             "- Los shots provienen de emulación local, no de hardware cuántico físico ni de emulación H2.",
-            "- El peso es suma de voltaje nominal (kV): es un proxy de importancia, no capacidad, flujo, impedancia ni riesgo.",
+            weight_limitation,
             "- No se afirma ventaja cuántica ni superioridad sobre Goemans–Williamson.",
             "- Antes de considerar el benchmark listo para entrega se requieren al menos cinco corridas independientes por configuración y sus estadísticas.",
             "",

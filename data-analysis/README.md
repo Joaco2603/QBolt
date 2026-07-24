@@ -41,6 +41,19 @@ this is not observed local demand. See
 `power-core/docs/spanish/reference-ice-dataset.md` for the source, derivation, and
 limitations.
 
+Build a larger member of the same deterministic ICE-backed benchmark family
+with `--count`:
+
+```bash
+python data-analysis/scripts/build_regional_instance.py --count 8 \
+  --output power-core/artifacts/regional_instance_8.json
+```
+
+Counts from 6 through 12 start from the documented Guanacaste seed and add the
+lowest stable substation identifier available on its connected confirmed-line
+frontier. The 6-, 8-, 10-, and 12-node artifacts are regenerated together by
+`python power-core/src/benchmarks/reproduce_local.py`.
+
 The curated ICE enrichment files add documented planning indicators without
 changing the authoritative graph weights:
 

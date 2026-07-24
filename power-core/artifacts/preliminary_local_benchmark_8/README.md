@@ -5,13 +5,13 @@
 ## Reproducción
 
 ```bash
-python power-core/src/benchmarks/preliminary.py --input power-core/artifacts/regional_instance_12.json --output-dir power-core/artifacts/preliminary_local_benchmark_12 --depths 1 2 3 --parameter-candidates 5 --search-shots 128 --final-shots 1024 --seed 1729 --gw-rounds 128
+python power-core/src/benchmarks/preliminary.py --input power-core/artifacts/regional_instance_8.json --output-dir power-core/artifacts/preliminary_local_benchmark_8 --depths 1 2 3 --parameter-candidates 5 --search-shots 128 --final-shots 1024 --seed 1729 --gw-rounds 128
 ```
 
-- Input: `power-core/artifacts/regional_instance_12.json`
-- SHA-256: `a0b17b773178a3a2de2c57962bb5bac54d0085b70d16236128120223262b507e`
-- Grafo: 12 nodos, 12 aristas
-- OPT exacto: 2162
+- Input: `power-core/artifacts/regional_instance_8.json`
+- SHA-256: `400484dfadbd61605f5aed3106cb500c627fb25329df56708341e13c936c4978`
+- Grafo: 8 nodos, 7 aristas
+- OPT exacto: 1426
 - Backend QAOA: `guppy-selene`
 - Semilla base: `1729`
 - Shots de búsqueda/finales: `128` / `1024`
@@ -20,12 +20,12 @@ python power-core/src/benchmarks/preliminary.py --input power-core/artifacts/reg
 
 | Método | Configuración | Expected cut | Mejor cut muestreado | Ratio esperado / OPT | Estado | Tiempo (s) |
 | --- | --- | ---: | ---: | ---: | --- | ---: |
-| Exacto | fuerza bruta | 2162 | 2162 | 1 | completed | 0.0071 |
-| Greedy | seed=1729 | 2162 | 2162 | 1 | completed | 8.8e-05 |
-| GW | seed=1730, rounds=128 | 2162 | 2162 | 1 | completed | 0.009102 |
-| QAOA local | p=1 | 1219.04 | 2162 | 0.563851 | completed | 4.67126 |
-| QAOA local | p=2 | 1381.21 | 2162 | 0.638859 | completed | 5.67473 |
-| QAOA local | p=3 | 1486.78 | 2162 | 0.687687 | completed | 7.04966 |
+| Exacto | fuerza bruta | 1426 | 1426 | 1 | completed | 0.000328 |
+| Greedy | seed=1729 | 1426 | 1426 | 1 | completed | 7.4e-05 |
+| GW | seed=1730, rounds=128 | 1426 | 1426 | 1 | completed | 0.006843 |
+| QAOA local | p=1 | 706.217 | 1426 | 0.495243 | completed | 3.46254 |
+| QAOA local | p=2 | 762.145 | 1426 | 0.534463 | completed | 3.31515 |
+| QAOA local | p=3 | 758.865 | 1426 | 0.532164 | completed | 3.75845 |
 
 `approximation_ratio_vs_p.png` muestra el ratio de QAOA por profundidad; `method_comparison.png` compara el corte esperado de QAOA contra OPT y los métodos clásicos; `qaoa_cut_distribution.png` muestra con qué frecuencia apareció cada corte para la mejor profundidad preliminar; y `execution_time_comparison.png` caracteriza los tiempos medidos. La mejor muestra QAOA no se usa como rendimiento típico. No incluyen barras de error porque hay una sola corrida independiente por configuración.
 

@@ -2,9 +2,9 @@
 
 Esta es la ruta recomendada para entender el experimento sin saltar entre
 archivos. El resultado central es una comparación reproducible de cortes
-ponderados sobre una instancia regional de seis subestaciones. **La evidencia
-actual es preliminar**: sirve para leer el pipeline, no para afirmar ventaja
-cuántica ni convergencia de QAOA.
+ponderados sobre instancias regionales ICE de 6, 8, 10 y 12 subestaciones. **La
+evidencia actual es preliminar**: sirve para leer el pipeline, no para afirmar
+ventaja cuántica, convergencia de QAOA ni escalabilidad.
 
 ## Ruta rápida
 
@@ -15,8 +15,10 @@ cuántica ni convergencia de QAOA.
    [QUBO → Ising](ising/README.md).
 4. **Cómo funciona el método cuántico** — [QAOA](qaoa/README.md).
 5. **Contra qué se compara** — [plan de benchmarks](benchmarks/README.md).
-6. **Qué significan los números** — la evidencia preliminar en
-   `power-core/artifacts/preliminary_local_benchmark/`. El directorio
+6. **Qué significan los números** — la evidencia preliminar por tamaño en
+   `power-core/artifacts/preliminary_local_benchmark*/` y su
+   [comparación agregada](../../artifacts/preliminary_size_depth_comparison/README.md).
+   El directorio
    `benchmarks/evaluation/` todavía contiene únicamente la convención y el
    template para una futura evaluación versionada.
 
@@ -69,12 +71,7 @@ cuántica ni convergencia de QAOA.
 
 ```bash
 python data-analysis/scripts/build_weighted_graph.py
-python data-analysis/scripts/build_regional_instance.py
-python power-core/src/benchmarks/preliminary.py \
-  --input power-core/artifacts/regional_instance.json \
-  --output-dir power-core/artifacts/preliminary_local_benchmark \
-  --depths 1 2 3 --parameter-candidates 5 \
-  --search-shots 128 --final-shots 1024 --seed 1729 --gw-rounds 128
+python power-core/src/benchmarks/reproduce_local.py
 python -m pytest
 ```
 
@@ -84,7 +81,9 @@ La corrida preliminar usa una sola corrida independiente por profundidad y
 cinco candidatos de parámetros dentro de esa corrida. Por eso no tiene media,
 desviación estándar ni barras de error. Para una evaluación final faltan al
 menos cinco corridas independientes por configuración, estados del optimizador,
-fallos conservados y comparación de dos tamaños si se afirma escalabilidad.
+fallos conservados. La comparación incluye cuatro tamaños, pero una observación
+por configuración no alcanza para estimar incertidumbre ni afirmar
+escalabilidad.
 
 La fuente normativa de restricciones es
 [`skills/quantathon-challenge-1/SKILL.md`](../../../skills/quantathon-challenge-1/SKILL.md).

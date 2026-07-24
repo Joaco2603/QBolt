@@ -112,52 +112,90 @@ def build_instance(nodes: list[dict[str, Any]], neighbors: int) -> dict[str, Any
         for other in nearby:
             pair = tuple(sorted((node["id"], other["id"])))
             length = distance_km(origin, (other["longitude"], other["latitude"]))
-            edges[pair] = {"from": pair[0], "to": pair[1], "distance_km": round(length, 3), "weight": round(1 / max(length, 0.001), 6)}
+            edges[pair] = {
+                "source": pair[0],
+                "target": pair[1],
+                "distance_km": round(length, 3),
+                "weight": round(1 / max(length, 0.001), 6),
+            }
     return {
-        "schema_version": 1,
+        "schema_version": 2,
         "source": "Subestaciones.csv + Subestaciones.geojson",
         "edge_model": "proximity_inverse_distance_fallback",
+        "weight_model": "inverse_distance_km",
+        "weight_units": "1/km",
+        "weight_definition": "Each edge weight is the inverse geographic distance between substations.",
         "limitations": ["Edges are inferred; they are not confirmed ICE transmission lines."],
         "nodes": nodes,
-        "edges": sorted(edges.values(), key=lambda edge: (edge["from"], edge["to"])),
+        "edges": sorted(edges.values(), key=lambda edge: (edge["source"], edge["target"])),
     }
 
 
 def build_real_regional_instance(
-    substations: dict[int, dict[str, Any]], lines: dict[int, dict[str, Any]]
+    substations: dict[int, dict[str, Any]],
+    lines: dict[int, dict[str, Any]],
+    *,
+    count: int = 6,
 ) -> dict[str, Any]:
-    """Build the documented six-node scenario from confirmed transmission lines."""
+    """Build a connected regional scenario from confirmed ICE transmission lines."""
+    if not 6 <= count <= 12:
+        raise ValueError("count must be between 6 and 12")
     full_graph = _weighted_graph_module().build_graph(substations, lines)
     nodes_by_name = {node["name"]: node for node in full_graph["nodes"]}
     missing_nodes = sorted(set(REAL_SCENARIO_NODE_NAMES) - nodes_by_name.keys())
     if missing_nodes:
         raise ValueError(f"Configured scenario nodes are missing: {missing_nodes}")
 
-    scenario_nodes = [dict(nodes_by_name[name]) for name in REAL_SCENARIO_NODE_NAMES]
+    node_by_id = {node["id"]: node for node in full_graph["nodes"]}
+    adjacency = {node_id: set() for node_id in node_by_id}
+    for edge in full_graph["edges"]:
+        adjacency[edge["source"]].add(edge["target"])
+        adjacency[edge["target"]].add(edge["source"])
+
+    scenario_ids_in_order = [nodes_by_name[name]["id"] for name in REAL_SCENARIO_NODE_NAMES]
+    selected_ids = set(scenario_ids_in_order)
+    while len(scenario_ids_in_order) < count:
+        candidates = sorted(
+            node_id
+            for node_id, node in node_by_id.items()
+            if node_id not in selected_ids
+            and node["province"] == "Guanacaste"
+            and adjacency[node_id] & selected_ids
+        )
+        if not candidates:
+            raise ValueError(
+                f"Unable to expand the confirmed Guanacaste scenario to {count} nodes"
+            )
+        selected = candidates[0]
+        selected_ids.add(selected)
+        scenario_ids_in_order.append(selected)
+
+    scenario_nodes = [dict(node_by_id[node_id]) for node_id in scenario_ids_in_order]
     demand_per_substation = NATIONAL_PEAK_DEMAND_MW / len(full_graph["nodes"])
     for node in scenario_nodes:
         node["synthetic_peak_demand_mw"] = round(demand_per_substation, 6)
 
-    scenario_ids = {node["id"] for node in scenario_nodes}
+    scenario_ids = set(scenario_ids_in_order)
     scenario_edges = [
         edge
         for edge in full_graph["edges"]
         if edge["source"] in scenario_ids and edge["target"] in scenario_ids
     ]
-    expected_edge_names = {
-        frozenset(("Pailas", "Liberia")),
-        frozenset(("Liberia", "Cañas")),
-        frozenset(("Cañas", "Corobici")),
-        frozenset(("Corobici", "Sandillal")),
-        frozenset(("Cañas", "Filadelfia")),
-    }
-    actual_edge_names = {
-        frozenset((edge["source_name"], edge["target_name"])) for edge in scenario_edges
-    }
-    if actual_edge_names != expected_edge_names:
-        raise ValueError(
-            "Configured scenario no longer has the expected confirmed transmission topology"
-        )
+    if count == 6:
+        expected_edge_names = {
+            frozenset(("Pailas", "Liberia")),
+            frozenset(("Liberia", "Cañas")),
+            frozenset(("Cañas", "Corobici")),
+            frozenset(("Corobici", "Sandillal")),
+            frozenset(("Cañas", "Filadelfia")),
+        }
+        actual_edge_names = {
+            frozenset((edge["source_name"], edge["target_name"])) for edge in scenario_edges
+        }
+        if actual_edge_names != expected_edge_names:
+            raise ValueError(
+                "Configured scenario no longer has the expected confirmed transmission topology"
+            )
     scenario_degree = {node_id: 0 for node_id in scenario_ids}
     for edge in scenario_edges:
         scenario_degree[edge["source"]] += 1
@@ -165,9 +203,10 @@ def build_real_regional_instance(
     for node in scenario_nodes:
         node["degree"] = scenario_degree[node["id"]]
 
-    return {
+    instance = {
         "schema_version": 2,
         "source": "Subestaciones.* + LineasDeTransmision.*",
+        "sources": full_graph["sources"],
         "edge_model": "confirmed_transmission_lines",
         "weight_model": "sum_nominal_voltage_kv",
         "weight_units": "kV",
@@ -190,14 +229,22 @@ def build_real_regional_instance(
             "source": NATIONAL_PEAK_DEMAND_SOURCE,
             "source_url": NATIONAL_PEAK_DEMAND_URL,
         },
-        "reference_two_zone_max_cut": {
-            "zone_a": ["SUB-01", "SUB-29", "SUB-47"],
-            "zone_b": ["SUB-07", "SUB-18", "SUB-15"],
-            "cut_weight_kv": sum(edge["weight"] for edge in scenario_edges),
+        "selection": {
+            "method": "confirmed_connected_expansion_from_reference_six",
+            "province": "Guanacaste",
+            "requested_node_count": count,
+            "reference_node_names": list(REAL_SCENARIO_NODE_NAMES),
         },
         "nodes": scenario_nodes,
         "edges": sorted(scenario_edges, key=lambda edge: (edge["source"], edge["target"])),
     }
+    if count == 6:
+        instance["reference_two_zone_max_cut"] = {
+            "zone_a": ["SUB-01", "SUB-29", "SUB-47"],
+            "zone_b": ["SUB-07", "SUB-18", "SUB-15"],
+            "cut_weight_kv": sum(edge["weight"] for edge in scenario_edges),
+        }
+    return instance
 
 
 def main() -> None:
@@ -220,7 +267,7 @@ def main() -> None:
     root = Path(__file__).parents[2]
     if args.mode == "confirmed":
         substations, lines = load_sources(root / "data-analysis/dataset")
-        instance = build_real_regional_instance(substations, lines)
+        instance = build_real_regional_instance(substations, lines, count=args.count)
     else:
         features = load_features(root / "data-analysis/dataset/Subestaciones.geojson", root / "data-analysis/dataset/Subestaciones.csv")
         selected = choose_compact(features, args.province, args.count)

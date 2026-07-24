@@ -9,7 +9,7 @@ python power-core/src/benchmarks/preliminary.py --input power-core/artifacts/reg
 ```
 
 - Input: `power-core/artifacts/regional_instance.json`
-- SHA-256: `c7551d39319704029233b84f535b1873561095b875f39230de70e0a2817c5509`
+- SHA-256: `b0cbdf2b81240aba24513c78c475a129dcdfafe6f588c790282a40bfacd24674`
 - Grafo: 6 nodos, 5 aristas
 - OPT exacto: 1058
 - Backend QAOA: `guppy-selene`
@@ -20,12 +20,12 @@ python power-core/src/benchmarks/preliminary.py --input power-core/artifacts/reg
 
 | Método | Configuración | Expected cut | Mejor cut muestreado | Ratio esperado / OPT | Estado | Tiempo (s) |
 | --- | --- | ---: | ---: | ---: | --- | ---: |
-| Exacto | fuerza bruta | 1058 | 1058 | 1 | completed | 0.00028 |
-| Greedy | seed=1729 | 1058 | 1058 | 1 | completed | 0.000181 |
-| GW | seed=1730, rounds=128 | 1058 | 1058 | 1 | completed | 0.020983 |
-| QAOA local | p=1 | 511.48 | 1058 | 0.483441 | completed | 3.02357 |
-| QAOA local | p=2 | 632.725 | 1058 | 0.598038 | completed | 2.77184 |
-| QAOA local | p=3 | 592.16 | 1058 | 0.559698 | completed | 3.44089 |
+| Exacto | fuerza bruta | 1058 | 1058 | 1 | completed | 7.5e-05 |
+| Greedy | seed=1729 | 1058 | 1058 | 1 | completed | 5.3e-05 |
+| GW | seed=1730, rounds=128 | 1058 | 1058 | 1 | completed | 0.010248 |
+| QAOA local | p=1 | 511.48 | 1058 | 0.483441 | completed | 4.60457 |
+| QAOA local | p=2 | 632.725 | 1058 | 0.598038 | completed | 3.00138 |
+| QAOA local | p=3 | 592.16 | 1058 | 0.559698 | completed | 3.49828 |
 
 `approximation_ratio_vs_p.png` muestra el ratio de QAOA por profundidad; `method_comparison.png` compara el corte esperado de QAOA contra OPT y los métodos clásicos; `qaoa_cut_distribution.png` muestra con qué frecuencia apareció cada corte para la mejor profundidad preliminar; y `execution_time_comparison.png` caracteriza los tiempos medidos. La mejor muestra QAOA no se usa como rendimiento típico. No incluyen barras de error porque hay una sola corrida independiente por configuración.
 
@@ -46,7 +46,7 @@ Ninguna profundidad falló.
 - La búsqueda aleatoria pequeña no permite afirmar convergencia del QAOA.
 - `LocalGuppySeleneBackend` recompila el programa Guppy en cada evaluación; los tiempos caracterizan esta implementación preliminar y no ventaja computacional.
 - Los shots provienen de emulación local, no de hardware cuántico físico ni de emulación H2.
-- El peso es suma de voltaje nominal (kV): es un proxy de importancia, no capacidad, flujo, impedancia ni riesgo.
+- Pesos (`kV`): Each edge weight is the summed nominal voltage of confirmed circuits between its two substations. No deben reinterpretarse como otra magnitud física.
 - No se afirma ventaja cuántica ni superioridad sobre Goemans–Williamson.
 - Antes de considerar el benchmark listo para entrega se requieren al menos cinco corridas independientes por configuración y sus estadísticas.
 
