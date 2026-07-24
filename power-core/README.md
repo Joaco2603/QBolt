@@ -1,131 +1,187 @@
 # Power Restoration Core
 
-`power-core` contains the implemented optimization boundary for the regional
-weighted Max-Cut experiment: QUBO construction, exact Ising conversion, QAOA
-orchestration and backends, greedy and Goemans-Williamson baselines, solver
-dispatch, and reproducible reports.
+Reproducible Python workspace for modelling a regional transmission network and
+benchmarking power-restoration / Max-Cut solvers. The project is currently a
+scaffold: dependencies and the directory layout are ready; the solver modules
+will be implemented under `src/`.
 
-The remaining gap is product-level orchestration: there is no consolidated
-benchmark CLI that executes every solver and emits the final comparison report.
+## Reproduce from a new computer
 
-## Quick path
+Use **Python 3.12 or newer**. Python 3.12 is the recommended baseline because
+the pinned TKET stack supports it on macOS, Linux, and Windows.
 
-From the repository root:
+### 1. Install prerequisites
+
+- Git
+- Python 3.12+
+- Internet access for the first dependency installation
+
+Verify Python before continuing:
+
+```bash
+python3 --version
+```
+
+The command must report `3.12` or newer. Do not use a Conda Python on macOS for
+this project: PyTKET documents installation issues with recent versions in that
+environment. Use the official Python installer, Homebrew Python, or `pyenv`.
+
+### 2. Clone the repository
+
+```bash
+git clone <REPOSITORY_URL> quantathonv2
+cd quantathonv2
+```
+
+Replace `<REPOSITORY_URL>` with the repository's real Git URL.
+
+### 3. Create and activate an isolated environment
+
+Run these commands from the repository root.
+
+**macOS / Linux**
 
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
-python -m pip install -r power-core/requirements.txt
-python -m pytest
 ```
 
-Expected result: all `power-core` tests pass.
+**Windows PowerShell**
 
-## Implemented flow
-
-```text
-regional_instance.json
-        │
-        ▼
-weighted NetworkX graph
-        │
-        ▼
-QuboModel: E_Q(x) = -weighted_cut(x) + optional penalties
-        │
-        ▼
-IsingModel: E_I(z), with z = 1 - 2x
-        │
-        ├── QAOA → local Guppy/Selene or authenticated Nexus adapter
-        └── classical comparison → greedy or Goemans-Williamson
+```powershell
+py -3.12 -m venv .venv
+.\.venv\Scripts\Activate.ps1
 ```
 
-The QUBO-to-Ising conversion preserves the complete energy, including the
-constant offset:
+Your terminal should now show `(.venv)`.
 
-```text
-E_Q(x) = E_I(1 - 2x)
-```
-
-## Components
-
-| Component | Responsibility |
-| --- | --- |
-| `optimizer.quantum.qubo` | Build weighted Max-Cut QUBOs and optional binary constraints |
-| `optimizer.quantum.ising` | Convert `QuboModel` coefficients and evaluate complete spin assignments |
-| `optimizer.quantum.qaoa` | Run seeded multi-start parameter optimization and normalize measurements |
-| `optimizer.greedy` | Build a deterministic seeded sequential weighted-greedy cut |
-| `optimizer.random_approximation` | Solve the Goemans-Williamson SDP and seeded hyperplane rounding |
-| `run_solver.py` | Dispatch a validated request without coupling to optimizer mathematics |
-| `reports/` | Regenerate QUBO and Ising documentation figures |
-
-QAOA uses at least five deterministic seeded BFGS starts. A returned best
-bitstring is the lowest-energy measured sample, not proof of global optimality.
-Nexus execution requires a caller-provided authenticated session; credentials
-are not stored by this module.
-
-## Reproducible reports
-
-Generate both walkthroughs:
+### 4. Install the pinned dependencies
 
 ```bash
-python power-core/src/reports/generate_qubo_walkthrough.py
-python power-core/src/reports/generate_ising_walkthrough.py
-python power-core/src/reports/generate_qaoa_walkthrough.py
+python -m pip install --upgrade pip
+python -m pip install -r power-core/requirements.txt
 ```
 
-Documentation:
+`requirements.txt` pins the project's direct dependencies. To reproduce the
+exact resolved transitive dependency set on a later machine, export it from the
+known-good environment and install that file instead:
 
-- [QUBO walkthrough in Spanish](docs/spanish/qubo/README.md)
-- [QUBO walkthrough in English](docs/english/qubo/README.md)
-- [QUBO-to-Ising walkthrough in Spanish](docs/spanish/ising/README.md)
-- [QUBO-to-Ising walkthrough in English](docs/english/ising/README.md)
-- [QAOA walkthrough in Spanish](docs/spanish/qaoa/README.md)
-- [QAOA walkthrough in English](docs/english/qaoa/README.md)
-- [Benchmark methodology](docs/spanish/benchmarks/README.md)
+```bash
+python -m pip freeze --all > requirements.lock
+python -m pip install -r requirements.lock
+```
 
-Each Ising report includes:
+Commit `requirements.lock` once a solver implementation and its validated
+environment exist. Do not claim byte-for-byte reproducibility from direct pins
+alone: transitive dependency releases can change.
 
-1. the six-step algebraic conversion;
-2. QUBO and Ising coefficient visualizations; and
-3. exhaustive energy-equivalence evidence for all 64 assignments.
+### 5. Verify the environment
+
+```bash
+python -c "import matplotlib, networkx, numpy, pytket, scipy; print('Environment OK')"
+python -m pytest data-analysis/tests
+```
+
+Para probar `power-core` desde la raíz del repositorio:
+
+```bash
+python -m pytest power-core/tests
+```
+
+Expected result: the import command prints `Environment OK`, and the data
+analysis test suite passes.
+
+### 6. Regenerate the source graph artifact
+
+```bash
+python data-analysis/scripts/build_weighted_graph.py
+```
+
+The generator validates the CSV and GeoJSON source pairs by `FID`, records
+SHA-256 digests, and writes the graph artifact to:
+
+```text
+power-core/artifacts/transmission_weighted_graph.json
+```
+
+This path is defined by the existing data generator. It is intentionally not
+`power-core/artifacts/`; do not silently move or edit generated artifacts by
+hand.
 
 ## Project layout
 
 ```text
 power-core/
-├── artifacts/                     # Generated graph JSON files
-├── docs/                          # Generated and explanatory documentation
-├── requirements.txt               # Pinned direct dependencies
+├── requirements.txt                 # Pinned direct dependencies
+├── README.md                        # This reproducibility guide
+├── scripts/                         # Developer and automation scripts
 ├── src/
-│   ├── optimizer/
-│   │   ├── quantum/{qubo,ising,qaoa}/
-│   │   └── random_approximation/
-│   ├── reports/
-│   └── run_solver.py
-└── tests/
+│   ├── cli.py                       # Future command-line entry point
+│   ├── run_benchmark.py             # Future benchmark runner
+│   ├── run_max_cut_benchmark.py     # Future Max-Cut benchmark runner
+│   ├── run_solver.py                # Future solver runner
+│   ├── version.py                   # Version metadata
+│   ├── evaluation/                  # Metrics and evaluation logic
+│   ├── grid/                        # Grid graph loading and transformations
+│   ├── optimizer/                   # Classical and quantum optimizers
+│   ├── reports/                     # Reproducible result reports
+│   ├── restoration/                 # Restoration domain use cases
+│   ├── scenarios/                   # Deterministic scenario definitions
+│   └── visualization/               # Plots and visual outputs
+└── tests/                           # Tests for power-core modules
 ```
 
 ## Reproducibility rules
 
-1. Run commands from the repository root.
-2. Record every random seed, QAOA depth, shot count, optimizer status, and failed run.
-3. Preserve graph source digests and generated artifact provenance.
-4. Regenerate files under `artifacts/` and report PNGs; never edit them manually.
-5. Benchmark the same instance and unchanged weights across every solver.
-6. Do not present simulator output as physical quantum-hardware evidence.
+1. Run every command from the repository root.
+2. Set and record a random seed for every solver run.
+3. Preserve graph source digests and generated JSON provenance.
+4. Never edit files under an artifacts directory manually; regenerate them.
+5. Benchmark identical instances against QAOA, Goemans-Williamson, greedy, and
+   an exact or simulated-annealing reference where feasible.
+6. Report QAOA approximation ratio `r = E_QAOA / E_optimal`, including mean,
+   standard deviation, optimizer status, initialization count, and depth `p`.
 
-## Known limitations
+## Current status
 
-- There is no unified benchmark command or final cross-solver result table yet.
-- Direct dependency versions are pinned, but no transitive lockfile is committed.
-- The Nexus adapter cannot guarantee repeatable remote sampling unless the service exposes an independent reproducibility control.
-- The voltage-derived graph weight is a modelling proxy, not an electrical capacity or risk metric.
+The folders and Python entry-point files are intentionally empty. Therefore,
+there is no `power-core` solver command to run yet. The available commands today
+are dependency installation, `data-analysis` tests, and graph-artifact
+generation above. Add documented commands here only when their implementation
+and tests exist.
+
+## Benchmark plan
+
+The Spanish benchmark plan distinguishes the Challenge 1 mandatory baselines,
+the implemented solvers, and useful supplemental experiments:
+
+- [`docs/spanish/benchmarks/README.md`](docs/spanish/benchmarks/README.md)
+- [`docs/spanish/benchmarks/nexus-run-dataset.md`](docs/spanish/benchmarks/nexus-run-dataset.md)
+
+Nexus QAOA runs can be collected in the versioned JSON dataset provided by
+`src/experiments/nexus_run_dataset.py`. It preserves successful, non-converged,
+and failed attempts for later comparison; it does not claim simulator results
+as physical Quantinuum hardware results.
 
 ## Troubleshooting
 
 | Symptom | Fix |
 | --- | --- |
-| `No module named ...` | Activate `.venv` and reinstall `power-core/requirements.txt`. |
-| PyTKET fails under macOS Conda | Use official Python, Homebrew Python, or `pyenv`. |
-| Matplotlib cannot write its user cache | Set `MPLCONFIGDIR` to a writable temporary directory. |
-| Graph generation reports an `FID mismatch` | Investigate the CSV/GeoJSON data; do not bypass validation. |
+| `python3 --version` is below 3.12 | Install Python 3.12+ and recreate `.venv`. |
+| `No module named ...` | Activate `.venv`, then rerun `python -m pip install -r power-core/requirements.txt`. |
+| PyTKET installation fails on macOS Conda | Recreate the environment with an official Python, Homebrew Python, or `pyenv` Python. |
+| Graph generation reports an `FID mismatch` | Treat it as a data-integrity failure; inspect the CSV and GeoJSON inputs instead of bypassing validation. |
+
+## Clean reset
+
+Delete only the virtual environment, then repeat steps 3–5:
+
+```bash
+rm -rf .venv
+```
+
+On Windows PowerShell:
+
+```powershell
+Remove-Item -Recurse -Force .venv
+```
