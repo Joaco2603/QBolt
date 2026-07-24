@@ -5,13 +5,13 @@
 ## Reproducción
 
 ```bash
-python power-core/src/benchmarks/preliminary.py --input power-core/artifacts/regional_instance.json --output-dir power-core/artifacts/preliminary_local_benchmark --depths 1 2 3 --parameter-candidates 5 --search-shots 128 --final-shots 1024 --seed 1729 --gw-rounds 128
+python power-core/src/benchmarks/preliminary.py --input /tmp/quantum-power-benchmark-inputs/regional_instance_10.json --output-dir power-core/artifacts/preliminary_local_benchmark_10_escalated --depths 1 2 3 --parameter-candidates 5 --search-shots 128 --final-shots 1024 --seed 1729 --gw-rounds 128
 ```
 
-- Input: `power-core/artifacts/regional_instance.json`
-- SHA-256: `c7551d39319704029233b84f535b1873561095b875f39230de70e0a2817c5509`
-- Grafo: 6 nodos, 5 aristas
-- OPT exacto: 1058
+- Input: `/tmp/quantum-power-benchmark-inputs/regional_instance_10.json`
+- SHA-256: `5bccf24ec650f365a0ff8aa6edb82b960847929d9e5a4ac458cecd9a67067019`
+- Grafo: 10 nodos, 13 aristas
+- OPT exacto: 1.86666
 - Backend QAOA: `guppy-selene`
 - Semilla base: `1729`
 - Shots de búsqueda/finales: `128` / `1024`
@@ -20,18 +20,18 @@ python power-core/src/benchmarks/preliminary.py --input power-core/artifacts/reg
 
 | Método | Configuración | Expected cut | Mejor cut muestreado | Ratio esperado / OPT | Estado | Tiempo (s) |
 | --- | --- | ---: | ---: | ---: | --- | ---: |
-| Exacto | fuerza bruta | 1058 | 1058 | 1 | completed | 0.00028 |
-| Greedy | seed=1729 | 1058 | 1058 | 1 | completed | 0.000181 |
-| GW | seed=1730, rounds=128 | 1058 | 1058 | 1 | completed | 0.020983 |
-| QAOA local | p=1 | 511.48 | 1058 | 0.483441 | completed | 3.02357 |
-| QAOA local | p=2 | 632.725 | 1058 | 0.598038 | completed | 2.77184 |
-| QAOA local | p=3 | 592.16 | 1058 | 0.559698 | completed | 3.44089 |
+| Exacto | fuerza bruta | 1.86666 | 1.86666 | 1 | completed | 0.006576 |
+| Greedy | seed=1729 | 1.80479 | 1.80479 | 0.966856 | completed | 0.000325 |
+| GW | seed=1730, rounds=128 | 1.86666 | 1.86666 | 1 | completed | 0.032476 |
+| QAOA local | p=1 | 1.02344 | 1.86666 | 0.548274 | completed | 5.47823 |
+| QAOA local | p=2 | 1.13644 | 1.86666 | 0.60881 | completed | 7.1071 |
+| QAOA local | p=3 | 1.05837 | 1.86666 | 0.566985 | completed | 9.12555 |
 
-`approximation_ratio_vs_p.png` muestra el ratio de QAOA por profundidad; `method_comparison.png` compara el corte esperado de QAOA contra OPT y los métodos clásicos; `qaoa_cut_distribution.png` muestra con qué frecuencia apareció cada corte para la mejor profundidad preliminar; y `execution_time_comparison.png` caracteriza los tiempos medidos. La mejor muestra QAOA no se usa como rendimiento típico. No incluyen barras de error porque hay una sola corrida independiente por configuración.
+La figura `approximation_ratio_vs_p.png` muestra los ratios esperado y del mejor estado muestreado. No incluye barras de error porque hay una sola corrida independiente por configuración.
 
 ## Búsqueda aleatoria de parámetros
 
-Para cada capa, `gamma_l ~ Uniform(0, pi / max_abs_J), where max_abs_J = max_(i,j) |J_ij|; if max_abs_J = 0, gamma_l = 0`. En esta instancia `max_abs_J = 115`. Se usa `beta_l ~ Uniform(0, pi / 2)`.
+Para cada capa, `gamma_l ~ Uniform(0, pi / max_abs_J), where max_abs_J = max_(i,j) |J_ij|; if max_abs_J = 0, gamma_l = 0`. En esta instancia `max_abs_J = 0.446981`. Se usa `beta_l ~ Uniform(0, pi / 2)`.
 
 Cada `p` usa **5 candidatos de parámetros dentro de UNA corrida independiente**. Estos candidatos no son 5 corridas independientes. Se selecciona el candidato de mayor `expected_cut` durante búsqueda y luego se vuelve a muestrear con shots finales. Los estados con count cero se excluyen de métricas y outputs.
 
@@ -54,7 +54,4 @@ Ninguna profundidad falló.
 
 - `results.json`: configuración, versiones, seeds, counts positivos, parámetros, tiempos, métricas y fallos.
 - `approximation_ratio_vs_p.png`: ratio contra profundidad sin barras de error.
-- `method_comparison.png`: comparación visual honesta; QAOA usa `expected_cut`, no su mejor muestra.
-- `qaoa_cut_distribution.png`: distribución de probabilidad empírica de los cortes en la profundidad con mayor `expected_cut`.
-- `execution_time_comparison.png`: tiempos observados en escala logarítmica; caracterizan esta implementación, no una ventaja computacional.
 - `README.md`: este resumen reproducible.

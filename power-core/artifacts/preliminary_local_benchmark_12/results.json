@@ -1,0 +1,603 @@
+{
+  "benchmark": "challenge_1_local_preliminary",
+  "configuration": {
+    "base_seed": 1729,
+    "depths": [
+      1,
+      2,
+      3
+    ],
+    "final_shots": 1024,
+    "gw_rounds": 128,
+    "independent_runs_per_configuration": 1,
+    "parameter_candidates_per_run": 5,
+    "parameter_trials": 5,
+    "search_shots_per_candidate": 128
+  },
+  "exact": {
+    "assignments_evaluated": 2048,
+    "bitstring": "011010010100",
+    "cut": 2.0296,
+    "method": "exhaustive_search_with_complement_symmetry",
+    "partition_one": [
+      "SUB-06",
+      "SUB-07",
+      "SUB-18",
+      "SUB-29",
+      "SUB-40"
+    ],
+    "partition_zero": [
+      "SUB-01",
+      "SUB-15",
+      "SUB-20",
+      "SUB-24",
+      "SUB-35",
+      "SUB-47",
+      "SUB-48"
+    ],
+    "ratio": 1.0,
+    "status": "completed",
+    "time_seconds": 0.02499
+  },
+  "execution_status": "completed_with_failures",
+  "goemans_williamson": {
+    "cut": 2.0296,
+    "error": null,
+    "method": "goemans_williamson",
+    "partition_one": [
+      "SUB-06",
+      "SUB-07",
+      "SUB-18",
+      "SUB-24",
+      "SUB-29",
+      "SUB-48"
+    ],
+    "partition_zero": [
+      "SUB-01",
+      "SUB-15",
+      "SUB-20",
+      "SUB-35",
+      "SUB-40",
+      "SUB-47"
+    ],
+    "ratio": 1.0,
+    "rounds": 128,
+    "sdp_value": 2.0436407231636347,
+    "seed": 1730,
+    "solver": "SCS",
+    "solver_options": {
+      "eps": 1e-06,
+      "max_iters": 100000
+    },
+    "solver_status": "optimal",
+    "status": "completed",
+    "time_seconds": 0.030438,
+    "winning_round": 1
+  },
+  "greedy": {
+    "cut": 2.0296,
+    "error": null,
+    "method": "greedy",
+    "partition_one": [
+      "SUB-01",
+      "SUB-15",
+      "SUB-20",
+      "SUB-35",
+      "SUB-40",
+      "SUB-47"
+    ],
+    "partition_zero": [
+      "SUB-06",
+      "SUB-07",
+      "SUB-18",
+      "SUB-24",
+      "SUB-29",
+      "SUB-48"
+    ],
+    "ratio": 1.0,
+    "seed": 1729,
+    "status": "completed",
+    "time_seconds": 0.000285
+  },
+  "input": {
+    "edge_count": 14,
+    "edge_model": "proximity_inverse_distance_fallback",
+    "limitations": [
+      "Edges are inferred; they are not confirmed ICE transmission lines."
+    ],
+    "node_count": 12,
+    "path": "/tmp/quantum-power-benchmark-inputs/regional_instance_12.json",
+    "schema_version": 1,
+    "sha256": "d07bf012aac74fdcf3b9db062edcf6d157763952c11b1e635e130198c23317b8",
+    "source": "Subestaciones.csv + Subestaciones.geojson",
+    "weight_definition": null,
+    "weight_model": null,
+    "weight_units": null
+  },
+  "objective": {
+    "beta_range_formula": "beta_l ~ Uniform(0, pi / 2)",
+    "gamma_range_formula": "gamma_l ~ Uniform(0, pi / max_abs_J), where max_abs_J = max_(i,j) |J_ij|; if max_abs_J = 0, gamma_l = 0",
+    "ising_formula": "H(z) = -cut(z) = -sum_edges(w)/2 + sum_edges((w/2) * z_i * z_j)",
+    "max_abs_J": 0.4469815,
+    "name": "weighted_max_cut",
+    "sense": "maximize cut; minimize Ising energy"
+  },
+  "qaoa": [
+    {
+      "backend": "guppy-selene",
+      "best_sample_cut": null,
+      "best_sample_ratio": null,
+      "beta_range": [
+        0.0,
+        1.5707963267948966
+      ],
+      "candidates": [
+        {
+          "error": {
+            "message": "zig command failed:\n  Command: /home/cristofermsr/Desktop/quantum-power/.venv/bin/python -m ziglang build-exe -femit-bin=/tmp/selene_zrqykuat_jzetao9y/artifacts/program.selene.x /tmp/selene_zrqykuat_jzetao9y/artifacts/program.helios.o /home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_helios_qis_plugin/_dist/lib/libhelios_qis_selene_runner.a /home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_helios_qis_plugin/_dist/lib/libhelios_qis_selene_interface_logging_off.so /home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_base_qis_plugin/_dist/lib/libbase_qis_selene_interface_logging_off.so -lc -L/home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_sim/_dist/lib -L/home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_helios_qis_plugin/_dist/lib -L/home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_helios_qis_plugin/_dist/lib -L/home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_base_qis_plugin/_dist/lib\n  Error: error: sub-compilation of libubsan failed\n    note: failed to check cache: manifest_create ReadOnlyFileSystem\nerror: sub-compilation of compiler_rt failed\n    note: failed to check cache: manifest_create ReadOnlyFileSystem\n",
+            "type": "RuntimeError"
+          },
+          "index": 0,
+          "parameters": {
+            "beta": [
+              0.0351469407515946
+            ],
+            "gamma": [
+              0.9749528450085009
+            ]
+          },
+          "seed": 101729,
+          "shots": 128,
+          "status": "failed",
+          "time_seconds": 1.301763
+        },
+        {
+          "error": {
+            "message": "zig command failed:\n  Command: /home/cristofermsr/Desktop/quantum-power/.venv/bin/python -m ziglang build-exe -femit-bin=/tmp/selene_ujiuitdu_r64a0vbs/artifacts/program.selene.x /tmp/selene_ujiuitdu_r64a0vbs/artifacts/program.helios.o /home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_helios_qis_plugin/_dist/lib/libhelios_qis_selene_runner.a /home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_helios_qis_plugin/_dist/lib/libhelios_qis_selene_interface_logging_off.so /home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_base_qis_plugin/_dist/lib/libbase_qis_selene_interface_logging_off.so -lc -L/home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_sim/_dist/lib -L/home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_helios_qis_plugin/_dist/lib -L/home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_helios_qis_plugin/_dist/lib -L/home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_base_qis_plugin/_dist/lib\n  Error: error: sub-compilation of compiler_rt failed\n    note: failed to check cache: manifest_create ReadOnlyFileSystem\nerror: sub-compilation of libubsan failed\n    note: failed to check cache: manifest_create ReadOnlyFileSystem\n",
+            "type": "RuntimeError"
+          },
+          "index": 1,
+          "parameters": {
+            "beta": [
+              0.11900516294890774
+            ],
+            "gamma": [
+              2.994380378048025
+            ]
+          },
+          "seed": 101730,
+          "shots": 128,
+          "status": "failed",
+          "time_seconds": 0.435461
+        },
+        {
+          "error": {
+            "message": "zig command failed:\n  Command: /home/cristofermsr/Desktop/quantum-power/.venv/bin/python -m ziglang build-exe -femit-bin=/tmp/selene_ytmazoiq_fxnnkd57/artifacts/program.selene.x /tmp/selene_ytmazoiq_fxnnkd57/artifacts/program.helios.o /home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_helios_qis_plugin/_dist/lib/libhelios_qis_selene_runner.a /home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_helios_qis_plugin/_dist/lib/libhelios_qis_selene_interface_logging_off.so /home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_base_qis_plugin/_dist/lib/libbase_qis_selene_interface_logging_off.so -lc -L/home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_sim/_dist/lib -L/home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_helios_qis_plugin/_dist/lib -L/home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_helios_qis_plugin/_dist/lib -L/home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_base_qis_plugin/_dist/lib\n  Error: error: sub-compilation of compiler_rt failed\n    note: failed to check cache: manifest_create ReadOnlyFileSystem\nerror: sub-compilation of libubsan failed\n    note: failed to check cache: manifest_create ReadOnlyFileSystem\n",
+            "type": "RuntimeError"
+          },
+          "index": 2,
+          "parameters": {
+            "beta": [
+              0.9216416946107178
+            ],
+            "gamma": [
+              5.514790120807716
+            ]
+          },
+          "seed": 101731,
+          "shots": 128,
+          "status": "failed",
+          "time_seconds": 0.433592
+        },
+        {
+          "error": {
+            "message": "zig command failed:\n  Command: /home/cristofermsr/Desktop/quantum-power/.venv/bin/python -m ziglang build-exe -femit-bin=/tmp/selene_uuehemhb_6_5qrm2o/artifacts/program.selene.x /tmp/selene_uuehemhb_6_5qrm2o/artifacts/program.helios.o /home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_helios_qis_plugin/_dist/lib/libhelios_qis_selene_runner.a /home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_helios_qis_plugin/_dist/lib/libhelios_qis_selene_interface_logging_off.so /home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_base_qis_plugin/_dist/lib/libbase_qis_selene_interface_logging_off.so -lc -L/home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_sim/_dist/lib -L/home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_helios_qis_plugin/_dist/lib -L/home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_helios_qis_plugin/_dist/lib -L/home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_base_qis_plugin/_dist/lib\n  Error: error: sub-compilation of compiler_rt failed\n    note: failed to check cache: manifest_create ReadOnlyFileSystem\nerror: sub-compilation of libubsan failed\n    note: failed to check cache: manifest_create ReadOnlyFileSystem\n",
+            "type": "RuntimeError"
+          },
+          "index": 3,
+          "parameters": {
+            "beta": [
+              0.20293001941788383
+            ],
+            "gamma": [
+              1.8323375833385143
+            ]
+          },
+          "seed": 101732,
+          "shots": 128,
+          "status": "failed",
+          "time_seconds": 0.442335
+        },
+        {
+          "error": {
+            "message": "zig command failed:\n  Command: /home/cristofermsr/Desktop/quantum-power/.venv/bin/python -m ziglang build-exe -femit-bin=/tmp/selene_pgyvgopp_xnxt_02f/artifacts/program.selene.x /tmp/selene_pgyvgopp_xnxt_02f/artifacts/program.helios.o /home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_helios_qis_plugin/_dist/lib/libhelios_qis_selene_runner.a /home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_helios_qis_plugin/_dist/lib/libhelios_qis_selene_interface_logging_off.so /home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_base_qis_plugin/_dist/lib/libbase_qis_selene_interface_logging_off.so -lc -L/home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_sim/_dist/lib -L/home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_helios_qis_plugin/_dist/lib -L/home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_helios_qis_plugin/_dist/lib -L/home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_base_qis_plugin/_dist/lib\n  Error: error: sub-compilation of compiler_rt failed\n    note: failed to check cache: manifest_create ReadOnlyFileSystem\nerror: sub-compilation of libubsan failed\n    note: failed to check cache: manifest_create ReadOnlyFileSystem\n",
+            "type": "RuntimeError"
+          },
+          "index": 4,
+          "parameters": {
+            "beta": [
+              0.3345511084337437
+            ],
+            "gamma": [
+              1.7053281369201394
+            ]
+          },
+          "seed": 101733,
+          "shots": 128,
+          "status": "failed",
+          "time_seconds": 0.442337
+        }
+      ],
+      "counts": {},
+      "error": {
+        "message": "all parameter candidates failed",
+        "type": "RuntimeError"
+      },
+      "expected_cut": null,
+      "expected_energy": null,
+      "expected_ratio": null,
+      "final_shots_requested": 1024,
+      "gamma_range": [
+        0.0,
+        7.028462371686062
+      ],
+      "independent_runs": 1,
+      "p": 1,
+      "parameter_candidates_completed": 0,
+      "parameter_candidates_requested": 5,
+      "preliminary": true,
+      "search_shots_per_candidate": 128,
+      "seeds": {
+        "candidate_execution": [
+          101729,
+          101730,
+          101731,
+          101732,
+          101733
+        ],
+        "final_sampling": 101734,
+        "parameter_generation": 2729
+      },
+      "status": "failed",
+      "timings_seconds": {
+        "total": 3.056087
+      }
+    },
+    {
+      "backend": "guppy-selene",
+      "best_sample_cut": null,
+      "best_sample_ratio": null,
+      "beta_range": [
+        0.0,
+        1.5707963267948966
+      ],
+      "candidates": [
+        {
+          "error": {
+            "message": "zig command failed:\n  Command: /home/cristofermsr/Desktop/quantum-power/.venv/bin/python -m ziglang build-exe -femit-bin=/tmp/selene_hdxzhyxh_94xa_r5h/artifacts/program.selene.x /tmp/selene_hdxzhyxh_94xa_r5h/artifacts/program.helios.o /home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_helios_qis_plugin/_dist/lib/libhelios_qis_selene_runner.a /home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_helios_qis_plugin/_dist/lib/libhelios_qis_selene_interface_logging_off.so /home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_base_qis_plugin/_dist/lib/libbase_qis_selene_interface_logging_off.so -lc -L/home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_sim/_dist/lib -L/home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_helios_qis_plugin/_dist/lib -L/home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_helios_qis_plugin/_dist/lib -L/home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_base_qis_plugin/_dist/lib\n  Error: error: sub-compilation of compiler_rt failed\n    note: failed to check cache: manifest_create ReadOnlyFileSystem\nerror: sub-compilation of libubsan failed\n    note: failed to check cache: manifest_create ReadOnlyFileSystem\n",
+            "type": "RuntimeError"
+          },
+          "index": 0,
+          "parameters": {
+            "beta": [
+              0.3295017463041709,
+              1.2289762681479932
+            ],
+            "gamma": [
+              5.686604547266647,
+              1.504887101984255
+            ]
+          },
+          "seed": 201729,
+          "shots": 128,
+          "status": "failed",
+          "time_seconds": 0.639773
+        },
+        {
+          "error": {
+            "message": "zig command failed:\n  Command: /home/cristofermsr/Desktop/quantum-power/.venv/bin/python -m ziglang build-exe -femit-bin=/tmp/selene_ycfxeogg_qlvos7g6/artifacts/program.selene.x /tmp/selene_ycfxeogg_qlvos7g6/artifacts/program.helios.o /home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_helios_qis_plugin/_dist/lib/libhelios_qis_selene_runner.a /home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_helios_qis_plugin/_dist/lib/libhelios_qis_selene_interface_logging_off.so /home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_base_qis_plugin/_dist/lib/libbase_qis_selene_interface_logging_off.so -lc -L/home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_sim/_dist/lib -L/home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_helios_qis_plugin/_dist/lib -L/home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_helios_qis_plugin/_dist/lib -L/home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_base_qis_plugin/_dist/lib\n  Error: error: sub-compilation of compiler_rt failed\n    note: failed to check cache: manifest_create ReadOnlyFileSystem\nerror: sub-compilation of libubsan failed\n    note: failed to check cache: manifest_create ReadOnlyFileSystem\n",
+            "type": "RuntimeError"
+          },
+          "index": 1,
+          "parameters": {
+            "beta": [
+              0.3658137725262025,
+              0.13590695249244183
+            ],
+            "gamma": [
+              3.4182096344236985,
+              6.910860457912323
+            ]
+          },
+          "seed": 201730,
+          "shots": 128,
+          "status": "failed",
+          "time_seconds": 0.632589
+        },
+        {
+          "error": {
+            "message": "zig command failed:\n  Command: /home/cristofermsr/Desktop/quantum-power/.venv/bin/python -m ziglang build-exe -femit-bin=/tmp/selene_sjqjttex_bcqz0z7y/artifacts/program.selene.x /tmp/selene_sjqjttex_bcqz0z7y/artifacts/program.helios.o /home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_helios_qis_plugin/_dist/lib/libhelios_qis_selene_runner.a /home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_helios_qis_plugin/_dist/lib/libhelios_qis_selene_interface_logging_off.so /home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_base_qis_plugin/_dist/lib/libbase_qis_selene_interface_logging_off.so -lc -L/home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_sim/_dist/lib -L/home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_helios_qis_plugin/_dist/lib -L/home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_helios_qis_plugin/_dist/lib -L/home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_base_qis_plugin/_dist/lib\n  Error: error: sub-compilation of compiler_rt failed\n    note: failed to check cache: manifest_create ReadOnlyFileSystem\nerror: sub-compilation of libubsan failed\n    note: failed to check cache: manifest_create ReadOnlyFileSystem\n",
+            "type": "RuntimeError"
+          },
+          "index": 2,
+          "parameters": {
+            "beta": [
+              0.5504726849323912,
+              0.5255246484808938
+            ],
+            "gamma": [
+              0.5808163326537978,
+              4.32838665743528
+            ]
+          },
+          "seed": 201731,
+          "shots": 128,
+          "status": "failed",
+          "time_seconds": 0.642236
+        },
+        {
+          "error": {
+            "message": "zig command failed:\n  Command: /home/cristofermsr/Desktop/quantum-power/.venv/bin/python -m ziglang build-exe -femit-bin=/tmp/selene_wepjacil_zn0iatyf/artifacts/program.selene.x /tmp/selene_wepjacil_zn0iatyf/artifacts/program.helios.o /home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_helios_qis_plugin/_dist/lib/libhelios_qis_selene_runner.a /home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_helios_qis_plugin/_dist/lib/libhelios_qis_selene_interface_logging_off.so /home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_base_qis_plugin/_dist/lib/libbase_qis_selene_interface_logging_off.so -lc -L/home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_sim/_dist/lib -L/home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_helios_qis_plugin/_dist/lib -L/home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_helios_qis_plugin/_dist/lib -L/home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_base_qis_plugin/_dist/lib\n  Error: error: sub-compilation of libubsan failed\n    note: failed to check cache: manifest_create ReadOnlyFileSystem\nerror: sub-compilation of compiler_rt failed\n    note: failed to check cache: manifest_create ReadOnlyFileSystem\n",
+            "type": "RuntimeError"
+          },
+          "index": 3,
+          "parameters": {
+            "beta": [
+              1.060150597010882,
+              0.18119610757726598
+            ],
+            "gamma": [
+              6.677174836330154,
+              4.641465502284127
+            ]
+          },
+          "seed": 201732,
+          "shots": 128,
+          "status": "failed",
+          "time_seconds": 0.631553
+        },
+        {
+          "error": {
+            "message": "zig command failed:\n  Command: /home/cristofermsr/Desktop/quantum-power/.venv/bin/python -m ziglang build-exe -femit-bin=/tmp/selene_rhvdijii_m4_2s4tc/artifacts/program.selene.x /tmp/selene_rhvdijii_m4_2s4tc/artifacts/program.helios.o /home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_helios_qis_plugin/_dist/lib/libhelios_qis_selene_runner.a /home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_helios_qis_plugin/_dist/lib/libhelios_qis_selene_interface_logging_off.so /home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_base_qis_plugin/_dist/lib/libbase_qis_selene_interface_logging_off.so -lc -L/home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_sim/_dist/lib -L/home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_helios_qis_plugin/_dist/lib -L/home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_helios_qis_plugin/_dist/lib -L/home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_base_qis_plugin/_dist/lib\n  Error: error: sub-compilation of libubsan failed\n    note: failed to check cache: manifest_create ReadOnlyFileSystem\nerror: sub-compilation of compiler_rt failed\n    note: failed to check cache: manifest_create ReadOnlyFileSystem\n",
+            "type": "RuntimeError"
+          },
+          "index": 4,
+          "parameters": {
+            "beta": [
+              0.31709542970663956,
+              0.7541579614317327
+            ],
+            "gamma": [
+              1.2844752398420378,
+              5.058237518580892
+            ]
+          },
+          "seed": 201733,
+          "shots": 128,
+          "status": "failed",
+          "time_seconds": 0.734301
+        }
+      ],
+      "counts": {},
+      "error": {
+        "message": "all parameter candidates failed",
+        "type": "RuntimeError"
+      },
+      "expected_cut": null,
+      "expected_energy": null,
+      "expected_ratio": null,
+      "final_shots_requested": 1024,
+      "gamma_range": [
+        0.0,
+        7.028462371686062
+      ],
+      "independent_runs": 1,
+      "p": 2,
+      "parameter_candidates_completed": 0,
+      "parameter_candidates_requested": 5,
+      "preliminary": true,
+      "search_shots_per_candidate": 128,
+      "seeds": {
+        "candidate_execution": [
+          201729,
+          201730,
+          201731,
+          201732,
+          201733
+        ],
+        "final_sampling": 201734,
+        "parameter_generation": 3729
+      },
+      "status": "failed",
+      "timings_seconds": {
+        "total": 3.281083
+      }
+    },
+    {
+      "backend": "guppy-selene",
+      "best_sample_cut": null,
+      "best_sample_ratio": null,
+      "beta_range": [
+        0.0,
+        1.5707963267948966
+      ],
+      "candidates": [
+        {
+          "error": {
+            "message": "zig command failed:\n  Command: /home/cristofermsr/Desktop/quantum-power/.venv/bin/python -m ziglang build-exe -femit-bin=/tmp/selene_rkzgghof_3awr2a2s/artifacts/program.selene.x /tmp/selene_rkzgghof_3awr2a2s/artifacts/program.helios.o /home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_helios_qis_plugin/_dist/lib/libhelios_qis_selene_runner.a /home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_helios_qis_plugin/_dist/lib/libhelios_qis_selene_interface_logging_off.so /home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_base_qis_plugin/_dist/lib/libbase_qis_selene_interface_logging_off.so -lc -L/home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_sim/_dist/lib -L/home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_helios_qis_plugin/_dist/lib -L/home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_helios_qis_plugin/_dist/lib -L/home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_base_qis_plugin/_dist/lib\n  Error: error: sub-compilation of compiler_rt failed\n    note: failed to check cache: manifest_create ReadOnlyFileSystem\nerror: sub-compilation of libubsan failed\n    note: failed to check cache: manifest_create ReadOnlyFileSystem\n",
+            "type": "RuntimeError"
+          },
+          "index": 0,
+          "parameters": {
+            "beta": [
+              0.2698945834994869,
+              0.6702844989684831,
+              0.8133874076319296
+            ],
+            "gamma": [
+              0.572900760615601,
+              6.353910463206862,
+              3.043872601937277
+            ]
+          },
+          "seed": 301729,
+          "shots": 128,
+          "status": "failed",
+          "time_seconds": 0.83495
+        },
+        {
+          "error": {
+            "message": "zig command failed:\n  Command: /home/cristofermsr/Desktop/quantum-power/.venv/bin/python -m ziglang build-exe -femit-bin=/tmp/selene_wlcpbcsh_sbh9kp_p/artifacts/program.selene.x /tmp/selene_wlcpbcsh_sbh9kp_p/artifacts/program.helios.o /home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_helios_qis_plugin/_dist/lib/libhelios_qis_selene_runner.a /home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_helios_qis_plugin/_dist/lib/libhelios_qis_selene_interface_logging_off.so /home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_base_qis_plugin/_dist/lib/libbase_qis_selene_interface_logging_off.so -lc -L/home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_sim/_dist/lib -L/home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_helios_qis_plugin/_dist/lib -L/home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_helios_qis_plugin/_dist/lib -L/home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_base_qis_plugin/_dist/lib\n  Error: error: sub-compilation of compiler_rt failed\n    note: failed to check cache: manifest_create ReadOnlyFileSystem\nerror: sub-compilation of libubsan failed\n    note: failed to check cache: manifest_create ReadOnlyFileSystem\n",
+            "type": "RuntimeError"
+          },
+          "index": 1,
+          "parameters": {
+            "beta": [
+              1.3047159944138436,
+              0.9117170310911353,
+              1.060067517851478
+            ],
+            "gamma": [
+              4.927683186450151,
+              6.712548901911078,
+              6.958992200857911
+            ]
+          },
+          "seed": 301730,
+          "shots": 128,
+          "status": "failed",
+          "time_seconds": 0.834343
+        },
+        {
+          "error": {
+            "message": "zig command failed:\n  Command: /home/cristofermsr/Desktop/quantum-power/.venv/bin/python -m ziglang build-exe -femit-bin=/tmp/selene_kjhwybeo_8qp91yyq/artifacts/program.selene.x /tmp/selene_kjhwybeo_8qp91yyq/artifacts/program.helios.o /home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_helios_qis_plugin/_dist/lib/libhelios_qis_selene_runner.a /home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_helios_qis_plugin/_dist/lib/libhelios_qis_selene_interface_logging_off.so /home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_base_qis_plugin/_dist/lib/libbase_qis_selene_interface_logging_off.so -lc -L/home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_sim/_dist/lib -L/home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_helios_qis_plugin/_dist/lib -L/home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_helios_qis_plugin/_dist/lib -L/home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_base_qis_plugin/_dist/lib\n  Error: error: sub-compilation of libubsan failed\n    note: failed to check cache: manifest_create ReadOnlyFileSystem\nerror: sub-compilation of compiler_rt failed\n    note: failed to check cache: manifest_create ReadOnlyFileSystem\n",
+            "type": "RuntimeError"
+          },
+          "index": 2,
+          "parameters": {
+            "beta": [
+              0.6511336394406895,
+              0.5448383035607074,
+              0.7112471766225474
+            ],
+            "gamma": [
+              3.283126529738043,
+              3.6594620841359595,
+              6.964036935381877
+            ]
+          },
+          "seed": 301731,
+          "shots": 128,
+          "status": "failed",
+          "time_seconds": 0.835826
+        },
+        {
+          "error": {
+            "message": "zig command failed:\n  Command: /home/cristofermsr/Desktop/quantum-power/.venv/bin/python -m ziglang build-exe -femit-bin=/tmp/selene_lxebtcfr_eqnfe9lk/artifacts/program.selene.x /tmp/selene_lxebtcfr_eqnfe9lk/artifacts/program.helios.o /home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_helios_qis_plugin/_dist/lib/libhelios_qis_selene_runner.a /home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_helios_qis_plugin/_dist/lib/libhelios_qis_selene_interface_logging_off.so /home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_base_qis_plugin/_dist/lib/libbase_qis_selene_interface_logging_off.so -lc -L/home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_sim/_dist/lib -L/home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_helios_qis_plugin/_dist/lib -L/home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_helios_qis_plugin/_dist/lib -L/home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_base_qis_plugin/_dist/lib\n  Error: error: sub-compilation of compiler_rt failed\n    note: failed to check cache: manifest_create ReadOnlyFileSystem\nerror: sub-compilation of libubsan failed\n    note: failed to check cache: manifest_create ReadOnlyFileSystem\n",
+            "type": "RuntimeError"
+          },
+          "index": 3,
+          "parameters": {
+            "beta": [
+              0.36930606539028354,
+              0.7208028642603629,
+              0.47168629135833917
+            ],
+            "gamma": [
+              1.0106952782481085,
+              1.6041217651804907,
+              5.9953780432829396
+            ]
+          },
+          "seed": 301732,
+          "shots": 128,
+          "status": "failed",
+          "time_seconds": 0.833865
+        },
+        {
+          "error": {
+            "message": "zig command failed:\n  Command: /home/cristofermsr/Desktop/quantum-power/.venv/bin/python -m ziglang build-exe -femit-bin=/tmp/selene_mqzamxju_0sg009pr/artifacts/program.selene.x /tmp/selene_mqzamxju_0sg009pr/artifacts/program.helios.o /home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_helios_qis_plugin/_dist/lib/libhelios_qis_selene_runner.a /home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_helios_qis_plugin/_dist/lib/libhelios_qis_selene_interface_logging_off.so /home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_base_qis_plugin/_dist/lib/libbase_qis_selene_interface_logging_off.so -lc -L/home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_sim/_dist/lib -L/home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_helios_qis_plugin/_dist/lib -L/home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_helios_qis_plugin/_dist/lib -L/home/cristofermsr/Desktop/quantum-power/.venv/lib/python3.14/site-packages/selene_base_qis_plugin/_dist/lib\n  Error: error: sub-compilation of libubsan failed\n    note: failed to check cache: manifest_create ReadOnlyFileSystem\nerror: sub-compilation of compiler_rt failed\n    note: failed to check cache: manifest_create ReadOnlyFileSystem\n",
+            "type": "RuntimeError"
+          },
+          "index": 4,
+          "parameters": {
+            "beta": [
+              1.541435733961403,
+              0.6168058886565786,
+              0.8479379807513826
+            ],
+            "gamma": [
+              4.449487222331353,
+              5.481351458646589,
+              1.9092294467563486
+            ]
+          },
+          "seed": 301733,
+          "shots": 128,
+          "status": "failed",
+          "time_seconds": 0.836245
+        }
+      ],
+      "counts": {},
+      "error": {
+        "message": "all parameter candidates failed",
+        "type": "RuntimeError"
+      },
+      "expected_cut": null,
+      "expected_energy": null,
+      "expected_ratio": null,
+      "final_shots_requested": 1024,
+      "gamma_range": [
+        0.0,
+        7.028462371686062
+      ],
+      "independent_runs": 1,
+      "p": 3,
+      "parameter_candidates_completed": 0,
+      "parameter_candidates_requested": 5,
+      "preliminary": true,
+      "search_shots_per_candidate": 128,
+      "seeds": {
+        "candidate_execution": [
+          301729,
+          301730,
+          301731,
+          301732,
+          301733
+        ],
+        "final_sampling": 301734,
+        "parameter_generation": 4729
+      },
+      "status": "failed",
+      "timings_seconds": {
+        "total": 4.1758
+      }
+    }
+  ],
+  "reporting": {
+    "convergence_claimed": false,
+    "independent_runs_per_configuration": 1,
+    "mean_std_error_bars_reported": false,
+    "parameter_candidates_are_independent_runs": false,
+    "quantum_advantage_claimed": false
+  },
+  "schema_version": 1,
+  "software_versions": {
+    "cvxpy": "1.9.2",
+    "guppylang": "0.21.16",
+    "matplotlib": "3.11.1",
+    "networkx": "3.6.1",
+    "numpy": "2.5.1",
+    "python": "3.14.6",
+    "scipy": "1.18.0",
+    "scs": "3.2.11",
+    "selene-sim": "0.2.17"
+  },
+  "source_provenance": {
+    "source": "Subestaciones.csv + Subestaciones.geojson",
+    "weight_definition": null,
+    "weight_units": null
+  },
+  "study_status": "preliminary",
+  "total_time_seconds": 10.578969
+}

@@ -1,0 +1,252 @@
+{
+  "schema_version": 1,
+  "source": "Subestaciones.csv + Subestaciones.geojson",
+  "edge_model": "proximity_inverse_distance_fallback",
+  "limitations": [
+    "Edges are inferred; they are not confirmed ICE transmission lines."
+  ],
+  "nodes": [
+    {
+      "id": "SUB-29",
+      "fid": 29,
+      "name": "Cañas",
+      "province": "Guanacaste",
+      "canton": "Cañas",
+      "district": "Cañas",
+      "observation": "CAS",
+      "longitude": -85.1236323586436,
+      "latitude": 10.4234985773189,
+      "projected_x": -9475919.40863803,
+      "projected_y": 1166792.54665283
+    },
+    {
+      "id": "SUB-47",
+      "fid": 47,
+      "name": "Sandillal",
+      "province": "Guanacaste",
+      "canton": "Cañas",
+      "district": "Cañas",
+      "observation": "SAD",
+      "longitude": -85.103277557602,
+      "latitude": 10.4652780043708,
+      "projected_x": -9473653.52255088,
+      "projected_y": 1171521.7682505
+    },
+    {
+      "id": "SUB-18",
+      "fid": 18,
+      "name": "Corobici",
+      "province": "Guanacaste",
+      "canton": "Cañas",
+      "district": "Cañas",
+      "observation": "COR",
+      "longitude": -85.0778213507225,
+      "latitude": 10.4712932222768,
+      "projected_x": -9470819.75056352,
+      "projected_y": 1172202.71314525
+    },
+    {
+      "id": "SUB-15",
+      "fid": 15,
+      "name": "Filadelfia",
+      "province": "Guanacaste",
+      "canton": "Carrillo",
+      "district": "Filadelfia",
+      "observation": "FIL",
+      "longitude": -85.4724249855784,
+      "latitude": 10.4173704179929,
+      "projected_x": -9514746.82626086,
+      "projected_y": 1166098.92316279
+    },
+    {
+      "id": "SUB-07",
+      "fid": 7,
+      "name": "Liberia",
+      "province": "Guanacaste",
+      "canton": "Liberia",
+      "district": "Liberia",
+      "observation": "LIB",
+      "longitude": -85.44574374991,
+      "latitude": 10.6153551397224,
+      "projected_x": -9511776.68469252,
+      "projected_y": 1188515.02042561
+    },
+    {
+      "id": "SUB-35",
+      "fid": 35,
+      "name": "Miravalles",
+      "province": "Guanacaste",
+      "canton": "Bagaces",
+      "district": "Fortuna",
+      "observation": "MIR",
+      "longitude": -85.1932537699486,
+      "latitude": 10.701481507002,
+      "projected_x": -9483669.62869282,
+      "projected_y": 1198270.87982366
+    },
+    {
+      "id": "SUB-06",
+      "fid": 6,
+      "name": "Mogote",
+      "province": "Guanacaste",
+      "canton": "Bagaces",
+      "district": "Mogote",
+      "observation": "MOG",
+      "longitude": -85.267612029714,
+      "latitude": 10.725715627784,
+      "projected_x": -9491947.15230617,
+      "projected_y": 1201016.46901161
+    },
+    {
+      "id": "SUB-24",
+      "fid": 24,
+      "name": "Arenal",
+      "province": "Guanacaste",
+      "canton": "Tilaran",
+      "district": "Santa Rosa",
+      "observation": "ARE",
+      "longitude": -85.0002881841908,
+      "latitude": 10.4727301596314,
+      "projected_x": -9462188.79794563,
+      "projected_y": 1172365.38171851
+    },
+    {
+      "id": "SUB-40",
+      "fid": 40,
+      "name": "Tanque",
+      "province": "Guanacaste",
+      "canton": "Tilaran",
+      "district": "Santa Rosa",
+      "observation": "TAN",
+      "longitude": -84.9962764371341,
+      "latitude": 10.4819843791374,
+      "projected_x": -9461742.21230609,
+      "projected_y": 1173413.02422505
+    },
+    {
+      "id": "SUB-20",
+      "fid": 20,
+      "name": "Colorado",
+      "province": "Guanacaste",
+      "canton": "Abangares",
+      "district": "Colorado",
+      "observation": "COD",
+      "longitude": -85.1724692781189,
+      "latitude": 10.2254716021372,
+      "projected_x": -9481355.90964593,
+      "projected_y": 1144385.46957003
+    },
+    {
+      "id": "SUB-48",
+      "fid": 48,
+      "name": "Tejona",
+      "province": "Guanacaste",
+      "canton": "Tilaran",
+      "district": "Santa Rosa",
+      "observation": "TEJ",
+      "longitude": -84.9892432433061,
+      "latitude": 10.5241607282092,
+      "projected_x": -9460959.2807505,
+      "projected_y": 1178188.07945315
+    },
+    {
+      "id": "SUB-01",
+      "fid": 1,
+      "name": "Pailas",
+      "province": "Guanacaste",
+      "canton": "Liberia",
+      "district": "Curubande",
+      "observation": "PAI",
+      "longitude": -85.3589556083694,
+      "latitude": 10.7560934802952,
+      "projected_x": -9502115.47296933,
+      "projected_y": 1204458.41910926
+    }
+  ],
+  "edges": [
+    {
+      "from": "SUB-01",
+      "to": "SUB-06",
+      "distance_km": 10.535,
+      "weight": 0.09492
+    },
+    {
+      "from": "SUB-01",
+      "to": "SUB-07",
+      "distance_km": 18.298,
+      "weight": 0.05465
+    },
+    {
+      "from": "SUB-01",
+      "to": "SUB-35",
+      "distance_km": 19.094,
+      "weight": 0.052371
+    },
+    {
+      "from": "SUB-06",
+      "to": "SUB-35",
+      "distance_km": 8.559,
+      "weight": 0.116831
+    },
+    {
+      "from": "SUB-07",
+      "to": "SUB-15",
+      "distance_km": 22.207,
+      "weight": 0.04503
+    },
+    {
+      "from": "SUB-15",
+      "to": "SUB-29",
+      "distance_km": 38.15,
+      "weight": 0.026212
+    },
+    {
+      "from": "SUB-18",
+      "to": "SUB-29",
+      "distance_km": 7.303,
+      "weight": 0.136923
+    },
+    {
+      "from": "SUB-18",
+      "to": "SUB-47",
+      "distance_km": 2.863,
+      "weight": 0.349318
+    },
+    {
+      "from": "SUB-20",
+      "to": "SUB-29",
+      "distance_km": 22.658,
+      "weight": 0.044134
+    },
+    {
+      "from": "SUB-20",
+      "to": "SUB-47",
+      "distance_km": 27.719,
+      "weight": 0.036077
+    },
+    {
+      "from": "SUB-24",
+      "to": "SUB-40",
+      "distance_km": 1.119,
+      "weight": 0.893963
+    },
+    {
+      "from": "SUB-24",
+      "to": "SUB-48",
+      "distance_km": 5.845,
+      "weight": 0.171089
+    },
+    {
+      "from": "SUB-29",
+      "to": "SUB-47",
+      "distance_km": 5.151,
+      "weight": 0.194123
+    },
+    {
+      "from": "SUB-40",
+      "to": "SUB-48",
+      "distance_km": 4.752,
+      "weight": 0.210419
+    }
+  ]
+}

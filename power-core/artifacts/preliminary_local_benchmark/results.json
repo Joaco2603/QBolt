@@ -31,7 +31,7 @@
     ],
     "ratio": 1.0,
     "status": "completed",
-    "time_seconds": 7.6e-05
+    "time_seconds": 0.00028
   },
   "execution_status": "completed",
   "goemans_williamson": {
@@ -50,7 +50,7 @@
     ],
     "ratio": 1.0,
     "rounds": 128,
-    "sdp_value": 1057.9999937078942,
+    "sdp_value": 1057.9999940310925,
     "seed": 1730,
     "solver": "SCS",
     "solver_options": {
@@ -59,7 +59,7 @@
     },
     "solver_status": "optimal",
     "status": "completed",
-    "time_seconds": 0.011678,
+    "time_seconds": 0.020983,
     "winning_round": 0
   },
   "greedy": {
@@ -79,7 +79,7 @@
     "ratio": 1.0,
     "seed": 1729,
     "status": "completed",
-    "time_seconds": 5.7e-05
+    "time_seconds": 0.000181
   },
   "input": {
     "edge_count": 5,
@@ -191,7 +191,7 @@
           "seed": 101729,
           "shots": 128,
           "status": "completed",
-          "time_seconds": 1.787252
+          "time_seconds": 1.187906
         },
         {
           "backend_metadata": {},
@@ -263,7 +263,7 @@
           "seed": 101730,
           "shots": 128,
           "status": "completed",
-          "time_seconds": 0.662985
+          "time_seconds": 0.347862
         },
         {
           "backend_metadata": {},
@@ -333,7 +333,7 @@
           "seed": 101731,
           "shots": 128,
           "status": "completed",
-          "time_seconds": 0.648141
+          "time_seconds": 0.348845
         },
         {
           "backend_metadata": {},
@@ -403,7 +403,7 @@
           "seed": 101732,
           "shots": 128,
           "status": "completed",
-          "time_seconds": 0.711997
+          "time_seconds": 0.344213
         },
         {
           "backend_metadata": {},
@@ -467,7 +467,7 @@
           "seed": 101733,
           "shots": 128,
           "status": "completed",
-          "time_seconds": 0.899425
+          "time_seconds": 0.345881
         }
       ],
       "counts": {
@@ -898,9 +898,9 @@
       },
       "status": "completed",
       "timings_seconds": {
-        "final_sampling": 0.934419,
-        "parameter_search": 4.709956,
-        "total": 5.644428
+        "final_sampling": 0.448656,
+        "parameter_search": 2.574819,
+        "total": 3.023571
       }
     },
     {
@@ -984,7 +984,7 @@
           "seed": 201729,
           "shots": 128,
           "status": "completed",
-          "time_seconds": 0.485467
+          "time_seconds": 0.43474
         },
         {
           "backend_metadata": {},
@@ -1051,7 +1051,7 @@
           "seed": 201730,
           "shots": 128,
           "status": "completed",
-          "time_seconds": 0.619226
+          "time_seconds": 0.433162
         },
         {
           "backend_metadata": {},
@@ -1114,7 +1114,7 @@
           "seed": 201731,
           "shots": 128,
           "status": "completed",
-          "time_seconds": 0.50913
+          "time_seconds": 0.440445
         },
         {
           "backend_metadata": {},
@@ -1191,7 +1191,7 @@
           "seed": 201732,
           "shots": 128,
           "status": "completed",
-          "time_seconds": 0.466955
+          "time_seconds": 0.450395
         },
         {
           "backend_metadata": {},
@@ -1262,7 +1262,7 @@
           "seed": 201733,
           "shots": 128,
           "status": "completed",
-          "time_seconds": 0.468352
+          "time_seconds": 0.437418
         }
       ],
       "counts": {
@@ -1683,9 +1683,9 @@
       },
       "status": "completed",
       "timings_seconds": {
-        "final_sampling": 1.175643,
-        "parameter_search": 2.549219,
-        "total": 3.725003
+        "final_sampling": 0.575484,
+        "parameter_search": 2.196275,
+        "total": 2.771844
       }
     },
     {
@@ -1764,7 +1764,7 @@
           "seed": 301729,
           "shots": 128,
           "status": "completed",
-          "time_seconds": 0.553138
+          "time_seconds": 0.525197
         },
         {
           "backend_metadata": {},
@@ -1839,7 +1839,7 @@
           "seed": 301730,
           "shots": 128,
           "status": "completed",
-          "time_seconds": 0.657753
+          "time_seconds": 0.531307
         },
         {
           "backend_metadata": {},
@@ -1919,7 +1919,7 @@
           "seed": 301731,
           "shots": 128,
           "status": "completed",
-          "time_seconds": 0.574911
+          "time_seconds": 0.531163
         },
         {
           "backend_metadata": {},
@@ -1989,7 +1989,7 @@
           "seed": 301732,
           "shots": 128,
           "status": "completed",
-          "time_seconds": 0.542712
+          "time_seconds": 0.626649
         },
         {
           "backend_metadata": {},
@@ -2064,7 +2064,7 @@
           "seed": 301733,
           "shots": 128,
           "status": "completed",
-          "time_seconds": 0.500452
+          "time_seconds": 0.532592
         }
       ],
       "counts": {
@@ -2487,9 +2487,9 @@
       },
       "status": "completed",
       "timings_seconds": {
-        "final_sampling": 0.568968,
-        "parameter_search": 2.829073,
-        "total": 3.398141
+        "final_sampling": 0.69379,
+        "parameter_search": 2.747022,
+        "total": 3.440892
       }
     }
   ],
@@ -2504,13 +2504,13 @@
   "software_versions": {
     "cvxpy": "1.9.2",
     "guppylang": "0.21.16",
-    "matplotlib": "3.10.9",
+    "matplotlib": "3.11.1",
     "networkx": "3.6.1",
-    "numpy": "2.5.0",
-    "python": "3.13.13",
+    "numpy": "2.5.1",
+    "python": "3.14.6",
     "scipy": "1.18.0",
     "scs": "3.2.11",
-    "selene-sim": "0.2.18"
+    "selene-sim": "0.2.17"
   },
   "source_provenance": {
     "source": "Subestaciones.* + LineasDeTransmision.*",
@@ -2518,5 +2518,5 @@
     "weight_units": "kV"
   },
   "study_status": "preliminary",
-  "total_time_seconds": 12.789591
+  "total_time_seconds": 9.265846
 }
