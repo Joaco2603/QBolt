@@ -1,187 +1,101 @@
 # Power Restoration Core
 
-Reproducible Python workspace for modelling a regional transmission network and
-benchmarking power-restoration / Max-Cut solvers. The project is currently a
-scaffold: dependencies and the directory layout are ready; the solver modules
-will be implemented under `src/`.
+`power-core` contains the optimization and reporting boundary for the weighted
+regional Max-Cut experiment: QUBO construction, exact Ising conversion, QAOA
+orchestration/backends, greedy and Goemans-Williamson baselines, experiment
+collection, size/depth aggregation, and reproducible walkthroughs.
 
-## Reproduce from a new computer
+## Quick path
 
-Use **Python 3.12 or newer**. Python 3.12 is the recommended baseline because
-the pinned TKET stack supports it on macOS, Linux, and Windows.
-
-### 1. Install prerequisites
-
-- Git
-- Python 3.12+
-- Internet access for the first dependency installation
-
-Verify Python before continuing:
-
-```bash
-python3 --version
-```
-
-The command must report `3.12` or newer. Do not use a Conda Python on macOS for
-this project: PyTKET documents installation issues with recent versions in that
-environment. Use the official Python installer, Homebrew Python, or `pyenv`.
-
-### 2. Clone the repository
-
-```bash
-git clone <REPOSITORY_URL> quantathonv2
-cd quantathonv2
-```
-
-Replace `<REPOSITORY_URL>` with the repository's real Git URL.
-
-### 3. Create and activate an isolated environment
-
-Run these commands from the repository root.
-
-**macOS / Linux**
+From the repository root, with Python 3.12 or newer:
 
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
-```
-
-**Windows PowerShell**
-
-```powershell
-py -3.12 -m venv .venv
-.\.venv\Scripts\Activate.ps1
-```
-
-Your terminal should now show `(.venv)`.
-
-### 4. Install the pinned dependencies
-
-```bash
-python -m pip install --upgrade pip
 python -m pip install -r power-core/requirements.txt
-```
-
-`requirements.txt` pins the project's direct dependencies. To reproduce the
-exact resolved transitive dependency set on a later machine, export it from the
-known-good environment and install that file instead:
-
-```bash
-python -m pip freeze --all > requirements.lock
-python -m pip install -r requirements.lock
-```
-
-Commit `requirements.lock` once a solver implementation and its validated
-environment exist. Do not claim byte-for-byte reproducibility from direct pins
-alone: transitive dependency releases can change.
-
-### 5. Verify the environment
-
-```bash
-python -c "import matplotlib, networkx, numpy, pytket, scipy; print('Environment OK')"
-python -m pytest data-analysis/tests
-```
-
-Para probar `power-core` desde la raíz del repositorio:
-
-```bash
 python -m pytest power-core/tests
 ```
 
-Expected result: the import command prints `Environment OK`, and the data
-analysis test suite passes.
-
-### 6. Regenerate the source graph artifact
-
-```bash
-python data-analysis/scripts/build_weighted_graph.py
-```
-
-The generator validates the CSV and GeoJSON source pairs by `FID`, records
-SHA-256 digests, and writes the graph artifact to:
+## Implemented flow
 
 ```text
-power-core/artifacts/transmission_weighted_graph.json
+regional_instance.json
+        ↓
+weighted NetworkX graph
+        ↓
+QuboModel: minimize E_Q(x) = -weighted_cut(x)
+        ↓
+IsingModel: E_Q(x) = E_I(1 - 2x)
+        ├── QAOA → local Guppy/Selene or Nexus-hosted Selene simulation
+        └── classical → exact search, greedy, Goemans-Williamson
 ```
 
-This path is defined by the existing data generator. It is intentionally not
-`power-core/artifacts/`; do not silently move or edit generated artifacts by
-hand.
+## Documentation and evidence
+
+| Topic | Link |
+| --- | --- |
+| Documentation reading route | [Spanish guide](docs/spanish/README.md) |
+| QUBO walkthrough | [Spanish](docs/spanish/qubo/README.md) · [English](docs/english/qubo/README.md) |
+| Ising walkthrough | [Spanish](docs/spanish/ising/README.md) · [English](docs/english/ising/README.md) |
+| QAOA walkthrough | [Spanish](docs/spanish/qaoa/README.md) · [English](docs/english/qaoa/README.md) |
+| Benchmark protocol | [Spanish benchmark guide](docs/spanish/benchmarks/README.md) |
+| Six-node evidence | [Artifact README](artifacts/preliminary_local_benchmark/README.md) |
+| Size/depth evidence | [Aggregate report](artifacts/preliminary_size_depth_comparison/README.md) |
+| Nexus collection | [Dataset guide](docs/spanish/benchmarks/nexus-run-dataset.md) |
+| ICE provenance | [Spanish](docs/spanish/reference-ice-dataset.md) · [English](docs/english/reference-ice-dataset.md) |
+
+## Reproduce the preliminary benchmark
+
+```bash
+python power-core/src/benchmarks/preliminary.py \
+  --input power-core/artifacts/regional_instance.json \
+  --output-dir power-core/artifacts/preliminary_local_benchmark \
+  --depths 1 2 3 --parameter-candidates 5 \
+  --search-shots 128 --final-shots 1024 --seed 1729 --gw-rounds 128
+```
+
+For the size/depth aggregate, use the recorded 8-, 10-, and 12-node fallback
+runs:
+
+```bash
+python power-core/src/benchmarks/aggregate_preliminary.py \
+  --input 8=power-core/artifacts/preliminary_local_benchmark_8_escalated/results.json \
+  --input 10=power-core/artifacts/preliminary_local_benchmark_10_escalated/results.json \
+  --input 12=power-core/artifacts/preliminary_local_benchmark_12_escalated/results.json \
+  --output-dir power-core/artifacts/preliminary_size_depth_comparison
+```
+
+These are preliminary local Guppy/Selene runs with one independent run per
+size/depth configuration. Five parameter candidates are not five independent
+experiments; no error bars or convergence claim is made.
+
+## Nexus execution boundary
+
+`NexusBackend` uses Nexus with Selene `StatevectorSimulator`. Describe those
+runs as simulation; they are neither Quantinuum H2 emulation nor physical
+hardware evidence. Use the [Nexus dataset collector](src/experiments/nexus_run_dataset.py)
+to preserve configuration, counts, optimizer details, and failures.
+
+## Known limitations
+
+- The final multi-run study with five or more independent runs per configuration
+  and uncertainty reporting is not complete.
+- The 8/10/12-node study uses proximity-fallback graphs, not confirmed ICE
+  transmission topology; do not present it as an electrical-grid scaling result.
+- Direct dependency pins are committed, but no transitive lockfile is committed.
+- Nominal-voltage weights are a modelling proxy, not electrical capacity or risk.
 
 ## Project layout
 
 ```text
 power-core/
-├── requirements.txt                 # Pinned direct dependencies
-├── README.md                        # This reproducibility guide
-├── scripts/                         # Developer and automation scripts
+├── artifacts/      # Generated graph and benchmark evidence
+├── docs/           # Spanish and English walkthroughs
+├── scripts/        # Nexus inspection utilities
 ├── src/
-│   ├── cli.py                       # Future command-line entry point
-│   ├── run_benchmark.py             # Future benchmark runner
-│   ├── run_max_cut_benchmark.py     # Future Max-Cut benchmark runner
-│   ├── run_solver.py                # Future solver runner
-│   ├── version.py                   # Version metadata
-│   ├── evaluation/                  # Metrics and evaluation logic
-│   ├── grid/                        # Grid graph loading and transformations
-│   ├── optimizer/                   # Classical and quantum optimizers
-│   ├── reports/                     # Reproducible result reports
-│   ├── restoration/                 # Restoration domain use cases
-│   ├── scenarios/                   # Deterministic scenario definitions
-│   └── visualization/               # Plots and visual outputs
-└── tests/                           # Tests for power-core modules
-```
-
-## Reproducibility rules
-
-1. Run every command from the repository root.
-2. Set and record a random seed for every solver run.
-3. Preserve graph source digests and generated JSON provenance.
-4. Never edit files under an artifacts directory manually; regenerate them.
-5. Benchmark identical instances against QAOA, Goemans-Williamson, greedy, and
-   an exact or simulated-annealing reference where feasible.
-6. Report QAOA approximation ratio `r = E_QAOA / E_optimal`, including mean,
-   standard deviation, optimizer status, initialization count, and depth `p`.
-
-## Current status
-
-The folders and Python entry-point files are intentionally empty. Therefore,
-there is no `power-core` solver command to run yet. The available commands today
-are dependency installation, `data-analysis` tests, and graph-artifact
-generation above. Add documented commands here only when their implementation
-and tests exist.
-
-## Benchmark plan
-
-The Spanish benchmark plan distinguishes the Challenge 1 mandatory baselines,
-the implemented solvers, and useful supplemental experiments:
-
-- [`docs/spanish/benchmarks/README.md`](docs/spanish/benchmarks/README.md)
-- [`docs/spanish/benchmarks/nexus-run-dataset.md`](docs/spanish/benchmarks/nexus-run-dataset.md)
-
-Nexus QAOA runs can be collected in the versioned JSON dataset provided by
-`src/experiments/nexus_run_dataset.py`. It preserves successful, non-converged,
-and failed attempts for later comparison; it does not claim simulator results
-as physical Quantinuum hardware results.
-
-## Troubleshooting
-
-| Symptom | Fix |
-| --- | --- |
-| `python3 --version` is below 3.12 | Install Python 3.12+ and recreate `.venv`. |
-| `No module named ...` | Activate `.venv`, then rerun `python -m pip install -r power-core/requirements.txt`. |
-| PyTKET installation fails on macOS Conda | Recreate the environment with an official Python, Homebrew Python, or `pyenv` Python. |
-| Graph generation reports an `FID mismatch` | Treat it as a data-integrity failure; inspect the CSV and GeoJSON inputs instead of bypassing validation. |
-
-## Clean reset
-
-Delete only the virtual environment, then repeat steps 3–5:
-
-```bash
-rm -rf .venv
-```
-
-On Windows PowerShell:
-
-```powershell
-Remove-Item -Recurse -Force .venv
+│   ├── benchmarks/ # Local benchmarks and aggregators
+│   ├── experiments/# Nexus dataset collection
+│   ├── optimizer/  # QUBO, Ising, QAOA, greedy, GW
+│   └── reports/    # Walkthrough figure generators
+└── tests/          # Behavioural and reporting tests
 ```
