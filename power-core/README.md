@@ -83,6 +83,26 @@ Documentation:
 - [QAOA walkthrough in English](docs/english/qaoa/README.md)
 - [Benchmark methodology](docs/spanish/benchmarks/README.md)
 
+## Iceberg QED co-compilation (ideal local MVP)
+
+`optimizer.quantum.iceberg` compiles an even-sized weighted Max-Cut QAOA
+instance into the Iceberg `[[k+2,k,2]]` code. It preserves explicit gadget
+barriers, schedules commuting cost gates with maximum-weight matching, and
+uses the Max-Cut global Z2 symmetry to split mixer rotations between the top
+and bottom code qubits.
+
+The six-node Guanacaste instance is compatible: it uses six logical and eight
+physical data qubits. The preliminary benchmark now records naive and
+co-compiled two-qubit depth per QAOA depth:
+
+```bash
+python power-core/src/benchmarks/preliminary.py
+```
+
+This local MVP reports structural metrics only. Ideal simulation has a 100%
+post-selection rate by construction; it does **not** model H2-1 noise or claim
+hardware fidelity, break-even performance, or quantum advantage.
+
 Each Ising report includes:
 
 1. the six-step algebraic conversion;

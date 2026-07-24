@@ -34,6 +34,11 @@ import networkx as nx  # noqa: E402
 
 from src.optimizer.greedy import solve_greedy  # noqa: E402
 from src.optimizer.quantum.ising import IsingModel  # noqa: E402
+from src.optimizer.quantum.iceberg import (  # noqa: E402
+    IcebergCompileConfig,
+    IcebergCompiler,
+    IcebergValidationError,
+)
 from src.optimizer.quantum.qaoa import (  # noqa: E402
     MeasurementBatch,
     QAOABackend,
@@ -707,6 +712,39 @@ def _classical_results(
     return greedy_result, gw_result
 
 
+def iceberg_structural_results(graph: nx.Graph, depths: Sequence[int]) -> list[dict[str, Any]]:
+    """Compare naive and co-compiled Iceberg schedules without noise claims.
+
+    This is deliberately a structural study: local ideal simulation cannot
+    estimate H2-1 fidelity or a meaningful non-unit post-selection rate.
+    """
+    results: list[dict[str, Any]] = []
+    for depth in depths:
+        gamma = (0.0,) * depth
+        beta = (0.0,) * depth
+        try:
+            naive = IcebergCompiler(
+                IcebergCompileConfig(syndrome_count=1, use_z2_symmetry=False)
+            ).compile(graph, gamma=gamma, beta=beta)
+            optimized = IcebergCompiler(
+                IcebergCompileConfig(syndrome_count=1, use_z2_symmetry=True)
+            ).compile(graph, gamma=gamma, beta=beta)
+            results.append(
+                {
+                    "p": depth,
+                    "status": "completed",
+                    "naive": dict(naive.metrics),
+                    "co_compiled": dict(optimized.metrics),
+                    "two_qubit_depth_reduction": naive.two_qubit_depth - optimized.two_qubit_depth,
+                    "ideal_postselection_rate": 1.0,
+                    "noise_model": "ideal; no H2-1 fidelity claim",
+                }
+            )
+        except IcebergValidationError as error:
+            results.append({"p": depth, "status": "not_applicable", "error": _error_record(error)})
+    return results
+
+
 def run_benchmark(
     input_path: Path = DEFAULT_INPUT,
     *,
@@ -744,6 +782,7 @@ def run_benchmark(
         )
         for depth in selected_config.depths
     ]
+    iceberg = iceberg_structural_results(graph, selected_config.depths)
     has_failures = any(result["status"] == "failed" for result in qaoa)
     has_failures = has_failures or greedy["status"] == "failed" or gw["status"] == "failed"
     max_abs_j = max((abs(float(value)) for value in model.quadratic.values()), default=0.0)
@@ -783,6 +822,7 @@ def run_benchmark(
         "greedy": greedy,
         "goemans_williamson": gw,
         "qaoa": qaoa,
+        "iceberg": iceberg,
         "total_time_seconds": round(perf_counter() - benchmark_started, 6),
     }
 

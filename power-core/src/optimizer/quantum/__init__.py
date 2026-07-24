@@ -1,6 +1,15 @@
 """Quantum optimization primitives and backend adapters."""
 
 from .ising import IsingModel
+from .iceberg import (
+    IcebergCompileConfig,
+    IcebergCompiledProgram,
+    IcebergCompiler,
+    IcebergOperation,
+    IcebergValidationError,
+    PostselectionResult,
+    postselect_counts,
+)
 from .qaoa import (
     LocalGuppySeleneBackend,
     MeasurementBatch,
@@ -19,6 +28,11 @@ from .qubo import (
 )
 __all__ = [
     "ConstraintBuilder",
+    "IcebergCompileConfig",
+    "IcebergCompiledProgram",
+    "IcebergCompiler",
+    "IcebergOperation",
+    "IcebergValidationError",
     "IsingModel",
     "LocalGuppySeleneBackend",
     "MeasurementBatch",
@@ -28,7 +42,9 @@ __all__ = [
     "QAOAProgram",
     "QAOAResult",
     "QuboModel",
+    "PostselectionResult",
     "build_max_cut_qubo",
     "cut_weight",
     "recommended_penalty",
+    "postselect_counts",
 ]

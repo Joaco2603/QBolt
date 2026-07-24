@@ -145,6 +145,9 @@ def test_schema_and_outputs_are_generated_with_fake_backend(tmp_path: Path) -> N
         "quantum_advantage_claimed": False,
     }
     assert [item["p"] for item in results["qaoa"]] == [1, 3]
+    assert [item["p"] for item in results["iceberg"]] == [1, 3]
+    assert all(item["status"] == "completed" for item in results["iceberg"])
+    assert all(item["ideal_postselection_rate"] == 1.0 for item in results["iceberg"])
     for item in results["qaoa"]:
         assert item["status"] == "completed"
         assert item["expected_cut"] == pytest.approx(1.5)
