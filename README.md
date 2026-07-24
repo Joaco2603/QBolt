@@ -93,9 +93,9 @@ We conducted experimental QAOA / Iceberg QED validation on the dedicated `feat/i
 
 Explore step-by-step mathematical derivations and walkthroughs:
 
-* 📐 **[Weighted Max-Cut QUBO Walkthrough](./docs/spanish/qubo/README.md)**
-* 🔄 **[Exact QUBO-to-Ising Conversion](./docs/spanish/ising/README.md)**
-* ⚛️ **[QAOA Execution Pipeline](./spanish/qaoa/README.md)**
+* 📐 **[Weighted Max-Cut QUBO Walkthrough](./power-core/docs/english/qubo/README.md)**
+* 🔄 **[Exact QUBO-to-Ising Conversion](./power-core/docs/english/ising/README.md)**
+* ⚛️ **[QAOA Execution Pipeline](./power-core/docs/english/qaoa/README.md)**
 
 The Ising verification module systematically checks all 64 state assignments ($2^6$) of the Guanacaste instance, proving exact equivalence:
 
@@ -124,7 +124,7 @@ including the constant energy offset.
 
 ---
 
-## 📊 Data Model & Provenance
+## Data Model & Provenance
 
 The primary electrical graph consists of:
 
@@ -138,8 +138,6 @@ Parallel circuits are aggregated and validated using **SHA-256 source data diges
 > **Modeling Notes:**
 > * Edge **weight** corresponds to the sum of nominal circuit voltages in kV (used as a transparent topological proxy).
 > * `synthetic_peak_demand_mw` represents a scenario test parameter rather than real-time telemetry.
-> 
-> 
 
 ### Fallback Mode
 
