@@ -15,7 +15,7 @@ import pytest
 ROOT = Path(__file__).parents[4]
 sys.path.insert(0, str(ROOT / "power-core"))
 
-from src.optimizer.quantum.qubo_implementation import (  # noqa: E402
+from src.optimizer.quantum.qubo.qubo_implementation import (  # noqa: E402
     build_max_cut_qubo,
     cut_weight,
     recommended_penalty,

@@ -12,9 +12,9 @@ import networkx as nx
 import pytest
 
 from src.optimizer import GoemansWilliamsonStrategy as ExportedStrategy
-from src.optimizer import goemans_williamson_strategy as strategy_module
-from src.optimizer.goemans_williamson import GoemansWilliamsonError
-from src.optimizer.goemans_williamson_strategy import GoemansWilliamsonStrategy
+from src.optimizer.random_approximation import goemans_williamson_strategy as strategy_module
+from src.optimizer.random_approximation import GoemansWilliamsonError
+from src.optimizer.random_approximation import GoemansWilliamsonStrategy
 from src.run_solver import SolverRunRequest, SolverRunner
 
 

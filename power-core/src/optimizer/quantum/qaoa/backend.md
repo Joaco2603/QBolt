@@ -61,14 +61,16 @@ For every circuit it:
 
 1. Allocates one qubit per program variable and applies `H` to prepare `|+⟩`.
 2. Repeats one cost/mixer block for each layer.
-3. Applies `RZ` to each linear coefficient.
-4. Implements each quadratic `Z_i Z_j` term as `CX(i, j) → RZ(j) → CX(i, j)`.
-5. Applies `RX` to every qubit for the mixer.
+3. Applies `RZ(2 gamma h_i)` to each linear coefficient.
+4. Implements each quadratic term as `CX(i, j) → RZ(2 gamma J_ij, j) → CX(i, j)`.
+5. Applies `RX(2 beta)` to every qubit for the mixer.
 6. Measures every qubit and records it under `q0`, `q1`, etc.
 
 Guppy angles are generated in half turns: a radian value `θ` is emitted as
-`angle(θ / π)`. The circuit source is compiled dynamically because all QAOA
-parameters are bound for an individual objective evaluation.
+`angle(θ / π)`. The factor of two is required because `RZ(θ)` and `RX(θ)` use
+the half-angle convention, while QAOA requires `exp(-i gamma H_C)` and
+`exp(-i beta H_B)`. The circuit source is compiled dynamically because all
+QAOA parameters are bound for an individual objective evaluation.
 
 ## Local execution
 

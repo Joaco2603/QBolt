@@ -5,7 +5,11 @@ from __future__ import annotations
 import pytest
 
 from src.optimizer.quantum import IsingModel, MeasurementBatch, QAOA
-from src.optimizer.quantum.qaoa.backends import _counts_from_collated_counts
+from src.optimizer.quantum.qaoa.backends import (
+    _cost_rotation_radians,
+    _counts_from_collated_counts,
+    _mixer_rotation_radians,
+)
 from src.optimizer.quantum.qubo.constraint_builder import QuboModel
 
 def test_ising_model_converts_qubo_and_preserves_exact_energy() -> None:
@@ -66,6 +70,12 @@ def test_qaoa_runs_seeded_multistart_and_returns_statistics() -> None:
 def test_qaoa_requires_at_least_five_starts() -> None:
     with pytest.raises(ValueError, match="at least 5"):
         QAOA(starts=4)
+
+
+def test_qaoa_rotation_angles_match_exp_minus_i_hamiltonian_convention() -> None:
+    assert _cost_rotation_radians(0.25, 3.0) == pytest.approx(1.5)
+    assert _cost_rotation_radians(-0.5, 2.0) == pytest.approx(-2.0)
+    assert _mixer_rotation_radians(0.25) == pytest.approx(0.5)
 
 
 def test_nexus_collated_counts_normalize_named_qubit_results() -> None:

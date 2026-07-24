@@ -1,6 +1,6 @@
 # Transmission graph data analysis
 
-The four source files are two logical datasets represented as CSV and GeoJSON:
+The four source files are two logical datasets represented as CSV and GeoJSON. They are versioned snapshots downloaded from the official [ICE Open Data portal](https://datos-ice-se.opendata.arcgis.com/). The transmission-line source is the [ICE transmission lines ArcGIS dataset](https://datos-ice-se.opendata.arcgis.com/datasets/1cd1630e16144d3bbccb1bd434dc6866_0/explore?location=9.946338%2C-83.987696%2C11).
 
 - `Subestaciones.*`: 70 substations. The GeoJSON provides point coordinates;
   both formats are cross-checked by `FID` and shared attributes.

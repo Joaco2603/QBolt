@@ -1,17 +1,17 @@
 # Modelo de Ising: contrato de conversión de QUBO
 
-Este módulo proporcionará el límite determinista entre la representación QUBO
+Este módulo proporciona el límite determinista entre la representación QUBO
 de minimización del proyecto y el Hamiltoniano de Ising consumido por QAOA.
-Solo convertirá coeficientes; la construcción de circuitos, la optimización,
+Solo convierte coeficientes; la construcción de circuitos, la optimización,
 la ejecución del backend y el muestreo de resultados pertenecen a capas
 posteriores.
 
-> **Estado:** solo diseño y contrato TDD. Aún no se incluye una implementación
-> de producción.
+> **Estado:** implementado y cubierto por pruebas exhaustivas de equivalencia
+> energética entre QUBO e Ising.
 
 ## Objetivo
 
-La futura clase `IsingModel`:
+La clase `IsingModel`:
 
 1. construirá un modelo de Ising a partir del `QuboModel` existente;
 2. preservará cada variable de decisión y auxiliar en orden determinista;
@@ -66,7 +66,7 @@ La constante `C` DEBE conservarse. Omitirla preservaría el `argmin` del
 optimizador, pero corrompería las comparaciones de energía, la evidencia de
 benchmarks y los cálculos posteriores de razón de aproximación.
 
-## Contrato público para implementar mediante TDD
+## Contrato público implementado
 
 ### `IsingModel.from_qubo`
 
@@ -74,8 +74,7 @@ benchmarks y los cálculos posteriores de razón de aproximación.
 IsingModel.from_qubo(qubo: QuboModel) -> IsingModel
 ```
 
-La factoría leerá la instantánea del QUBO sin mutarla. El modelo creado
-expondrá:
+La factoría lee la instantánea del QUBO sin mutarla. El modelo creado expone:
 
 | Campo | Significado |
 | --- | --- |
@@ -94,14 +93,14 @@ porque `x_i² = x_i`.
 energy(spins: Mapping[str, int]) -> float
 ```
 
-El método evaluará el objetivo completo de Ising, incluido el desplazamiento.
-Solo aceptará asignaciones que:
+El método evalúa el objetivo completo de Ising, incluido el desplazamiento.
+Solo acepta asignaciones que:
 
 - contengan cada variable del modelo exactamente una vez;
 - no contengan ninguna variable desconocida; y
 - utilicen valores enteros de espín `-1` o `+1` (los booleanos no son espines válidos).
 
-Las asignaciones inválidas generarán `ValueError`, identificando en el mensaje
+Las asignaciones inválidas generan `ValueError`, identificando en el mensaje
 la variable faltante, la variable desconocida o el espín inválido.
 
 ### Ayudantes de conversión de asignaciones
@@ -111,8 +110,8 @@ binary_to_spins(assignment: Mapping[str, int]) -> dict[str, int]
 spins_to_binary(assignment: Mapping[str, int]) -> dict[str, int]
 ```
 
-Estos ayudantes implementarán el mapeo documentado sin cambiar los nombres de
-las variables ni el orden de inserción. Aplicarán la misma validación de
+Estos ayudantes implementan el mapeo documentado sin cambiar los nombres de
+las variables ni el orden de inserción. Aplican la misma validación de
 cobertura exacta que `energy`; los valores binarios deben ser enteros `0` o
 `1`.
 
@@ -140,10 +139,9 @@ Estas responsabilidades requieren contratos separados para que la conversión
 algebraica pueda verificarse exhaustivamente antes de introducir la ejecución
 cuántica.
 
-## Entrega para TDD
+## Verificación
 
-Implementa una por una las pruebas documentadas en
-[`../../../../tests/optimizer/qubo_ising_qaoa/ising/test_ising.md`](../../../../tests/optimizer/qubo_ising_qaoa/ising/test_ising.md).
-La primera prueba ejecutable debe fallar porque `IsingModel` no existe. Solo
-después debe añadirse código de producción, siguiendo
-ROJO → VERDE → REFACTORIZAR.
+El contrato ejecutable está en
+[`../../../../tests/optimizer/quantum/ising/test_ising.py`](../../../../tests/optimizer/quantum/ising/test_ising.py).
+La verificación visual reproducible está documentada en
+[`../../../../docs/spanish/ising/README.md`](../../../../docs/spanish/ising/README.md).

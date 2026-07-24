@@ -1,5 +1,6 @@
 """Optimizer implementations for the power restoration core."""
 
-from .goemans_williamson_strategy import GoemansWilliamsonStrategy
+from .greedy import GreedyStrategy
+from .random_approximation import GoemansWilliamsonStrategy
 
-__all__ = ["GoemansWilliamsonStrategy"]
+__all__ = ["GoemansWilliamsonStrategy", "GreedyStrategy"]

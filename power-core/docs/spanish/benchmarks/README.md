@@ -16,7 +16,7 @@ semilla, las versiones de dependencias y la configuración completa.
 | QAOA | Método cuántico evaluado | Implementado | Es el objeto principal del experimento; se evalúa por su valor de corte y su ratio de aproximación, no por una afirmación de ventaja cuántica. |
 | Goemans-Williamson (GW) | Baseline clásico de alta calidad | Implementado | Es la referencia de aproximación más importante para Max-Cut ponderado no negativo: combina relajación SDP y redondeo aleatorio, con garantía teórica esperada bajo sus supuestos. |
 | Búsqueda exhaustiva | Oráculo exacto | Por integrar al runner de benchmarks | Para los grafos de 6–12 nodos del reto es viable: como máximo hay \(2^{11}=2048\) cortes no complementarios. Produce `OPT`, necesario para calcular ratios de aproximación honestos. |
-| Greedy | Baseline clásico liviano | Por integrar al runner de benchmarks | Mide cuánto valor obtiene una heurística simple y rápida; evita que QAOA o GW parezcan útiles si no superan un método elemental. |
+| Greedy | Baseline clásico liviano | Implementado | Mide cuánto valor obtiene una heurística simple y rápida; evita que QAOA o GW parezcan útiles si no superan un método elemental. |
 
 ## Qué exige la rúbrica / skill
 
@@ -60,7 +60,7 @@ es factible y elimina la ambigüedad de usar una heurística como referencia del
 2. Validar la formulación QUBO/Ising contra el valor de corte de búsqueda
    exhaustiva en una instancia pequeña.
 3. Calcular `OPT` por búsqueda exhaustiva.
-4. Ejecutar greedy, GW y QAOA sobre el mismo grafo y con pesos sin transformar.
+4. Ejecutar las estrategias implementadas de greedy y GW, junto con QAOA, sobre el mismo grafo y con pesos sin transformar.
 5. Ejecutar QAOA con al menos cinco semillas/inicializaciones por cada valor de
    `p`; conservar tanto éxitos como fallos.
 6. Reportar una tabla por configuración con valor de corte, `OPT`, ratio,

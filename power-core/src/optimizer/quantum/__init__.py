@@ -10,7 +10,7 @@ from .qaoa import (
     QAOAProgram,
     QAOAResult,
 )
-from .qubo_implementation import (
+from .qubo import (
     ConstraintBuilder,
     QuboModel,
     build_max_cut_qubo,

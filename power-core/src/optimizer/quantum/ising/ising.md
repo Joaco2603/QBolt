@@ -1,16 +1,16 @@
 # Ising model: QUBO conversion contract
 
-This module will provide the deterministic boundary between the project's
+This module provides the deterministic boundary between the project's
 minimization QUBO representation and the Ising Hamiltonian consumed by QAOA.
-It will convert coefficients only; circuit construction, optimization, backend
+It converts coefficients only; circuit construction, optimization, backend
 execution, and result sampling belong to later layers.
 
-> **Status:** design and TDD contract only. No production implementation is
-> included yet.
+> **Status:** implemented and covered by exhaustive QUBO/Ising
+> energy-equivalence tests.
 
 ## Objective
 
-The future `IsingModel` class will:
+The `IsingModel` class:
 
 1. build an Ising model from the existing `QuboModel`;
 2. preserve every decision and auxiliary variable in deterministic order;
@@ -63,7 +63,7 @@ The constant `C` MUST be retained. Dropping it would preserve the optimizer's
 argmin but would corrupt energy comparisons, benchmark evidence, and later
 approximation-ratio calculations.
 
-## Public contract to implement through TDD
+## Implemented public contract
 
 ### `IsingModel.from_qubo`
 
@@ -71,8 +71,8 @@ approximation-ratio calculations.
 IsingModel.from_qubo(qubo: QuboModel) -> IsingModel
 ```
 
-The factory will read the QUBO snapshot without mutating it. The created model
-will expose:
+The factory reads the QUBO snapshot without mutating it. The created model
+exposes:
 
 | Field | Meaning |
 | --- | --- |
@@ -90,14 +90,14 @@ QUBO diagonal terms belong in its linear mapping because `x_i² = x_i`.
 energy(spins: Mapping[str, int]) -> float
 ```
 
-The method will evaluate the complete Ising objective, including the offset.
-It will accept only assignments that:
+The method evaluates the complete Ising objective, including the offset.
+It accepts only assignments that:
 
 - contain every model variable exactly once;
 - contain no unknown variable; and
 - use integer spin values `-1` or `+1` (booleans are not valid spins).
 
-Invalid assignments will raise `ValueError` with the missing variable, unknown
+Invalid assignments raise `ValueError` with the missing variable, unknown
 variable, or invalid spin identified in the message.
 
 ### Assignment conversion helpers
@@ -107,8 +107,8 @@ binary_to_spins(assignment: Mapping[str, int]) -> dict[str, int]
 spins_to_binary(assignment: Mapping[str, int]) -> dict[str, int]
 ```
 
-These helpers will implement the documented mapping without changing variable
-names or insertion order. They will apply the same exact-coverage validation as
+These helpers implement the documented mapping without changing variable
+names or insertion order. They apply the same exact-coverage validation as
 `energy`; binary values must be integer `0` or `1`.
 
 ## Validation and numerical policy
@@ -137,10 +137,9 @@ This class does not:
 Those responsibilities require separate contracts so the algebraic conversion
 can be verified exhaustively before quantum execution is introduced.
 
-## TDD handoff
+## Verification
 
-Implement the tests documented in
-[`../../../../tests/optimizer/qubo_ising_qaoa/ising/test_ising.md`](../../../../tests/optimizer/qubo_ising_qaoa/ising/test_ising.md)
-one at a time. The first executable test must fail because `IsingModel` does
-not exist. Only then should production code be added, following
-RED → GREEN → REFACTOR.
+The executable contract lives in
+[`../../../../tests/optimizer/quantum/ising/test_ising.py`](../../../../tests/optimizer/quantum/ising/test_ising.py).
+The reproducible visual verification is documented in
+[`../../../../docs/english/ising/README.md`](../../../../docs/english/ising/README.md).

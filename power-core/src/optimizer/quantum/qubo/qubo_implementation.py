@@ -14,7 +14,7 @@ from typing import Callable, Mapping
 
 import networkx as nx
 
-from .qubo.constraint_builder import ConstraintBuilder, QuboModel
+from .constraint_builder import ConstraintBuilder, QuboModel
 
 ConstraintConfiguration = Callable[[ConstraintBuilder], object]
 

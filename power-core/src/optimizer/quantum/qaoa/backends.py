@@ -116,6 +116,18 @@ class NexusBackend:
         )
 
 
+def _cost_rotation_radians(gamma: float, coefficient: float) -> float:
+    """Return the RZ angle implementing ``exp(-i * gamma * coefficient * Z)``."""
+
+    return 2.0 * float(gamma) * float(coefficient)
+
+
+def _mixer_rotation_radians(beta: float) -> float:
+    """Return the RX angle implementing ``exp(-i * beta * X)``."""
+
+    return 2.0 * float(beta)
+
+
 def _build_guppy_program(
     program: QAOAProgram, gamma: Sequence[float], beta: Sequence[float]
 ) -> Any:
@@ -140,19 +152,20 @@ def _build_guppy_program(
     lines.extend(f"    h(q{index})" for index in range(len(program.variables)))
     for layer in range(program.layers):
         for index, (_, coefficient) in enumerate(program.linear):
-            lines.append(f"    rz(q{index}, {half_turns(gamma[layer] * coefficient)})")
+            rotation = _cost_rotation_radians(gamma[layer], coefficient)
+            lines.append(f"    rz(q{index}, {half_turns(rotation)})")
         for left, right, coefficient in program.quadratic:
             left_index = program.variables.index(left)
             right_index = program.variables.index(right)
             lines.extend(
                 (
                     f"    cx(q{left_index}, q{right_index})",
-                    f"    rz(q{right_index}, {half_turns(gamma[layer] * coefficient)})",
+                    f"    rz(q{right_index}, {half_turns(_cost_rotation_radians(gamma[layer], coefficient))})",
                     f"    cx(q{left_index}, q{right_index})",
                 )
             )
         lines.extend(
-            f"    rx(q{index}, {half_turns(beta[layer])})"
+            f"    rx(q{index}, {half_turns(_mixer_rotation_radians(beta[layer]))})"
             for index in range(len(program.variables))
         )
     lines.extend(

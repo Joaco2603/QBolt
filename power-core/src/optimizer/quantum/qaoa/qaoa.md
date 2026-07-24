@@ -43,9 +43,17 @@ result = QAOA(layers=1).run_cloud(
 
 `QAOAResult` contains the best observed bitstring, its spin assignment and
 energy, optimized parameters, counts, probabilities, per-bitstring energies,
-optimizer status, seed, depth, shot count, and backend metadata. “Best” means
-the lowest-energy measured sample; it is not a proof of global optimality.
+backend name, depth, shot count, the selected BFGS outcome status, objective
+evaluation count, and backend metadata. “Best” means the lowest-energy measured
+sample; it is not a proof of global optimality.
 
-The default optimizer uses five deterministic seeded BFGS starts. Failed or
-non-converged starts remain represented by the optimizer status and must not be
-silently presented as quantum advantage.
+The default optimizer uses five deterministic seeded BFGS starts. The current
+result retains only the selected start's optimizer status; it does not expose
+the status or parameter history of every attempted start. A benchmark report
+must preserve those runs separately rather than treating this result object as
+complete failed-run evidence.
+
+## Visual walkthrough
+
+- [English](../../../../docs/english/qaoa/README.md)
+- [Spanish](../../../../docs/spanish/qaoa/README.md)

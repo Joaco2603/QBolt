@@ -18,7 +18,14 @@ import pytest
 
 
 REPOSITORY_ROOT = Path(__file__).parents[4]
-MODULE_PATH = REPOSITORY_ROOT / "power-core" / "src" / "optimizer" / "goemans_williamson.py"
+MODULE_PATH = (
+    REPOSITORY_ROOT
+    / "power-core"
+    / "src"
+    / "optimizer"
+    / "random_approximation"
+    / "goemans_williamson.py"
+)
 MODULE_SPEC = importlib.util.spec_from_file_location("goemans_williamson_nested_tests", MODULE_PATH)
 assert MODULE_SPEC is not None and MODULE_SPEC.loader is not None
 MODULE = importlib.util.module_from_spec(MODULE_SPEC)

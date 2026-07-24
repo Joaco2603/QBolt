@@ -29,6 +29,7 @@ class QuboModel:
         linear: Mapping[str, float],
         quadratic: Mapping[tuple[str, str], float],
     ) -> None:
+        """Store an independent snapshot of the QUBO coefficients and variables."""
         self.decision_variables = decision_variables
         self.auxiliary_variables = auxiliary_variables
         self.offset = offset
@@ -60,6 +61,7 @@ class QuboModel:
 
     @staticmethod
     def _validate_binary_assignment(assignment: Mapping[str, int]) -> None:
+        """Reject assignments whose values are not exact integer bits, 0 or 1."""
         for variable, value in assignment.items():
             if type(value) is not int or value not in (0, 1):
                 raise ValueError(
@@ -67,6 +69,7 @@ class QuboModel:
                 )
 
     def _energy(self, assignment: Mapping[str, int]) -> float:
+        """Evaluate offset + linear terms + quadratic interactions for one full assignment."""
         energy = self.offset
         for variable, coefficient in self.linear.items():
             energy += coefficient * assignment[variable]
@@ -79,6 +82,7 @@ class ConstraintBuilder:
     """Build composable QUBO penalties over nodes of a weighted graph."""
 
     def __init__(self, graph: nx.Graph, *, penalty: float) -> None:
+        """Start an empty builder and validate the graph weights and penalty scale."""
         if not isinstance(graph, nx.Graph):
             raise TypeError("graph must be a networkx.Graph")
         if not isinstance(penalty, Real) or not isfinite(float(penalty)) or penalty <= 0:
@@ -93,20 +97,30 @@ class ConstraintBuilder:
         self._quadratic: dict[tuple[str, str], float] = {}
 
     def exactly_one(self, *variables: str) -> ConstraintBuilder:
+        """Penalize every assignment except those where exactly one variable is 1.
+
+        Encodes ``penalty * (sum(x_i) - 1)^2``.
+        """
         names = self._validate_variables(variables)
         self._add_square({name: 1.0 for name in names}, constant=-1.0)
         return self
 
     def at_most_one(self, *variables: str) -> ConstraintBuilder:
+        """Penalize pairs of selected variables so no more than one can be 1."""
         names = self._validate_variables(variables)
         for left, right in combinations(names, 2):
             self._add_quadratic(left, right, self._penalty)
         return self
 
     def at_least_one(self, *variables: str) -> ConstraintBuilder:
+        """Require one or more selected variables; shorthand for ``at_least_k(..., k=1)``."""
         return self.at_least_k(*variables, k=1)
 
     def requires(self, *variables: str, iff: bool = False) -> ConstraintBuilder:
+        """Require the first variable to imply the second, or make them equal when ``iff`` is true.
+
+        The one-way penalty is ``penalty * left * (1 - right)``.
+        """
         left, right = self._validate_binary_variables(variables)
         if type(iff) is not bool:
             raise TypeError("iff must be a boolean")
@@ -117,6 +131,7 @@ class ConstraintBuilder:
         return self
 
     def at_most_k(self, *variables: str, k: int) -> ConstraintBuilder:
+        """Limit selected variables to ``k`` using private binary-encoded slack variables."""
         names = self._validate_variables(variables)
         self._validate_k(k, len(names), maximum_can_exceed=True)
         if k >= len(names):
@@ -130,6 +145,7 @@ class ConstraintBuilder:
         return self
 
     def at_least_k(self, *variables: str, k: int) -> ConstraintBuilder:
+        """Require at least ``k`` selected variables using private binary-encoded slack variables."""
         names = self._validate_variables(variables)
         self._validate_k(k, len(names), maximum_can_exceed=False)
         if k == 0:
@@ -143,11 +159,13 @@ class ConstraintBuilder:
         return self
 
     def mutually_exclusive(self, *variables: str) -> ConstraintBuilder:
+        """Prevent two variables from both being 1 via ``penalty * left * right``."""
         left, right = self._validate_binary_variables(variables)
         self._add_quadratic(left, right, self._penalty)
         return self
 
     def equal(self, *variables: str) -> ConstraintBuilder:
+        """Force two variables to have the same value via ``penalty * (left - right)^2``."""
         left, right = self._validate_binary_variables(variables)
         self._add_linear(left, self._penalty)
         self._add_linear(right, self._penalty)
@@ -166,6 +184,7 @@ class ConstraintBuilder:
 
     @staticmethod
     def _validate_weights(graph: nx.Graph) -> None:
+        """Ensure every graph edge supplies a finite numeric weight before building constraints."""
         for left, right, attributes in graph.edges(data=True):
             weight = attributes.get("weight")
             if not isinstance(weight, Real) or not isfinite(float(weight)):
@@ -174,6 +193,7 @@ class ConstraintBuilder:
                 )
 
     def _validate_variables(self, variables: tuple[str, ...]) -> tuple[str, ...]:
+        """Validate graph-node variables and register each as a primary decision variable."""
         if not variables:
             raise ValueError("A constraint requires at least one variable")
         if len(set(variables)) != len(variables):
@@ -189,6 +209,7 @@ class ConstraintBuilder:
         return variables
 
     def _validate_binary_variables(self, variables: tuple[str, ...]) -> tuple[str, str]:
+        """Validate and return exactly two primary variables for pairwise constraints."""
         if len(variables) != 2:
             raise ValueError("Binary constraints require exactly two variables")
         names = self._validate_variables(variables)
@@ -196,6 +217,7 @@ class ConstraintBuilder:
 
     @staticmethod
     def _validate_k(k: int, variable_count: int, *, maximum_can_exceed: bool) -> None:
+        """Check cardinality bounds, allowing a redundant upper bound when requested."""
         if type(k) is not int:
             raise TypeError("k must be an integer")
         if k < 0:
@@ -204,6 +226,7 @@ class ConstraintBuilder:
             raise ValueError("k cannot exceed the number of variables")
 
     def _new_slack_variables(self, maximum: int) -> tuple[tuple[str, int], ...]:
+        """Create private auxiliary bits whose weighted sum represents values up to ``maximum``."""
         weights = self._binary_weights(maximum)
         variables: list[tuple[str, int]] = []
         for weight in weights:
@@ -214,6 +237,7 @@ class ConstraintBuilder:
 
     @staticmethod
     def _binary_weights(maximum: int) -> tuple[int, ...]:
+        """Return compact binary weights that can represent every integer from 0 to ``maximum``."""
         if maximum == 0:
             return ()
         weights: list[int] = []
@@ -227,6 +251,7 @@ class ConstraintBuilder:
         return tuple(weights)
 
     def _next_auxiliary_name(self) -> str:
+        """Return an unused, deterministic name for the next private slack variable."""
         occupied = set(self._graph.nodes) | set(self._decision_variables) | set(self._auxiliary_variables)
         index = len(self._auxiliary_variables)
         name = f"__qubo_aux_{index}"
@@ -236,6 +261,11 @@ class ConstraintBuilder:
         return name
 
     def _add_square(self, coefficients: Mapping[str, float], *, constant: float) -> None:
+        """Expand ``penalty * (constant + sum(coefficient_i * x_i))^2`` into QUBO terms.
+
+        The expansion contributes a constant offset, linear ``x_i`` terms, and
+        quadratic ``x_i * x_j`` interactions.
+        """
         self._offset += self._penalty * constant * constant
         items = tuple(coefficients.items())
         for variable, coefficient in items:
@@ -251,9 +281,14 @@ class ConstraintBuilder:
             )
 
     def _add_linear(self, variable: str, coefficient: float) -> None:
+        """Accumulate a linear QUBO coefficient for a term of the form ``c * x_i``."""
         self._linear[variable] = self._linear.get(variable, 0.0) + coefficient
 
     def _add_quadratic(self, left: str, right: str, coefficient: float) -> None:
+        """Accumulate a quadratic coefficient ``c * x_i * x_j`` in canonical key order.
+
+        A diagonal term is linear because binary variables satisfy ``x_i^2 = x_i``.
+        """
         if left == right:
             self._add_linear(left, coefficient)
             return

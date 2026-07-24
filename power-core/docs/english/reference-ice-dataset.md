@@ -127,7 +127,9 @@ plan de restauración real ni como capacidad de suministro de una zona.
 
 ## Fuentes
 
+- [ICE Open Data portal](https://datos-ice-se.opendata.arcgis.com/) — official ICE catalogue used to obtain the versioned input snapshots in `data-analysis/dataset/`.
 - [ICE Open Data — Substations](https://datos-ice-se.opendata.arcgis.com/datasets/f3fceca2659b4ecf8a5c2632e04aff1f_0/explore?location=9.942788%2C-84.130603%2C13&showTable=true) — declared geospatial source for the `Subestaciones.*` dataset. The service describes a georeferenced survey of substation sites; each point is the approximate centroid of the equipment yard, not the exact location of every asset. ICE's Transmission Division reports annual updates and aerial LiDAR surveys.
+- [ICE Open Data — Transmission lines](https://datos-ice-se.opendata.arcgis.com/datasets/1cd1630e16144d3bbccb1bd434dc6866_0/explore?location=9.946338%2C-83.987696%2C11) — source for the `LineasDeTransmision.*` dataset, including the nominal-voltage `Voltaje` field used to construct graph weights.
 - [ICE DOCSE — Informe de atención de demanda y producción de electricidad con fuentes renovables, Costa Rica 2025](https://apps.grupoice.com/CenceWeb/documentos/3/3008/27/R01-PDOCSE-07%20Informe_Atenci%C3%B3n%20demanda%20y%20producci%C3%B3n_2025_v2_firmado.pdf)
 - [ICE DOCSE — Informe Anual 2025](https://apps.grupoice.com/CenceWeb/documentos/3/3008/28/Informe%20Anual%202025.pdf)
 - `data-analysis/dataset/Subestaciones.{csv,geojson}` y `data-analysis/dataset/LineasDeTransmision.{csv,geojson}`
