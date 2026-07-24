@@ -30,7 +30,11 @@ for import_root in (str(project_root), str(source_root)):
     if import_root not in sys.path:
         sys.path.insert(0, import_root)
 
-from optimizer.quantum.qubo_implementation import cut_weight
+try:
+    # Current package layout.
+    from optimizer.quantum.qubo import cut_weight
+except ImportError:  # pragma: no cover - compatibility with older checkouts
+    from optimizer.quantum.qubo_implementation import cut_weight
 
 
 SCHEMA_VERSION = 1
