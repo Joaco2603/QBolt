@@ -1,9 +1,8 @@
 # Power Restoration Core
 
 Reproducible Python workspace for modelling a regional transmission network and
-benchmarking power-restoration / Max-Cut solvers. The project is currently a
-scaffold: dependencies and the directory layout are ready; the solver modules
-will be implemented under `src/`.
+benchmarking power-restoration / Max-Cut solvers. The QUBO, Ising, QAOA,
+classical baseline, and Nexus dataset modules are implemented under `src/`.
 
 ## Reproduce from a new computer
 
@@ -58,8 +57,8 @@ Your terminal should now show `(.venv)`.
 ### 4. Install the pinned dependencies
 
 ```bash
-python -m pip install --upgrade pip
-python -m pip install -r power-core/requirements.txt
+.venv/bin/python -m pip install --upgrade pip
+.venv/bin/python -m pip install -r power-core/requirements.txt
 ```
 
 `requirements.txt` pins the project's direct dependencies. To reproduce the
@@ -114,20 +113,14 @@ hand.
 power-core/
 ├── requirements.txt                 # Pinned direct dependencies
 ├── README.md                        # This reproducibility guide
-├── scripts/                         # Developer and automation scripts
+├── scripts/                         # Standalone Nexus utilities
 ├── src/
-│   ├── cli.py                       # Future command-line entry point
-│   ├── run_benchmark.py             # Future benchmark runner
-│   ├── run_max_cut_benchmark.py     # Future Max-Cut benchmark runner
-│   ├── run_solver.py                # Future solver runner
-│   ├── version.py                   # Version metadata
-│   ├── evaluation/                  # Metrics and evaluation logic
-│   ├── grid/                        # Grid graph loading and transformations
+│   ├── benchmarks/                  # Preliminary reproducible benchmarks
+│   ├── experiments/                 # Nexus dataset runner
 │   ├── optimizer/                   # Classical and quantum optimizers
-│   ├── reports/                     # Reproducible result reports
-│   ├── restoration/                 # Restoration domain use cases
-│   ├── scenarios/                   # Deterministic scenario definitions
-│   └── visualization/               # Plots and visual outputs
+│   ├── reports/                     # Reproducible report generators
+│   ├── run_solver.py                # Optimizer-independent runner
+│   └── x.py                         # Manual Nexus smoke runner
 └── tests/                           # Tests for power-core modules
 ```
 
@@ -144,11 +137,11 @@ power-core/
 
 ## Current status
 
-The folders and Python entry-point files are intentionally empty. Therefore,
-there is no `power-core` solver command to run yet. The available commands today
-are dependency installation, `data-analysis` tests, and graph-artifact
-generation above. Add documented commands here only when their implementation
-and tests exist.
+The QUBO/Ising transformations, backend-independent QAOA orchestration, local
+Selene adapter, Nexus adapter, greedy and Goemans–Williamson baselines, and
+versioned Nexus dataset writer are implemented and tested. A complete real-
+service benchmark submission still requires credentials, remote runs,
+classical result tables, statistical error reporting, and depth-`p` comparison.
 
 ## Benchmark plan
 
@@ -159,8 +152,11 @@ the implemented solvers, and useful supplemental experiments:
 - [`docs/spanish/benchmarks/nexus-run-dataset.md`](docs/spanish/benchmarks/nexus-run-dataset.md)
 
 Nexus QAOA runs can be collected in the versioned JSON dataset provided by
-`src/experiments/nexus_run_dataset.py`. It preserves successful, non-converged,
-and failed attempts for later comparison; it does not claim simulator results
+`src/experiments/nexus_run_dataset.py`. It preserves successful,
+non-converged, and failed attempts, input digests, initialization histories,
+and result counts. See
+[`docs/spanish/benchmarks/nexus-run-dataset.md`](docs/spanish/benchmarks/nexus-run-dataset.md)
+for the schema and execution checklist. It does not claim simulator results
 as physical Quantinuum hardware results.
 
 ## Troubleshooting

@@ -10,7 +10,7 @@ Estas figuras explican la orquestación QAOA independiente del backend implement
 2. Preparar `|+⟩` en cada cúbit y aplicar `p` capas alternadas de costo y mezcla.
 3. Ejecutar un conjunto de parámetros ligados mediante un adaptador local o de nube.
 4. Convertir los conteos validados en energía Ising esperada.
-5. Usar al menos cinco inicios BFGS con semillas y elegir el resultado de menor energía esperada.
+5. Usar al menos cinco inicios COBYLA con semillas y elegir el resultado de menor energía esperada.
 6. Muestrear otra vez con los parámetros elegidos; `QAOAResult` conserva el estado del optimizador seleccionado, no el historial de cada inicio.
 
 ![Estructura del circuito QAOA parametrizado](qaoa_circuit_layers.png)
@@ -35,5 +35,5 @@ Estas figuras explican la orquestación QAOA independiente del backend implement
 ## Regenerar desde la raíz del repositorio
 
 ```bash
-python power-core/src/reports/generate_qaoa_walkthrough.py
+.venv/bin/python power-core/src/reports/generate_qaoa_walkthrough.py
 ```

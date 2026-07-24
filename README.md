@@ -19,17 +19,17 @@ python3 -m venv .venv
 source .venv/bin/activate          # Windows: .venv\Scripts\Activate.ps1
 python -m pip install -r power-core/requirements.txt
 
-python -m pytest
+.venv/bin/python -m pytest
 ```
 
 Regenerate the graph inputs and documentation figures:
 
 ```bash
-python data-analysis/scripts/build_weighted_graph.py
-python data-analysis/scripts/build_regional_instance.py
-python power-core/src/reports/generate_qubo_walkthrough.py
-python power-core/src/reports/generate_ising_walkthrough.py
-python power-core/src/reports/generate_qaoa_walkthrough.py
+.venv/bin/python data-analysis/scripts/build_weighted_graph.py
+.venv/bin/python data-analysis/scripts/build_regional_instance.py
+.venv/bin/python power-core/src/reports/generate_qubo_walkthrough.py
+.venv/bin/python power-core/src/reports/generate_ising_walkthrough.py
+.venv/bin/python power-core/src/reports/generate_qaoa_walkthrough.py
 ```
 
 Generated JSON and PNG files must be regenerated from their source scripts,
@@ -43,7 +43,7 @@ not edited by hand.
 | Six-node Guanacaste reference instance | Implemented |
 | Weighted Max-Cut QUBO and constraints | Implemented |
 | Exact QUBO-to-Ising conversion | Implemented and exhaustively tested |
-| QAOA orchestration | Implemented with five-or-more seeded BFGS starts |
+| QAOA orchestration | Implemented with five-or-more seeded COBYLA starts |
 | Local Guppy/Selene execution adapter | Implemented; optional runtime dependencies required |
 | Quantinuum Nexus adapter | Implemented; requires an authenticated compatible session |
 | Greedy baseline | Implemented with seeded deterministic tie-breaking |
@@ -111,8 +111,12 @@ topology.
 Challenge 1 experiments must preserve seeds, input digests, objective
 conventions, optimizer status, failed runs, QAOA depth `p`, and initialization
 count. Compare identical instances against Goemans-Williamson, greedy, and an
-exact or simulated-annealing reference where feasible. Do not claim quantum
-advantage without reproducible evidence.
+exact or simulated-annealing reference where feasible. The verified Nexus
+stack is Python 3.12+ (tested with 3.14), `qnexus==0.45.0`,
+`guppylang==0.21.16`, `selene-sim==0.2.17`, `pytket==2.18.1`,
+`numpy==2.5.1`, and `scipy==1.18.0`. Nexus receives each start seed through
+`StatevectorSimulator(seed=...)`, although exact remote counts depend on the
+service. Do not claim quantum advantage without reproducible evidence.
 
 ## Further reading
 

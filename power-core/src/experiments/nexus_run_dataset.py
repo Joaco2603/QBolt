@@ -30,11 +30,7 @@ for import_root in (str(project_root), str(source_root)):
     if import_root not in sys.path:
         sys.path.insert(0, import_root)
 
-try:
-    # Current package layout.
-    from optimizer.quantum.qubo import cut_weight
-except ImportError:  # pragma: no cover - compatibility with older checkouts
-    from optimizer.quantum.qubo_implementation import cut_weight
+from optimizer.quantum.qubo import cut_weight
 
 
 SCHEMA_VERSION = 1
@@ -246,6 +242,8 @@ class NexusRunDataset:
         cut_value = _cut_value(graph, result)
         metadata = dict(getattr(result, "metadata", {}) or {})
         initializations = metadata.get("starts")
+        optimizer_method = metadata.get("optimizer_method", "unknown")
+        selected_start = metadata.get("selected_start")
         record = {
             "run_id": run_id,
             "recorded_at_utc": recorded_at_utc or _utc_now(),
@@ -257,6 +255,8 @@ class NexusRunDataset:
                 "layers_p": layers,
                 "starts": starts,
                 "initializations": initializations,
+                "optimizer_method": optimizer_method,
+                "selected_start": selected_start,
                 "shots": shots,
                 "seed": seed,
                 "configuration": _json_copy(dict(configuration or {})),
@@ -453,7 +453,7 @@ def main() -> None:
         try:
             import qnexus as qnx
             from optimizer.quantum import IsingModel, NexusBackend, QAOA
-            from optimizer.quantum.qubo_implementation import build_max_cut_qubo
+            from optimizer.quantum.qubo import build_max_cut_qubo
 
             qnx.login()
             project = qnx.projects.get_or_create(name=args.project)

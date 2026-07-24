@@ -125,8 +125,12 @@ The session object must expose the APIs used by the adapter:
   `collated_counts()` to collect measurements.
 
 The job is configured with the program's qubit count and `shots` requested by
-the caller. Missing session APIs produce a `RuntimeError` that explains the
-expected Nexus capabilities.
+the caller. The per-start seed is sent to Nexus in
+`StatevectorSimulator(seed=seed)`, so the local orchestration preserves the
+seed contract. Exact remote reproducibility still depends on the service
+honouring that simulator parameter and on the same service version and
+configuration. Missing session APIs produce a `RuntimeError` that explains
+the expected Nexus capabilities.
 
 > **Reproducibility note:** the concrete Nexus submission path does not pass
 > the `seed` argument to the remote simulator. Therefore, although `QAOA`

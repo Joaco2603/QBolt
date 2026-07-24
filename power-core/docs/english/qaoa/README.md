@@ -10,7 +10,7 @@ These figures explain the implemented backend-agnostic QAOA orchestration for th
 2. Prepare `|+⟩` on every qubit and apply `p` alternating cost and mixer layers.
 3. Execute one bound parameter set through a local or cloud adapter.
 4. Convert validated measurement counts into expected Ising energy.
-5. Use at least five seeded BFGS starts and select the lowest expected-energy outcome.
+5. Use at least five seeded COBYLA starts and select the lowest expected-energy outcome.
 6. Sample once more with the selected parameters; `QAOAResult` retains the selected optimizer status, not every start history.
 
 ![Parameterized QAOA circuit structure](qaoa_circuit_layers.png)
@@ -35,5 +35,5 @@ These figures explain the implemented backend-agnostic QAOA orchestration for th
 ## Regenerate from the repository root
 
 ```bash
-python power-core/src/reports/generate_qaoa_walkthrough.py
+.venv/bin/python power-core/src/reports/generate_qaoa_walkthrough.py
 ```

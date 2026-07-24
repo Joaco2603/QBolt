@@ -41,7 +41,7 @@ TEXT = {
         "cost": "U_C(γₖ) = exp(−i γₖ H_C)\n\nhᵢzᵢ  →  RZ\nJᵢⱼzᵢzⱼ  →  CX · RZ · CX\n\nThe constant C is not a gate.",
         "mixer": "U_B(βₖ) = exp(−i βₖ Σ Xᵢ)\n\nApply RX to every qubit.\nThis mixes probability between candidates.",
         "measure": "counts = {bitstring: shots}\n\n⟨E⟩ = Σ_b p(b) E(b)\n\nVariable order = qubit order = bitstring order.",
-        "optimize": "Repeat p cost/mixer layers\nEvaluate ⟨E⟩ through the backend\nBFGS updates (γ, β)\nAt least five seeded starts\nFinal sampling with best parameters",
+        "optimize": "Repeat p cost/mixer layers\nEvaluate ⟨E⟩ through the backend\nCOBYLA updates (γ, β)\nAt least five seeded starts\nFinal sampling with best parameters",
         "warning": "Process diagram only: no QAOA backend was executed and no benchmark result is claimed.",
         "circuit_title": "Parameterized QAOA circuit structure",
         "initialization": "Initialization",
@@ -57,7 +57,7 @@ TEXT = {
         "backend": "Backend adapter\nlocal Selene or authenticated Nexus",
         "counts": "MeasurementBatch\nvalidated counts",
         "expectation": "Expected energy\nΣ p(bitstring)·E",
-        "bfgs": "BFGS update\nuntil optimizer stops",
+        "optimizer": "COBYLA update\nuntil optimizer stops",
         "select": "Select lowest expected-energy start",
         "final": "Final sampling\nbest parameters",
         "result": "QAOAResult\nbest sample, counts, selected status",
@@ -70,7 +70,7 @@ TEXT = {
             "Prepare `|+⟩` on every qubit and apply `p` alternating cost and mixer layers.",
             "Execute one bound parameter set through a local or cloud adapter.",
             "Convert validated measurement counts into expected Ising energy.",
-            "Use at least five seeded BFGS starts and select the lowest expected-energy outcome.",
+            "Use at least five seeded COBYLA starts and select the lowest expected-energy outcome.",
             "Sample once more with the selected parameters; `QAOAResult` retains the selected optimizer status, not every start history.",
         ],
         "scope": "Evidence boundary",
@@ -92,7 +92,7 @@ TEXT = {
         "cost": "U_C(γₖ) = exp(−i γₖ H_C)\n\nhᵢzᵢ  →  RZ\nJᵢⱼzᵢzⱼ  →  CX · RZ · CX\n\nLa constante C no es una compuerta.",
         "mixer": "U_B(βₖ) = exp(−i βₖ Σ Xᵢ)\n\nAplicar RX a cada cúbit.\nEsto mezcla probabilidad entre candidatos.",
         "measure": "conteos = {bitstring: shots}\n\n⟨E⟩ = Σ_b p(b) E(b)\n\nOrden de variables = orden de cúbits = orden del bitstring.",
-        "optimize": "Repetir p capas de costo/mezcla\nEvaluar ⟨E⟩ mediante el backend\nBFGS actualiza (γ, β)\nAl menos cinco inicios con semilla\nMuestreo final con los mejores parámetros",
+        "optimize": "Repetir p capas de costo/mezcla\nEvaluar ⟨E⟩ mediante el backend\nCOBYLA actualiza (γ, β)\nAl menos cinco inicios con semilla\nMuestreo final con los mejores parámetros",
         "warning": "Solo es un diagrama del proceso: no se ejecutó un backend QAOA ni se afirma un resultado de benchmark.",
         "circuit_title": "Estructura del circuito QAOA parametrizado",
         "initialization": "Inicialización",
@@ -108,7 +108,7 @@ TEXT = {
         "backend": "Adaptador de backend\nSelene local o Nexus autenticado",
         "counts": "MeasurementBatch\nconteos validados",
         "expectation": "Energía esperada\nΣ p(bitstring)·E",
-        "bfgs": "Actualización BFGS\nhasta que termine el optimizador",
+        "optimizer": "Actualización COBYLA\nhasta que termine el optimizador",
         "select": "Elegir el inicio con menor energía esperada",
         "final": "Muestreo final\nmejores parámetros",
         "result": "QAOAResult\nmejor muestra, conteos y estado elegido",
@@ -121,7 +121,7 @@ TEXT = {
             "Preparar `|+⟩` en cada cúbit y aplicar `p` capas alternadas de costo y mezcla.",
             "Ejecutar un conjunto de parámetros ligados mediante un adaptador local o de nube.",
             "Convertir los conteos validados en energía Ising esperada.",
-            "Usar al menos cinco inicios BFGS con semillas y elegir el resultado de menor energía esperada.",
+            "Usar al menos cinco inicios COBYLA con semillas y elegir el resultado de menor energía esperada.",
             "Muestrear otra vez con los parámetros elegidos; `QAOAResult` conserva el estado del optimizador seleccionado, no el historial de cada inicio.",
         ],
         "scope": "Límite de la evidencia",
@@ -426,7 +426,7 @@ def render_optimization_loop(
         ((10.2, 7.6), text["backend"], "#ede9fe", 2.85),
         ((10.2, 5.4), text["counts"], "#f5f3ff", 2.65),
         ((7.0, 5.4), text["expectation"], "#ffedd5", 2.7),
-        ((4.0, 5.4), text["bfgs"], "#dcfce7", 2.75),
+        ((4.0, 5.4), text["optimizer"], "#dcfce7", 2.75),
         ((4.0, 3.0), text["select"], "#fee2e2", 3.0),
         ((7.0, 3.0), text["final"], "#dbeafe", 2.35),
         ((10.2, 3.0), text["result"], "#dcfce7", 3.0),
@@ -512,7 +512,7 @@ def write_readme(
 ## {text['reproduce']}
 
 ```bash
-python power-core/src/reports/generate_qaoa_walkthrough.py
+.venv/bin/python power-core/src/reports/generate_qaoa_walkthrough.py
 ```
 """
     output.parent.mkdir(parents=True, exist_ok=True)

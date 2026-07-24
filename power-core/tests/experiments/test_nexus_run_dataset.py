@@ -1,9 +1,11 @@
 from pathlib import Path
 from types import SimpleNamespace
+import sys
 
 import networkx as nx
 import pytest
 
+import experiments.nexus_run_dataset as nexus_cli
 from experiments.nexus_run_dataset import NexusRunDataset, build_instance_snapshot, parse_args
 
 
@@ -98,6 +100,94 @@ def test_dataset_rejects_duplicate_run_ids_and_different_instances(tmp_path: Pat
     other_instance = build_instance_snapshot(changed, instance_id="other")
     with pytest.raises(ValueError, match="different instance"):
         NexusRunDataset.load_or_create(instance=other_instance, path=path)
+
+
+def test_cli_does_not_reference_removed_qubo_module() -> None:
+    source = Path(nexus_cli.__file__).read_text(encoding="utf-8")
+
+    assert "optimizer.quantum.qubo_implementation" not in source
+    assert "from optimizer.quantum.qubo import build_max_cut_qubo" in source
+
+
+def test_cli_completes_authenticated_nexus_flow_and_persists_success(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    calls: list[object] = []
+
+    class FakeQnexus:
+        class projects:
+            @staticmethod
+            def get_or_create(*, name: str) -> str:
+                calls.append(("project", name))
+                return "project-ref"
+
+        class context:
+            @staticmethod
+            def set_active_project(project: object) -> None:
+                calls.append(("active-project", project))
+
+        class quotas:
+            @staticmethod
+            def check_quota(*, name: str) -> bool:
+                calls.append(("quota", name))
+                return True
+
+        @staticmethod
+        def login() -> None:
+            calls.append("login")
+
+    class FakeBackend:
+        def __init__(self, session: object, **kwargs: object) -> None:
+            calls.append(("backend", session, kwargs))
+
+    class FakeQAOA:
+        def __init__(self, **kwargs: object) -> None:
+            calls.append(("qaoa", kwargs))
+
+        def run_cloud(self, ising: object, *, session: object, backend: object, shots: int):
+            calls.append(("run-cloud", ising, session, backend, shots))
+            return result()
+
+    import optimizer.quantum as quantum
+
+    monkeypatch.setitem(sys.modules, "qnexus", FakeQnexus)
+    monkeypatch.setattr(quantum, "NexusBackend", FakeBackend)
+    monkeypatch.setattr(quantum, "QAOA", FakeQAOA)
+    monkeypatch.setattr(nexus_cli, "_environment_snapshot", lambda: {"fake": True})
+
+    instance_path = tmp_path / "instance.json"
+    instance_path.write_text(
+        __import__("json").dumps({
+            "source": "tiny",
+            "nodes": [{"id": node} for node in ("A", "B", "C")],
+            "edges": [
+                {"source": "A", "target": "B", "weight": 10},
+                {"source": "B", "target": "C", "weight": 5},
+            ],
+        }),
+        encoding="utf-8",
+    )
+    output = tmp_path / "runs.json"
+
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "nexus_run_dataset.py", "--instance", str(instance_path),
+            "--output", str(output), "--run-id", "fake-success", "--seed", "7",
+            "--starts", "5", "--shots", "16", "--optimal-cut", "15",
+        ],
+    )
+    nexus_cli.main()
+
+    document = NexusRunDataset.load(output).document
+    run = document["runs"][0]
+    assert run["result"]["status"] == "succeeded"
+    assert run["solver"]["optimizer_method"] == "unknown"
+    assert "login" in calls
+    assert ("quota", "simulation") in calls
+    assert any(call[0] == "run-cloud" for call in calls if isinstance(call, tuple))
+    assert "fake-success" in capsys.readouterr().out
 
 
 @pytest.mark.parametrize(
