@@ -51,6 +51,16 @@ not edited by hand.
 | Optimizer-independent solver runner | Implemented |
 | End-to-end benchmark CLI/report | Not yet implemented |
 
+## Experimental validation
+
+We ran an experimental Iceberg QED/QAOA implementation on the dedicated
+`feat/iceberg-qed-qaoa` branch. The local ideal MVP compiled the six-node
+regional Max-Cut instance (6 logical / 8 physical data qubits), compared naive
+and co-compiled schedules, and passed the complete test suite (`171 passed`).
+This experiment reports structural circuit metrics only; it does not claim
+H2-1 hardware fidelity, noisy post-selection improvement, or quantum
+advantage. The implementation remains isolated from `main`.
+
 ## Visual walkthroughs
 
 - [Weighted Max-Cut QUBO, step by step](power-core/docs/spanish/qubo/README.md)
