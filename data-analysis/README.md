@@ -41,6 +41,23 @@ this is not observed local demand. See
 `power-core/docs/spanish/reference-ice-dataset.md` for the source, derivation, and
 limitations.
 
+The curated ICE enrichment files add documented planning indicators without
+changing the authoritative graph weights:
+
+- `dataset/ice_transmission_enrichment.csv` records line-level voltage,
+  published transport-capacity values, planned ranges, emergency values when
+  available, DLR installation, source page, and evidence status. Blank MVA
+  fields mean that the reviewed public source did not publish a value for that
+  exact link; they must not be imputed.
+- `dataset/ice_system_indicators.csv` records projected national demand,
+  projected energy, transmission length, and total transformation capacity.
+
+The line values come from the ICE Plan de Expansión de la Transmisión
+2024-2034. They are planning/documentation values, not a real-time flow
+dataset. Use MVA as a Max-Cut weight only after matching every edge in an
+instance; otherwise retain `sum_nominal_voltage_kv` and report MVA as a
+secondary enrichment.
+
 The older geographic fallback is available only when explicitly requested:
 
 ```bash

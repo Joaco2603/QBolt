@@ -33,7 +33,7 @@ module never performs login or stores credentials:
 import qnexus as qnx
 from optimizer.quantum import NexusBackend, QAOA
 
-result = QAOA(layers=1).run_cloud(
+result = QAOA(layers=1, starts=5, seed=7, max_parallel_starts=2).run_cloud(
     model,
     session=qnx,
     backend=NexusBackend(qnx),
@@ -49,3 +49,9 @@ the lowest-energy measured sample; it is not a proof of global optimality.
 The default optimizer uses five deterministic seeded BFGS starts. Failed or
 non-converged starts remain represented by the optimizer status and must not be
 silently presented as quantum advantage.
+
+Only `NexusBackend` declares support for parallel starts. The configured worker
+limit applies between starts; each BFGS optimization remains sequential, and
+local Selene/custom backends remain sequential. `QAOAResult.metadata["starts"]`
+records each start's seed, evaluation count, optimizer status, objective value,
+and error (if any).

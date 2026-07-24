@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
+from numbers import Integral
 from typing import Any, Mapping, Sequence
+from uuid import uuid4
 
 from .qaoa import (
     MeasurementBatch,
@@ -15,6 +17,7 @@ class LocalGuppySeleneBackend:
     """Generate Guppy and execute it with Selene's local state-vector emulator."""
 
     name = "guppy-selene"
+    supports_parallel_starts = False
 
     def __init__(self, executor: Any | None = None) -> None:
         self._executor = executor
@@ -50,6 +53,7 @@ class NexusBackend:
     """Submit Guppy through an already-authenticated Nexus session."""
 
     name = "quantinuum-nexus"
+    supports_parallel_starts = True
 
     def __init__(
         self,
@@ -84,10 +88,15 @@ class NexusBackend:
                 )
             )
         main = _build_guppy_program(program, gamma, beta)
+        identifier = uuid4().hex
+        hugr_name = f"qaoa-ising-program-{identifier}"
+        job_name = f"qaoa-ising-execution-{identifier}"
+        job: Any | None = None
         try:
             hugr_ref = self.session.hugr.upload(
                 hugr_package=main.compile(),
-                name="qaoa-ising-program",
+                name=hugr_name,
+                project=self.project,
             )
             config = self.session.models.SeleneConfig(
                 n_qubits=len(program.variables),
@@ -97,7 +106,7 @@ class NexusBackend:
                 "programs": [hugr_ref],
                 "n_shots": [shots],
                 "backend_config": config,
-                "name": "qaoa-ising-execution",
+                "name": job_name,
             }
             if self.project is not None:
                 job_kwargs["project"] = self.project
@@ -105,15 +114,30 @@ class NexusBackend:
                 job_kwargs["max_cost"] = self.max_cost
             job = self.session.start_execute_job(**job_kwargs)
             self.session.jobs.wait_for(job, timeout=self.timeout)
-            result = self.session.jobs.results(job)[0].download_result()
-        except AttributeError as error:
+            results = self.session.jobs.results(job)
+            if not results:
+                raise RuntimeError("Nexus returned no execution results")
+            result_ref = results[0]
+            download_result = getattr(result_ref, "download_result", None)
+            if not callable(download_result):
+                raise RuntimeError(
+                    "Nexus execution result does not expose download_result()"
+                )
+            result = download_result()
+            counts = _counts_from_nexus_result(result, program.variables)
+        except Exception as error:
+            job_id = _job_identifier(job)
+            if isinstance(error, AttributeError):
+                message = (
+                    "The authenticated Nexus session does not expose the required "
+                    "hugr, Selene, and jobs APIs"
+                )
+            else:
+                message = "Nexus execution failed"
             raise RuntimeError(
-                "The authenticated Nexus session does not expose the required "
-                "hugr, Selene, and jobs APIs"
+                f"{message} (job {job_id}; {error})"
             ) from error
-        return MeasurementBatch(
-            _counts_from_collated_counts(result.collated_counts(), program.variables)
-        )
+        return MeasurementBatch(counts)
 
 
 def _build_guppy_program(
@@ -190,9 +214,63 @@ def _counts_from_guppy_result(result: Any, variables: Sequence[str]) -> dict[str
 def _counts_from_collated_counts(
     counts: Any, variables: Sequence[str]
 ) -> dict[str, int]:
+    if not isinstance(counts, Mapping):
+        raise ValueError(
+            f"Nexus collated_counts() must return a mapping, got {type(counts).__name__}"
+        )
     normalized: dict[str, int] = {}
     for key, value in counts.items():
+        if isinstance(value, bool) or not isinstance(value, Integral) or value < 0:
+            raise ValueError(f"Invalid Nexus measurement count for {key!r}: {value!r}")
         bitstring = _collated_key_to_bitstring(key, len(variables))
+        normalized[bitstring] = normalized.get(bitstring, 0) + int(value)
+    return _canonical_counts(normalized, variables)
+
+
+def _counts_from_nexus_result(
+    result: Any, variables: Sequence[str]
+) -> dict[str, int]:
+    """Normalize the result variants returned by Nexus execution refs.
+
+    HUGR/Selene results normally expose ``collated_counts``. Some Nexus/Pytket
+    result versions expose ``get_counts`` instead, so this adapter intentionally
+    uses capability checks rather than importing concrete Nexus result classes.
+    """
+    collated_counts = getattr(result, "collated_counts", None)
+    if callable(collated_counts):
+        return _counts_from_collated_counts(collated_counts(), variables)
+
+    get_counts = getattr(result, "get_counts", None)
+    if callable(get_counts):
+        return _counts_from_bit_counts(get_counts(), variables)
+
+    if isinstance(result, Mapping):
+        return _counts_from_bit_counts(result, variables)
+
+    raise RuntimeError(
+        "Unsupported Nexus execution result type: "
+        f"{type(result).__module__}.{type(result).__qualname__}"
+    )
+
+
+def _counts_from_bit_counts(
+    counts: Any, variables: Sequence[str]
+) -> dict[str, int]:
+    """Convert direct bit-tuple counts, such as Pytket BackendResult counts."""
+    if not isinstance(counts, Mapping):
+        raise ValueError(
+            f"Nexus get_counts() must return a mapping, got {type(counts).__name__}"
+        )
+    normalized: dict[str, int] = {}
+    for key, value in counts.items():
+        if isinstance(value, bool) or not isinstance(value, Integral) or value < 0:
+            raise ValueError(f"Invalid Nexus measurement count for {key!r}: {value!r}")
+        if isinstance(key, str):
+            bitstring = key
+        elif isinstance(key, (tuple, list)):
+            bitstring = "".join(_bit_value_to_char(bit) for bit in key)
+        else:
+            raise ValueError(f"Unsupported Nexus bit-count key: {key!r}")
         normalized[bitstring] = normalized.get(bitstring, 0) + int(value)
     return _canonical_counts(normalized, variables)
 
@@ -205,11 +283,15 @@ def _collated_key_to_bitstring(key: Any, qubit_count: int) -> str:
     if not isinstance(key, tuple):
         raise ValueError(f"Unsupported Nexus measurement key: {key!r}")
 
+    # Pytket-style direct counts can also arrive through a generic mapping.
+    if all(isinstance(bit, Integral) and not isinstance(bit, bool) for bit in key):
+        return "".join(_bit_value_to_char(bit) for bit in key)
+
     # Nexus may return one named result, e.g. (('result', '011'),).
     if len(key) == 1:
         entry = key[0]
         if isinstance(entry, tuple) and len(entry) == 2:
-            return str(entry[1])
+            return _bitstring_value(entry[1])
         raise ValueError(f"Unsupported Nexus measurement key: {key!r}")
 
     # Selene can also return one entry per measured qubit:
@@ -219,12 +301,43 @@ def _collated_key_to_bitstring(key: Any, qubit_count: int) -> str:
         expected_labels = [f"q{index}" for index in range(qubit_count)]
         if set(named_values) != set(expected_labels) or len(named_values) != len(key):
             raise ValueError(f"Unexpected Nexus measurement labels: {key!r}")
-        return "".join(str(named_values[label]) for label in expected_labels)
+        return "".join(
+            _bit_value_to_char(named_values[label]) for label in expected_labels
+        )
 
     raise ValueError(f"Unsupported Nexus measurement key: {key!r}")
+
+
+def _bit_value_to_char(value: Any) -> str:
+    if isinstance(value, bool) or not isinstance(value, Integral) or value not in (0, 1):
+        if value not in ("0", "1"):
+            raise ValueError(f"Measurement value must be binary, got {value!r}")
+        return value
+    return str(int(value))
+
+
+def _bitstring_value(value: Any) -> str:
+    if isinstance(value, str):
+        if not value or any(bit not in "01" for bit in value):
+            raise ValueError(f"Measurement value must be binary, got {value!r}")
+        return value
+    if isinstance(value, (tuple, list)):
+        return "".join(_bit_value_to_char(bit) for bit in value)
+    return _bit_value_to_char(value)
 
 
 def _as_batch(value: MeasurementBatch | Mapping[str, int]) -> MeasurementBatch:
     if isinstance(value, MeasurementBatch):
         return value
     return MeasurementBatch(counts=value)
+
+
+def _job_identifier(job: Any | None) -> str:
+    """Return a useful Nexus job identifier even for lightweight test doubles."""
+    if job is None:
+        return "not-submitted"
+    for attribute in ("id", "job_id", "name"):
+        value = getattr(job, attribute, None)
+        if value is not None:
+            return str(value)
+    return str(job)

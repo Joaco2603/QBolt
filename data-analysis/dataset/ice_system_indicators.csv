@@ -1,0 +1,12 @@
+year,projected_demand_mw,projected_energy_gwh,transmission_length_km,total_transformation_capacity_mva,source_locator,source_document,source_url,notes
+2024,1824,12148,2995.7,12551.8,PET 2024-2034 pp. 20-23 y 121,Plan de Expansión de la Transmisión 2024-2034,https://www.grupoice.com/wps/portal/ICE/electricidad/proyectos-energeticos/plan-de-expansion/,Longitud y capacidad corresponden al estado reportado a diciembre de 2024; demanda es proyección del PET.
+2025,1854,12405,,,PET 2024-2034 p. 121,Plan de Expansión de la Transmisión 2024-2034,https://www.grupoice.com/wps/portal/ICE/electricidad/proyectos-energeticos/plan-de-expansion/,Demanda proyectada del PET.
+2026,1877,12649,,,PET 2024-2034 p. 121,Plan de Expansión de la Transmisión 2024-2034,https://www.grupoice.com/wps/portal/ICE/electricidad/proyectos-energeticos/plan-de-expansion/,Demanda proyectada del PET.
+2027,1904,12895,,,PET 2024-2034 p. 121,Plan de Expansión de la Transmisión 2024-2034,https://www.grupoice.com/wps/portal/ICE/electricidad/proyectos-energeticos/plan-de-expansion/,Demanda proyectada del PET.
+2028,1926,13134,,,PET 2024-2034 p. 121,Plan de Expansión de la Transmisión 2024-2034,https://www.grupoice.com/wps/portal/ICE/electricidad/proyectos-energeticos/plan-de-expansion/,Demanda proyectada del PET.
+2029,1957,13371,,,PET 2024-2034 p. 121,Plan de Expansión de la Transmisión 2024-2034,https://www.grupoice.com/wps/portal/ICE/electricidad/proyectos-energeticos/plan-de-expansion/,Demanda proyectada del PET.
+2030,1982,13605,,,PET 2024-2034 p. 121,Plan de Expansión de la Transmisión 2024-2034,https://www.grupoice.com/wps/portal/ICE/electricidad/proyectos-energeticos/plan-de-expansion/,Demanda proyectada del PET.
+2031,2007,13837,,,PET 2024-2034 p. 121,Plan de Expansión de la Transmisión 2024-2034,https://www.grupoice.com/wps/portal/ICE/electricidad/proyectos-energeticos/plan-de-expansion/,Demanda proyectada del PET.
+2032,2031,14065,,,PET 2024-2034 p. 121,Plan de Expansión de la Transmisión 2024-2034,https://www.grupoice.com/wps/portal/ICE/electricidad/proyectos-energeticos/plan-de-expansion/,Demanda proyectada del PET.
+2033,2063,14286,,,PET 2024-2034 p. 121,Plan de Expansión de la Transmisión 2024-2034,https://www.grupoice.com/wps/portal/ICE/electricidad/proyectos-energeticos/plan-de-expansion/,Demanda proyectada del PET.
+2034,2088,14498,,,PET 2024-2034 p. 121,Plan de Expansión de la Transmisión 2024-2034,https://www.grupoice.com/wps/portal/ICE/electricidad/proyectos-energeticos/plan-de-expansion/,Demanda proyectada del PET.

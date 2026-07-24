@@ -7,6 +7,7 @@ backend's measurement counts. Guppy/Selene and Nexus details stay in adapters.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from concurrent.futures import ThreadPoolExecutor
 from typing import Any, Mapping, Protocol, Sequence
 
 from ..ising import IsingModel
@@ -35,6 +36,7 @@ class QAOABackend(Protocol):
     """Protocol implemented by local and cloud execution adapters."""
 
     name: str
+    supports_parallel_starts: bool
 
     def execute(
         self,
@@ -70,14 +72,24 @@ class QAOAResult:
 class QAOA:
     """Optimize and sample a minimization Ising Hamiltonian."""
 
-    def __init__(self, *, layers: int = 1, starts: int = 5, seed: int = 0) -> None:
+    def __init__(
+        self,
+        *,
+        layers: int = 1,
+        starts: int = 5,
+        seed: int = 0,
+        max_parallel_starts: int = 2,
+    ) -> None:
         if type(layers) is not int or layers < 1:
             raise ValueError("layers must be a positive integer")
         if type(starts) is not int or starts < 5:
             raise ValueError("starts must be an integer of at least 5")
+        if type(max_parallel_starts) is not int or max_parallel_starts < 1:
+            raise ValueError("max_parallel_starts must be a positive integer")
         self.layers = layers
         self.starts = starts
         self.seed = seed
+        self.max_parallel_starts = max_parallel_starts
 
     def run_local(self, model: IsingModel, *, backend: QAOABackend, shots: int = 1024) -> QAOAResult:
         return self.run(model, backend=backend, shots=shots)
@@ -121,32 +133,88 @@ class QAOA:
         except ImportError as error:
             raise RuntimeError("QAOA optimization requires numpy and scipy") from error
 
+        # Allocate all initial points before starting threads. This makes the
+        # experiment independent of worker scheduling.
         rng = np.random.default_rng(self.seed)
-        evaluations = 0
-        best = None
+        initials = [rng.uniform(-np.pi, np.pi, size=2 * self.layers) for _ in range(self.starts)]
+        parallel_enabled = bool(getattr(backend, "supports_parallel_starts", False))
+        workers = min(self.max_parallel_starts, self.starts) if parallel_enabled else 1
 
-        def objective(parameters: Any) -> float:
-            nonlocal evaluations
-            evaluations += 1
-            gamma = tuple(float(value) for value in parameters[: self.layers])
-            beta = tuple(float(value) for value in parameters[self.layers :])
-            batch = backend.execute(program, gamma, beta, shots=shots, seed=self.seed + evaluations)
-            return _expected_energy(model, batch.counts)
+        def optimize_start(index: int) -> dict[str, Any]:
+            evaluations = 0
+            start_seed = int(
+                np.random.SeedSequence([self.seed, index]).generate_state(1, dtype=np.uint32)[0]
+            )
 
-        for _ in range(self.starts):
-            initial = rng.uniform(-np.pi, np.pi, size=2 * self.layers)
-            outcome = minimize(objective, initial, method="BFGS")
-            candidate = (float(outcome.fun), tuple(float(x) for x in outcome.x), outcome)
-            if best is None or (candidate[0], candidate[1]) < (best[0], best[1]):
-                best = candidate
-        assert best is not None
-        gamma = best[1][: self.layers]
-        beta = best[1][self.layers :]
+            def objective(parameters: Any) -> float:
+                nonlocal evaluations
+                evaluations += 1
+                gamma = tuple(float(value) for value in parameters[: self.layers])
+                beta = tuple(float(value) for value in parameters[self.layers :])
+                evaluation_seed = int(
+                    np.random.SeedSequence([start_seed, evaluations]).generate_state(1, dtype=np.uint32)[0]
+                )
+                batch = backend.execute(program, gamma, beta, shots=shots, seed=evaluation_seed)
+                return _expected_energy(model, batch.counts)
+
+            try:
+                outcome = minimize(objective, initials[index], method="BFGS")
+                parameters = tuple(float(x) for x in outcome.x)
+                return {
+                    "index": index,
+                    "seed": start_seed,
+                    "objective_evaluations": evaluations,
+                    "optimizer_status": str(getattr(outcome, "message", "completed")),
+                    "optimizer_success": bool(getattr(outcome, "success", False)),
+                    "objective_value": float(outcome.fun),
+                    "parameters": parameters,
+                    "outcome": outcome,
+                    "error": None,
+                }
+            except Exception as error:
+                return {
+                    "index": index,
+                    "seed": start_seed,
+                    "objective_evaluations": evaluations,
+                    "optimizer_status": "failed",
+                    "optimizer_success": False,
+                    "objective_value": None,
+                    "parameters": None,
+                    "outcome": None,
+                    "error": str(error),
+                }
+
+        if workers == 1:
+            starts = [optimize_start(index) for index in range(self.starts)]
+        else:
+            with ThreadPoolExecutor(max_workers=workers, thread_name_prefix="qaoa-start") as pool:
+                starts = list(pool.map(optimize_start, range(self.starts)))
+        failures = [item for item in starts if item["error"] is not None]
+        successful = [item for item in starts if item["error"] is None]
+        if not successful:
+            details = "; ".join(f"{item['index']}: {item['error']}" for item in failures)
+            raise RuntimeError(f"All QAOA starts failed ({details})")
+        best = min(successful, key=lambda item: (item["objective_value"], item["parameters"], item["index"]))
+        gamma = best["parameters"][: self.layers]
+        beta = best["parameters"][self.layers :]
         batch = backend.execute(program, gamma, beta, shots=shots, seed=self.seed)
         counts = _canonical_counts(batch.counts, model.variables)
         energies = {bits: model.energy(_bits_to_spins(bits, model.variables)) for bits in counts}
         bitstring = min(counts, key=lambda bits: (energies[bits], bits))
-        optimizer = best[2]
+        optimizer = best["outcome"]
+        start_metadata = [
+            {key: item[key] for key in (
+                "index", "seed", "objective_evaluations", "optimizer_status",
+                "optimizer_success", "objective_value", "error",
+            )}
+            for item in starts
+        ]
+        metadata = dict(batch.metadata)
+        metadata.update({
+            "starts": start_metadata,
+            "parallel_workers": workers,
+            "parallel_backend_enabled": parallel_enabled,
+        })
         return QAOAResult(
             bitstring=bitstring,
             spins=_bits_to_spins(bitstring, model.variables),
@@ -161,8 +229,8 @@ class QAOA:
             shots=shots,
             optimizer_status=str(getattr(optimizer, "message", "completed")),
             optimizer_success=bool(getattr(optimizer, "success", False)),
-            objective_evaluations=evaluations,
-            metadata=dict(batch.metadata),
+            objective_evaluations=sum(item["objective_evaluations"] for item in starts),
+            metadata=metadata,
         )
 
 
@@ -193,4 +261,3 @@ def _expected_energy(model: IsingModel, counts: Mapping[str, int]) -> float:
         count * model.energy(_bits_to_spins(bits, model.variables))
         for bits, count in canonical.items()
     ) / total
-
