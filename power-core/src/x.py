@@ -13,6 +13,8 @@ qnx.login()
 
 project = qnx.projects.get_or_create(name="Quantum Power QAOA")
 qnx.context.set_active_project(project)
+if not qnx.quotas.check_quota(name="simulation"):
+    raise RuntimeError("No simulation quota available")
 from optimizer.quantum.index import build_max_cut_qubo
 
 with open("../artifacts/regional_instance.json") as file:
@@ -35,11 +37,12 @@ backend = NexusBackend(
     max_cost=10.0,
 )
 
-result = QAOA(layers=1, starts=5, seed=7).run_cloud(
+result = QAOA(layers=1, starts=5, seed=7,max_parallel_starts=5).run_cloud(
     ising,
     session=qnx,
     backend=backend,
-    shots=1024,
+    shots=2,
+
 )
 
 

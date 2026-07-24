@@ -33,7 +33,7 @@ module never performs login or stores credentials:
 import qnexus as qnx
 from optimizer.quantum import NexusBackend, QAOA
 
-result = QAOA(layers=1).run_cloud(
+result = QAOA(layers=1, starts=5, seed=7, max_parallel_starts=2).run_cloud(
     model,
     session=qnx,
     backend=NexusBackend(qnx),
@@ -48,9 +48,11 @@ evaluation count, and backend metadata. “Best” means the lowest-energy measu
 sample; it is not a proof of global optimality.
 
 The default optimizer uses five deterministic seeded BFGS starts. The current
-result retains only the selected start's optimizer status; it does not expose
-the status or parameter history of every attempted start. A benchmark report
-must preserve those runs separately rather than treating this result object as
+The default optimizer uses five deterministic seeded BFGS starts. Each start's
+seed, evaluation count, objective value, optimizer status, and error (if any)
+are preserved in `QAOAResult.metadata["starts"]`; the selected start remains
+the one exposed by the top-level optimizer fields. A benchmark report must
+preserve every start separately rather than treating one selected result as
 complete failed-run evidence.
 
 ## Visual walkthrough
