@@ -100,7 +100,7 @@ class NexusBackend:
             )
             config = self.session.models.SeleneConfig(
                 n_qubits=len(program.variables),
-                simulator=self.session.models.StatevectorSimulator(),
+                simulator=self.session.models.StatevectorSimulator(seed=seed),
             )
             job_kwargs: dict[str, Any] = {
                 "programs": [hugr_ref],

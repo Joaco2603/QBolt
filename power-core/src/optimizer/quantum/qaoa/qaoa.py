@@ -86,6 +86,8 @@ class QAOA:
             raise ValueError("starts must be an integer of at least 5")
         if type(max_parallel_starts) is not int or max_parallel_starts < 1:
             raise ValueError("max_parallel_starts must be a positive integer")
+        if type(seed) is not int or seed < 0:
+            raise ValueError("seed must be a non-negative integer")
         self.layers = layers
         self.starts = starts
         self.seed = seed
@@ -151,14 +153,16 @@ class QAOA:
                 evaluations += 1
                 gamma = tuple(float(value) for value in parameters[: self.layers])
                 beta = tuple(float(value) for value in parameters[self.layers :])
-                evaluation_seed = int(
-                    np.random.SeedSequence([start_seed, evaluations]).generate_state(1, dtype=np.uint32)[0]
-                )
-                batch = backend.execute(program, gamma, beta, shots=shots, seed=evaluation_seed)
+                batch = backend.execute(program, gamma, beta, shots=shots, seed=start_seed)
                 return _expected_energy(model, batch.counts)
 
             try:
-                outcome = minimize(objective, initials[index], method="BFGS")
+                outcome = minimize(
+                    objective,
+                    initials[index],
+                    method="COBYLA",
+                    options={"maxiter": 200},
+                )
                 parameters = tuple(float(x) for x in outcome.x)
                 return {
                     "index": index,
@@ -194,10 +198,14 @@ class QAOA:
         if not successful:
             details = "; ".join(f"{item['index']}: {item['error']}" for item in failures)
             raise RuntimeError(f"All QAOA starts failed ({details})")
-        best = min(successful, key=lambda item: (item["objective_value"], item["parameters"], item["index"]))
+        converged = [item for item in successful if item["optimizer_success"]]
+        best = min(
+            converged or successful,
+            key=lambda item: (item["objective_value"], item["parameters"], item["index"]),
+        )
         gamma = best["parameters"][: self.layers]
         beta = best["parameters"][self.layers :]
-        batch = backend.execute(program, gamma, beta, shots=shots, seed=self.seed)
+        batch = backend.execute(program, gamma, beta, shots=shots, seed=best["seed"])
         counts = _canonical_counts(batch.counts, model.variables)
         energies = {bits: model.energy(_bits_to_spins(bits, model.variables)) for bits in counts}
         bitstring = min(counts, key=lambda bits: (energies[bits], bits))
@@ -212,6 +220,8 @@ class QAOA:
         metadata = dict(batch.metadata)
         metadata.update({
             "starts": start_metadata,
+            "selected_start": best["index"],
+            "optimizer_method": "COBYLA",
             "parallel_workers": workers,
             "parallel_backend_enabled": parallel_enabled,
         })

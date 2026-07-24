@@ -51,9 +51,11 @@ class RecordingBackend:
 
     def __init__(self) -> None:
         self.calls: list[tuple[tuple[float, ...], tuple[float, ...]]] = []
+        self.seeds: list[int | None] = []
 
     def execute(self, program, gamma, beta, *, shots, seed):
         self.calls.append((tuple(gamma), tuple(beta)))
+        self.seeds.append(seed)
         return MeasurementBatch({"00": shots, "11": 0})
 
 
@@ -70,6 +72,9 @@ def test_qaoa_runs_seeded_multistart_and_returns_statistics() -> None:
     assert result.energies["00"] == pytest.approx(-1.5)
     assert result.layers == 1
     assert result.metadata["parallel_backend_enabled"] is False
+    assert result.metadata["optimizer_method"] == "COBYLA"
+    selected_start = result.metadata["selected_start"]
+    assert backend.seeds[-1] == result.metadata["starts"][selected_start]["seed"]
     assert len(result.metadata["starts"]) == 5
     assert result.objective_evaluations == sum(
         start["objective_evaluations"] for start in result.metadata["starts"]
@@ -90,6 +95,11 @@ def test_qaoa_rotation_angles_match_exp_minus_i_hamiltonian_convention() -> None
 def test_qaoa_rejects_non_positive_parallel_worker_limit() -> None:
     with pytest.raises(ValueError, match="max_parallel_starts"):
         QAOA(max_parallel_starts=0)
+
+
+def test_qaoa_rejects_negative_seed() -> None:
+    with pytest.raises(ValueError, match="seed"):
+        QAOA(seed=-1)
 
 
 class ParallelRecordingBackend(RecordingBackend):
@@ -207,7 +217,7 @@ def test_nexus_backend_uses_unique_names_and_project(monkeypatch) -> None:
         hugr = SimpleNamespace(upload=lambda **kwargs: uploads.append(kwargs) or "hugr-ref")
         models = SimpleNamespace(
             SeleneConfig=lambda **kwargs: SimpleNamespace(**kwargs),
-            StatevectorSimulator=lambda: SimpleNamespace(),
+            StatevectorSimulator=lambda **kwargs: SimpleNamespace(**kwargs),
         )
         jobs = FakeJobs()
 
@@ -227,6 +237,8 @@ def test_nexus_backend_uses_unique_names_and_project(monkeypatch) -> None:
     assert jobs[0]["name"] != jobs[1]["name"]
     assert jobs[0]["project"] == "project-ref"
     assert jobs[0]["max_cost"] == 3.0
+    assert jobs[0]["backend_config"].simulator.seed == 7
+    assert jobs[1]["backend_config"].simulator.seed == 8
 
 
 def test_nexus_backend_error_includes_submitted_job_id(monkeypatch) -> None:
@@ -238,7 +250,7 @@ def test_nexus_backend_error_includes_submitted_job_id(monkeypatch) -> None:
         hugr = SimpleNamespace(upload=lambda **kwargs: "hugr-ref")
         models = SimpleNamespace(
             SeleneConfig=lambda **kwargs: SimpleNamespace(**kwargs),
-            StatevectorSimulator=lambda: SimpleNamespace(),
+            StatevectorSimulator=lambda **kwargs: SimpleNamespace(**kwargs),
         )
         jobs = SimpleNamespace(
             wait_for=lambda job, timeout: None,
