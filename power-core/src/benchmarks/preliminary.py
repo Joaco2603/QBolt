@@ -892,7 +892,7 @@ def _readme(results: Mapping[str, Any], output_dir: Path) -> str:
             "",
             *table_lines,
             "",
-            "La figura `approximation_ratio_vs_p.png` muestra los ratios esperado y del mejor estado muestreado. No incluye barras de error porque hay una sola corrida independiente por configuración.",
+            "`approximation_ratio_vs_p.png` muestra el ratio de QAOA por profundidad; `method_comparison.png` compara el corte esperado de QAOA contra OPT y los métodos clásicos; `qaoa_cut_distribution.png` muestra con qué frecuencia apareció cada corte para la mejor profundidad preliminar; y `execution_time_comparison.png` caracteriza los tiempos medidos. La mejor muestra QAOA no se usa como rendimiento típico. No incluyen barras de error porque hay una sola corrida independiente por configuración.",
             "",
             "## Búsqueda aleatoria de parámetros",
             "",
@@ -919,6 +919,9 @@ def _readme(results: Mapping[str, Any], output_dir: Path) -> str:
             "",
             "- `results.json`: configuración, versiones, seeds, counts positivos, parámetros, tiempos, métricas y fallos.",
             "- `approximation_ratio_vs_p.png`: ratio contra profundidad sin barras de error.",
+            "- `method_comparison.png`: comparación visual honesta; QAOA usa `expected_cut`, no su mejor muestra.",
+            "- `qaoa_cut_distribution.png`: distribución de probabilidad empírica de los cortes en la profundidad con mayor `expected_cut`.",
+            "- `execution_time_comparison.png`: tiempos observados en escala logarítmica; caracterizan esta implementación, no una ventaja computacional.",
             "- `README.md`: este resumen reproducible.",
             "",
         ]
@@ -986,8 +989,226 @@ def _write_plot(results: Mapping[str, Any], path: Path) -> None:
     plt.close(figure)
 
 
+def method_comparison_rows(
+    results: Mapping[str, Any],
+) -> list[tuple[str, float, str]]:
+    """Return directly comparable benchmark values for the summary chart."""
+
+    exact_cut = float(results["exact"]["cut"])
+    rows = [("OPT exacto", exact_cut, "#4c78a8")]
+    for key, label, color in (
+        ("greedy", "Greedy", "#59a14f"),
+        ("goemans_williamson", "Goemans–Williamson", "#f28e2b"),
+    ):
+        result = results[key]
+        if result["status"] == "completed":
+            rows.append((label, float(result["cut"]), color))
+    for item in results["qaoa"]:
+        if (
+            item["status"].startswith("completed")
+            and item["expected_cut"] is not None
+        ):
+            rows.append(
+                (
+                    f"QAOA esperado (p={item['p']})",
+                    float(item["expected_cut"]),
+                    "#e15759",
+                )
+            )
+    return rows
+
+
+def method_comparison_y_limit(rows: Sequence[tuple[str, float, str]]) -> float:
+    """Return a positive y-axis limit, including zero-objective instances."""
+
+    return max(1.0, max((value for _, value, _ in rows), default=0.0) * 1.18)
+
+
+def _write_method_comparison_plot(results: Mapping[str, Any], path: Path) -> None:
+    """Write a truthful expected-performance comparison for non-specialists."""
+
+    import matplotlib
+
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+
+    rows = method_comparison_rows(results)
+    labels = [item[0] for item in rows]
+    cuts = [item[1] for item in rows]
+    colors = [item[2] for item in rows]
+    exact_cut = float(results["exact"]["cut"])
+    figure, axis = plt.subplots(figsize=(10.0, 5.2))
+    bars = axis.bar(labels, cuts, color=colors)
+    axis.axhline(exact_cut, color="#4c78a8", linestyle=":", linewidth=1.2)
+    axis.set_ylabel("Valor de corte ponderado")
+    axis.set_title("Preliminar: cortes clásicos vs. corte esperado de QAOA")
+    axis.set_ylim(0.0, method_comparison_y_limit(rows))
+    axis.grid(axis="y", alpha=0.25)
+    axis.tick_params(axis="x", rotation=15)
+    for bar, value in zip(bars, cuts, strict=True):
+        axis.text(
+            bar.get_x() + bar.get_width() / 2,
+            value,
+            f"{value:.0f}",
+            ha="center",
+            va="bottom",
+            fontsize=8,
+        )
+    figure.tight_layout()
+    figure.savefig(
+        path,
+        dpi=160,
+        metadata={"Software": "quantathonv2 preliminary benchmark"},
+    )
+    plt.close(figure)
+
+
+def runtime_comparison_rows(
+    results: Mapping[str, Any],
+) -> list[tuple[str, float, str]]:
+    """Return positive observed runtimes for a log-scale comparison."""
+
+    rows: list[tuple[str, float, str]] = []
+    for key, label, color in (
+        ("exact", "Exacto", "#4c78a8"),
+        ("greedy", "Greedy", "#59a14f"),
+        ("goemans_williamson", "Goemans–Williamson", "#f28e2b"),
+    ):
+        result = results[key]
+        seconds = float(result["time_seconds"])
+        if result["status"] == "completed" and seconds > 0.0:
+            rows.append((label, seconds, color))
+    for item in results["qaoa"]:
+        seconds = float(item["timings_seconds"]["total"])
+        if item["status"].startswith("completed") and seconds > 0.0:
+            rows.append((f"QAOA p={item['p']}", seconds, "#e15759"))
+    return rows
+
+
+def _write_runtime_comparison_plot(
+    results: Mapping[str, Any],
+    path: Path,
+) -> None:
+    """Plot observed runtimes without presenting them as quantum advantage."""
+
+    import matplotlib
+
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+
+    rows = runtime_comparison_rows(results)
+    labels = [label for label, _, _ in rows]
+    seconds = [value for _, value, _ in rows]
+    colors = [color for _, _, color in rows]
+    figure, axis = plt.subplots(figsize=(9.5, 5.2))
+    bars = axis.bar(labels, seconds, color=colors)
+    axis.set_yscale("log")
+    axis.set_ylabel("Tiempo observado (segundos, escala log)")
+    axis.set_title("Preliminar: tiempo observado por método")
+    axis.grid(axis="y", which="both", alpha=0.25)
+    axis.tick_params(axis="x", rotation=15)
+    for bar, value in zip(bars, seconds, strict=True):
+        axis.text(
+            bar.get_x() + bar.get_width() / 2,
+            value,
+            f"{value:.3g} s",
+            ha="center",
+            va="bottom",
+            fontsize=8,
+        )
+    figure.tight_layout()
+    figure.savefig(
+        path,
+        dpi=160,
+        metadata={"Software": "quantathonv2 preliminary benchmark"},
+    )
+    plt.close(figure)
+
+
+def qaoa_distribution_data(results: Mapping[str, Any]) -> dict[str, Any]:
+    """Aggregate QAOA final-shot probabilities by cut value."""
+
+    completed = [
+        item
+        for item in results["qaoa"]
+        if item["status"].startswith("completed")
+        and item["expected_cut"] is not None
+    ]
+    if not completed:
+        raise ValueError("no completed QAOA result is available")
+    selected = max(
+        completed,
+        key=lambda item: (float(item["expected_cut"]), -int(item["p"])),
+    )
+    counts_by_cut: dict[float, int] = {}
+    for state in selected["state_metrics"].values():
+        cut = float(state["cut"])
+        counts_by_cut[cut] = counts_by_cut.get(cut, 0) + int(state["count"])
+    total = sum(counts_by_cut.values())
+    if total <= 0:
+        raise ValueError("selected QAOA result has no positive-count states")
+    return {
+        "p": int(selected["p"]),
+        "expected_cut": float(selected["expected_cut"]),
+        "optimal_cut": float(results["exact"]["cut"]),
+        "shots": total,
+        "probabilities": [
+            (cut, count / total)
+            for cut, count in sorted(counts_by_cut.items())
+        ],
+    }
+
+
+def _write_qaoa_distribution_plot(
+    results: Mapping[str, Any],
+    path: Path,
+) -> None:
+    """Plot the empirical cut distribution for the strongest expected QAOA run."""
+
+    import matplotlib
+
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+
+    data = qaoa_distribution_data(results)
+    cuts = [cut for cut, _ in data["probabilities"]]
+    probabilities = [probability for _, probability in data["probabilities"]]
+    figure, axis = plt.subplots(figsize=(9.5, 5.2))
+    axis.bar(cuts, probabilities, color="#e15759", width=35.0)
+    axis.axvline(
+        data["expected_cut"],
+        color="#7f3c8d",
+        linestyle="--",
+        linewidth=1.5,
+        label=f"Esperado: {data['expected_cut']:.1f}",
+    )
+    axis.axvline(
+        data["optimal_cut"],
+        color="#4c78a8",
+        linestyle=":",
+        linewidth=1.5,
+        label=f"OPT: {data['optimal_cut']:.0f}",
+    )
+    axis.set_xlabel("Valor de corte ponderado")
+    axis.set_ylabel("Probabilidad empírica")
+    axis.set_title(
+        f"Preliminar: distribución QAOA para p={data['p']} "
+        f"({data['shots']} shots)"
+    )
+    axis.set_ylim(0.0, max(probabilities, default=0.0) * 1.2 or 1.0)
+    axis.grid(axis="y", alpha=0.25)
+    axis.legend(loc="best")
+    figure.tight_layout()
+    figure.savefig(
+        path,
+        dpi=160,
+        metadata={"Software": "quantathonv2 preliminary benchmark"},
+    )
+    plt.close(figure)
+
+
 def write_outputs(results: Mapping[str, Any], output_dir: Path) -> None:
-    """Write the three deterministic output names in the requested directory."""
+    """Write the reproducible JSON, README, and benchmark figures."""
 
     destination = Path(output_dir)
     destination.mkdir(parents=True, exist_ok=True)
@@ -996,6 +1217,15 @@ def write_outputs(results: Mapping[str, Any], output_dir: Path) -> None:
         encoding="utf-8",
     )
     _write_plot(results, destination / "approximation_ratio_vs_p.png")
+    _write_method_comparison_plot(results, destination / "method_comparison.png")
+    _write_qaoa_distribution_plot(
+        results,
+        destination / "qaoa_cut_distribution.png",
+    )
+    _write_runtime_comparison_plot(
+        results,
+        destination / "execution_time_comparison.png",
+    )
     (destination / "README.md").write_text(
         _readme(results, destination),
         encoding="utf-8",

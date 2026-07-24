@@ -27,7 +27,7 @@ python power-core/src/benchmarks/preliminary.py --input power-core/artifacts/reg
 | QAOA local | p=2 | 632.725 | 1058 | 0.598038 | completed | 3.725 |
 | QAOA local | p=3 | 592.16 | 1058 | 0.559698 | completed | 3.39814 |
 
-La figura `approximation_ratio_vs_p.png` muestra los ratios esperado y del mejor estado muestreado. No incluye barras de error porque hay una sola corrida independiente por configuración.
+`approximation_ratio_vs_p.png` muestra el ratio de QAOA por profundidad; `method_comparison.png` compara el corte esperado de QAOA contra OPT y los métodos clásicos; `qaoa_cut_distribution.png` muestra con qué frecuencia apareció cada corte para la mejor profundidad preliminar; y `execution_time_comparison.png` caracteriza los tiempos medidos. La mejor muestra QAOA no se usa como rendimiento típico. No incluyen barras de error porque hay una sola corrida independiente por configuración.
 
 ## Búsqueda aleatoria de parámetros
 
@@ -54,4 +54,7 @@ Ninguna profundidad falló.
 
 - `results.json`: configuración, versiones, seeds, counts positivos, parámetros, tiempos, métricas y fallos.
 - `approximation_ratio_vs_p.png`: ratio contra profundidad sin barras de error.
+- `method_comparison.png`: comparación visual honesta; QAOA usa `expected_cut`, no su mejor muestra.
+- `qaoa_cut_distribution.png`: distribución de probabilidad empírica de los cortes en la profundidad con mayor `expected_cut`.
+- `execution_time_comparison.png`: tiempos observados en escala logarítmica; caracterizan esta implementación, no una ventaja computacional.
 - `README.md`: este resumen reproducible.

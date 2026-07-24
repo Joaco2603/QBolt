@@ -13,8 +13,12 @@ from src.benchmarks.preliminary import (
     BenchmarkConfig,
     build_max_cut_ising,
     exact_max_cut,
+    method_comparison_y_limit,
+    method_comparison_rows,
     metrics_from_counts,
+    qaoa_distribution_data,
     run_benchmark,
+    runtime_comparison_rows,
     write_outputs,
 )
 from src.optimizer.quantum.qaoa import MeasurementBatch
@@ -158,6 +162,9 @@ def test_schema_and_outputs_are_generated_with_fake_backend(tmp_path: Path) -> N
     assert sorted(path.name for path in output_dir.iterdir()) == [
         "README.md",
         "approximation_ratio_vs_p.png",
+        "execution_time_comparison.png",
+        "method_comparison.png",
+        "qaoa_cut_distribution.png",
         "results.json",
     ]
     persisted = json.loads((output_dir / "results.json").read_text(encoding="utf-8"))
@@ -165,10 +172,74 @@ def test_schema_and_outputs_are_generated_with_fake_backend(tmp_path: Path) -> N
     assert (output_dir / "approximation_ratio_vs_p.png").read_bytes().startswith(
         b"\x89PNG\r\n\x1a\n"
     )
+    assert (output_dir / "method_comparison.png").read_bytes().startswith(
+        b"\x89PNG\r\n\x1a\n"
+    )
+    assert (output_dir / "execution_time_comparison.png").read_bytes().startswith(
+        b"\x89PNG\r\n\x1a\n"
+    )
+    assert (output_dir / "qaoa_cut_distribution.png").read_bytes().startswith(
+        b"\x89PNG\r\n\x1a\n"
+    )
     readme = (output_dir / "README.md").read_text(encoding="utf-8")
     assert "Estado: `preliminary`" in readme
     assert "candidatos de parámetros dentro de UNA corrida independiente" in readme
     assert "no se reportan media, desviación estándar ni barras de error" in readme
+
+    comparison = method_comparison_rows(results)
+    assert [(label, value) for label, value, _ in comparison] == [
+        ("OPT exacto", 2.0),
+        ("Greedy", 2.0),
+        ("Goemans–Williamson", 2.0),
+        ("QAOA esperado (p=1)", 1.5),
+        ("QAOA esperado (p=3)", 1.5),
+    ]
+    assert all("mejor" not in label.lower() for label, _, _ in comparison)
+
+    runtime_rows = runtime_comparison_rows(results)
+    assert [label for label, _, _ in runtime_rows] == [
+        "Exacto",
+        "Greedy",
+        "Goemans–Williamson",
+        "QAOA p=1",
+        "QAOA p=3",
+    ]
+    assert all(seconds > 0.0 for _, seconds, _ in runtime_rows)
+
+    distribution = qaoa_distribution_data(results)
+    assert distribution["p"] == 1
+    assert distribution["expected_cut"] == pytest.approx(1.5)
+    assert distribution["optimal_cut"] == pytest.approx(2.0)
+    assert distribution["probabilities"] == pytest.approx(
+        [(0.0, 0.25), (2.0, 0.75)]
+    )
+
+
+def test_method_comparison_supports_zero_optimum(tmp_path: Path) -> None:
+    output_dir = tmp_path / "zero-output"
+    output_dir.mkdir()
+    results = {
+        "exact": {"cut": 0.0},
+        "greedy": {"status": "completed", "cut": 0.0},
+        "goemans_williamson": {"status": "completed", "cut": 0.0},
+        "qaoa": [
+            {
+                "status": "completed",
+                "p": 1,
+                "expected_cut": 0.0,
+                "best_sample_cut": 0.0,
+            }
+        ],
+    }
+
+    from src.benchmarks.preliminary import _write_method_comparison_plot
+
+    _write_method_comparison_plot(results, output_dir / "comparison.png")
+
+    assert method_comparison_y_limit(method_comparison_rows(results)) == 1.0
+    assert (output_dir / "comparison.png").read_bytes().startswith(
+        b"\x89PNG\r\n\x1a\n"
+    )
 
 
 def test_backend_failure_is_preserved_per_depth_and_other_depths_continue(

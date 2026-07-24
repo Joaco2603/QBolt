@@ -71,6 +71,27 @@ es factible y elimina la ambigüedad de usar una heurística como referencia del
 
 ## Interpretación correcta
 
+La corrida preliminar disponible se puede leer visualmente en:
+
+- [`approximation_ratio_vs_p.png`](../../../artifacts/preliminary_local_benchmark/approximation_ratio_vs_p.png): ratio esperado y mejor muestra de QAOA para cada `p`.
+- [`method_comparison.png`](../../../artifacts/preliminary_local_benchmark/method_comparison.png): cortes de OPT, greedy y GW frente al corte esperado de QAOA para cada `p`, sobre la misma instancia.
+- [`qaoa_cut_distribution.png`](../../../artifacts/preliminary_local_benchmark/qaoa_cut_distribution.png): probabilidad empírica de cada valor de corte para la profundidad con mayor corte esperado.
+- [`execution_time_comparison.png`](../../../artifacts/preliminary_local_benchmark/execution_time_comparison.png): tiempo observado por método en escala logarítmica.
+- [`results.json`](../../../artifacts/preliminary_local_benchmark/results.json): datos completos, seeds, counts, tiempos y fallos.
+
+La primera figura responde “¿cómo cambia QAOA con la profundidad?”; la segunda
+responde “¿cómo se compara el rendimiento esperado de QAOA con los resultados
+clásicos?”. La mejor muestra QAOA queda en la tabla y en `results.json`, pero no
+se usa como rendimiento típico. Ninguna figura debe leerse como evidencia de
+ventaja cuántica: la corrida tiene una sola repetición independiente por
+profundidad.
+
+La distribución separa dos preguntas que NO deben confundirse: “¿apareció el
+óptimo al menos una vez?” y “¿qué corte se obtiene en promedio?”. La gráfica de
+tiempo solo caracteriza esta corrida local: QAOA recompila y muestrea mediante
+Guppy/Selene, por lo que no constituye evidencia de complejidad asintótica ni
+de ventaja cuántica.
+
 - GW, greedy y las heurísticas adicionales son comparadores, no adversarios que
   deban ser descartados para favorecer una narrativa cuántica.
 - El mejor bitstring medido por QAOA no prueba optimalidad global.
